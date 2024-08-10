@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-import org.checkerframework.checker.units.qual.A;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -19,8 +18,7 @@ import org.firstinspires.ftc.teamcode.opmode.config.XDriveConfig;
 import org.firstinspires.ftc.teamcode.modules.hardware.ImuEx;
 import org.firstinspires.ftc.teamcode.modules.hardware.MotorGroup;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.StandardTrackingWheelLocalizer;
-import org.firstinspires.ftc.teamcode.utils.Vec2;
-import org.opencv.core.Mat;
+import org.firstinspires.ftc.teamcode.modules.Vec2;
 
 import java.util.ArrayList;
 import java.util.List;
