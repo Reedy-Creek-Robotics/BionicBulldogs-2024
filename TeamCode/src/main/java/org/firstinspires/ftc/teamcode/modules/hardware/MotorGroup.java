@@ -2,9 +2,7 @@ package org.firstinspires.ftc.teamcode.modules.hardware;
 
 import android.util.Log;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import java.util.ArrayList;
 
@@ -16,18 +14,8 @@ public class MotorGroup {
     int pos;
 
     public MotorGroup() {
-        motors = new ArrayList<DcMotor>();
+        motors = new ArrayList<>();
     }
-
-//    public void addMotor(String name, boolean reversed) {
-//        DcMotor motor = op.hardwareMap.dcMotor.get(name);
-//        motor.setDirection(
-//                reversed ?
-//                        DcMotorSimple.Direction.REVERSE :
-//                        DcMotorSimple.Direction.FORWARD
-//        );
-//        motors.add(motor);
-//    }
 
     public void addMotor(DcMotor motor) {
         motors.add(motor);
@@ -41,8 +29,8 @@ public class MotorGroup {
         return motors.size();
     }
 
-    public void setRunMode(DcMotor.RunMode runMode) {
-        runMode = runMode;
+    public void setRunMode(DcMotor.RunMode newRunMode) {
+        runMode = newRunMode;
         for (DcMotor motor : motors) {
             motor.setMode(runMode);
         }

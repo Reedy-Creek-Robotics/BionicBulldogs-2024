@@ -43,7 +43,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
-import org.firstinspires.ftc.teamcode.modules.drive.XDrive;
+import org.firstinspires.ftc.teamcode.modules.drive.HDrive;
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
@@ -110,7 +110,7 @@ public class DriveToAprilTag
     public static double MAX_AUTO_SPEED = 0.4;   //  Clip the approach speed to this max value (adjust for your robot)
     public static double MAX_AUTO_STRAFE= 0.4;   //  Clip the approach speed to this max value (adjust for your robot)
     public static double MAX_AUTO_TURN  = 0.2;   //  Clip the turn speed to this max value (adjust for your robot)
-    XDrive drive;
+    HDrive drive;
     Telemetry telemetry;
     private static final boolean USE_WEBCAM = true;  // Set true to use a webcam, or false for a phone camera
     private VisionPortal visionPortal;               // Used to manage the video source.
@@ -119,10 +119,10 @@ public class DriveToAprilTag
     boolean targetFound = false;
     boolean reversed;
 
-    public DriveToAprilTag(XDrive _drive, LinearOpMode op){
+    public DriveToAprilTag(HDrive _drive, LinearOpMode op){
         this(_drive, op, "Webcam 1", false);
     }
-    public DriveToAprilTag(XDrive _drive, LinearOpMode op, String name, boolean _reversed) {
+    public DriveToAprilTag(HDrive _drive, LinearOpMode op, String name, boolean _reversed) {
         drive = _drive;
         telemetry = op.telemetry;
         // Initialize the Apriltag Detection process

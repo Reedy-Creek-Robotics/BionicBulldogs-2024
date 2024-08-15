@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.HardwareMap
 import com.qualcomm.robotcore.hardware.IMU
 
-class XDriveConfig(var hmap: HardwareMap)
+class HDriveConfig(var hmap: HardwareMap)
 {
 	private var frontLeft = "frontLeft"
 	private var frontRight = "frontRight"
