@@ -35,7 +35,7 @@ abstract class LuaAutoBase : LinearOpMode()
 		telemetry.clearAll();
 		telemetry.update();
 		
-		luaRR.start(str);
+		luaRR.start();
 	}
 	
 	abstract fun getOpmodeName(): String;

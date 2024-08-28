@@ -4,12 +4,12 @@ import com.acmerobotics.dashboard.FtcDashboard
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
-import com.qualcomm.robotcore.util.ElapsedTime
-import org.firstinspires.ftc.teamcode.modules.lua.Lua
 import org.firstinspires.ftc.teamcode.modules.ui.UI
+import org.firstinspires.ftc.teamcode.modules.lua.LuaRoadRunner
+import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive
 
 @Autonomous
-class LuaTest : LinearOpMode()
+class LuaRoadrunnerTest : LinearOpMode()
 {
 	private lateinit var opmodes: Array<String>;
 	private val ui: UI = UI();
@@ -18,9 +18,10 @@ class LuaTest : LinearOpMode()
 	override fun runOpMode()
 	{
 		telemetry = MultipleTelemetry(telemetry, FtcDashboard.getInstance().telemetry);
-		val lua = Lua(this);
-
-		opmodes = lua.init();
+		val drive = SampleMecanumDrive(hardwareMap);
+		val luaRR = LuaRoadRunner(drive, this);
+		
+		opmodes = luaRR.initLua();
 		
 		ui.init(telemetry, gamepad1)
 
@@ -34,6 +35,7 @@ class LuaTest : LinearOpMode()
 					if(ui.button(s))
 					{
 						selected = s;
+						luaRR.init(selected);
 					}
 				}
 			}
@@ -45,16 +47,6 @@ class LuaTest : LinearOpMode()
 		}
 		if(!opModeIsActive())
 			return;
-		lua.start(selected);
-		val elapsedTime = ElapsedTime();
-		elapsedTime.reset();
-		var prevTime = 0.0f;
-		while(opModeIsActive())
-		{
-			val curTime = elapsedTime.seconds().toFloat();
-			val deltaTime: Float = curTime - prevTime;
-			lua.update(curTime, deltaTime);
-			prevTime = curTime;
-		}
+		luaRR.start();
 	}
 }

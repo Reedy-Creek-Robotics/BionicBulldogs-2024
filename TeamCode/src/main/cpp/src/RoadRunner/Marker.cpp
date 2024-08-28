@@ -5,7 +5,7 @@
 #include <string>
 
 extern "C" JNIEXPORT void JNICALL
-Java_org_firstinspires_ftc_teamcode_modules_lua_LuaRoadRunner_callDisplacement(JNIEnv* env, jobject thiz, jstring str)
+Java_org_firstinspires_ftc_teamcode_modules_lua_LuaRoadRunnerBuilder_callDisplacement(JNIEnv* env, jobject thiz, jstring str)
 {
 	callNextDispMarker(env->GetStringUTFChars(str, nullptr));
 }
@@ -14,9 +14,12 @@ NodeGrid grid;
 
 void setup();
 
+jobject builder2;
+
 extern "C" JNIEXPORT void JNICALL Java_org_firstinspires_ftc_teamcode_modules_lua_LuaRoadRunner_internalInit(JNIEnv* env, jobject thiz, jobject builder)
 {
-	FuncStat::setVals(env, thiz);
+    builder2 = env->NewGlobalRef(builder);
+	FuncStat::setVals(env, builder2);
 
 	Save::makeBuilder.init("makeBuilder", "(DDD)V");
 	Save::lineTo.init("lineTo", "(DD)V");
@@ -50,3 +53,11 @@ extern "C" JNIEXPORT void JNICALL Java_org_firstinspires_ftc_teamcode_modules_lu
 	grid.recognitionId = recognition;
 	Save::exp(&grid);
 }
+
+extern "C" JNIEXPORT void JNICALL Java_org_firstinspires_ftc_teamcode_modules_lua_LuaRoadRunner_close(
+        JNIEnv* env, jobject thiz
+        )
+{
+    env->DeleteGlobalRef(builder2);
+}
+
