@@ -37,6 +37,7 @@ class Acceleration
 
 		companion object
 		{
+				@JvmField
 				var accelTime = 0.25
 		}
 }
