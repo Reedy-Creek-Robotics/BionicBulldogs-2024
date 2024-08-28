@@ -3,17 +3,18 @@ package org.firstinspires.ftc.teamcode.opmode.lua
 import com.acmerobotics.dashboard.FtcDashboard
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
-import org.firstinspires.ftc.teamcode.modules.lua.Lua
-import org.firstinspires.ftc.teamcode.modules.lua.LuaError
+import org.firstinspires.ftc.teamcode.modules.lua.LuaRoadRunner
+import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive
 import org.firstinspires.ftc.teamcode.modules.lua.TestModule
-import java.lang.Exception
 
 abstract class LuaAutoBase : LinearOpMode()
 {
 	override fun runOpMode()
 	{
 		telemetry = MultipleTelemetry(telemetry, FtcDashboard.getInstance().telemetry);
-		val lua = Lua(this);
+		val drive = SampleMecanumDrive(hardwareMap);
+		val luaRR = LuaRoadRunner(drive, this);
+		val lua = luaRR.lua;
 		
 		val obj = TestModule(this);
 		lua.addObject(obj);
@@ -21,11 +22,9 @@ abstract class LuaAutoBase : LinearOpMode()
 		telemetry.addLine("initing lua");
 		telemetry.update();
 		
-		lua.init();
-		
 		val str = getOpmodeName();
 		
-		lua.initRR(str);
+		luaRR.init(str);
 		
 		telemetry.clearAll();
 		telemetry.addLine("inited");
@@ -36,7 +35,7 @@ abstract class LuaAutoBase : LinearOpMode()
 		telemetry.clearAll();
 		telemetry.update();
 		
-		lua.startRR(str);
+		luaRR.start(str);
 	}
 	
 	abstract fun getOpmodeName(): String;

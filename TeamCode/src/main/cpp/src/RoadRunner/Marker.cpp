@@ -14,8 +14,7 @@ NodeGrid grid;
 
 void setup();
 
-extern "C" JNIEXPORT void JNICALL Java_org_firstinspires_ftc_teamcode_modules_lua_LuaRoadRunner_buildPath(
-	JNIEnv* env, jobject thiz, jstring name, int recognition)
+extern "C" JNIEXPORT void JNICALL Java_org_firstinspires_ftc_teamcode_modules_lua_LuaRoadRunner_internalInit(JNIEnv* env, jobject thiz, jobject builder)
 {
 	FuncStat::setVals(env, thiz);
 
@@ -32,7 +31,11 @@ extern "C" JNIEXPORT void JNICALL Java_org_firstinspires_ftc_teamcode_modules_lu
 	Save::wait.init("wait", "(D)V");
 	Save::rotate.init("turn", "(D)V");
 	Save::pathErr.init("pathErr", "(Ljava/lang/String;)V");
+}
 
+extern "C" JNIEXPORT void JNICALL Java_org_firstinspires_ftc_teamcode_modules_lua_LuaRoadRunner_buildPath(
+	JNIEnv* env, jobject thiz, jstring name, int recognition)
+{
 	std::string str = env->GetStringUTFChars(name, nullptr);
 	std::string path = getPathName(str);
 	if (path == "")

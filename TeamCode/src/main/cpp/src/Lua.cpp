@@ -57,10 +57,10 @@ std::string getPathName(const std::string& name)
 	return "";
 }
 
-extern "C" JNIEXPORT jobjectArray JNICALL Java_org_firstinspires_ftc_teamcode_modules_lua_Lua_init(JNIEnv* env,
-																								   jobject thiz)
+extern "C" JNIEXPORT jobjectArray JNICALL Java_org_firstinspires_ftc_teamcode_modules_lua_Lua_internalInit(JNIEnv* env,
+																								   jobject thiz, jobject stdlib)
 {
-	jobject ref = env->NewGlobalRef(thiz);
+	jobject ref = env->NewGlobalRef(stdlib);
 	addObject(ref);
 	FuncStat::setVals(env, ref);
 	printF.init("print", "(Ljava/lang/String;)V");

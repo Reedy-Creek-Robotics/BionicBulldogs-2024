@@ -5,28 +5,28 @@ import com.acmerobotics.dashboard.FtcDashboard
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
-import org.firstinspires.ftc.teamcode.modules.Ui.UI
-import org.firstinspires.ftc.teamcode.modules.lua.Lua
+import org.firstinspires.ftc.teamcode.modules.ui.UI
+import org.firstinspires.ftc.teamcode.modules.lua.LuaRoadRunner
+import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive
 
 @Autonomous
 class LuaTest : LinearOpMode()
 {
-	private var opmodes: Array<String>? = null;
-	private var ui: UI = UI();
+	private lateinit var opmodes: Array<String>;
+	private val ui: UI = UI();
 	private var selected: String = "";
-	var lua: Lua? = null;
 	
 	override fun runOpMode()
 	{
 		telemetry = MultipleTelemetry(telemetry, FtcDashboard.getInstance().telemetry);
-		lua = Lua(this);
-		opmodes = lua?.init();
+		val drive = SampleMecanumDrive(hardwareMap);
+		val luaRR = LuaRoadRunner(drive, this);
+		
+		opmodes = luaRR.initLua();
+		
 		ui.init(telemetry, gamepad1)
-		Log.d("LuaTest", opmodes?.size.toString());
-		if(opmodes == null)
-		{
-			return;
-		}
+		Log.d("LuaTest", opmodes.size.toString());
+		
 		while(opModeInInit())
 		{
 			if(selected == "")
@@ -37,7 +37,7 @@ class LuaTest : LinearOpMode()
 					if(ui.button(s))
 					{
 						selected = s;
-						lua?.initRR(selected);
+						luaRR.init(selected);
 					}
 				}
 			}
@@ -49,14 +49,6 @@ class LuaTest : LinearOpMode()
 		}
 		if(!opModeIsActive())
 			return;
-		if(lua?.isRR() == true)
-		{
-			lua?.startRR(selected, 4);
-		}
-		else
-		{
-			lua?.start(selected, 4);
-		}
-		lua?.stop();
+		luaRR.start();
 	}
 }
