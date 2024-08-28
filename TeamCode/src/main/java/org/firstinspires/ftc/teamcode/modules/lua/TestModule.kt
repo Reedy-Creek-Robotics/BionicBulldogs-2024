@@ -3,24 +3,24 @@ package org.firstinspires.ftc.teamcode.modules.lua
 import com.qualcomm.robotcore.eventloop.opmode.OpMode
 import com.qualcomm.robotcore.hardware.Servo
 
-class TestModule
+class TestModule(opmode: OpMode)
 {
-	private var servo: Servo? = null;
-	private var servo2: Servo? = null;
+	private var servo: Servo;
+	private var servo2: Servo;
 	
-	constructor(opmode: OpMode)
+	init
 	{
 		servo = opmode.hardwareMap.servo.get("servo");
 		servo2 = opmode.hardwareMap.servo.get("servo2");
 	}
 	
-	fun setPos(pos: Double)
+	fun setPos(pos: Float)
 	{
-		servo?.position = pos;
+		servo.position = pos.toDouble();
 	}
 	
-	fun setPos2(pos: Double)
+	fun setPos2(pos: Float)
 	{
-		servo2?.position = pos;
+		servo2.position = pos.toDouble();
 	}
 }

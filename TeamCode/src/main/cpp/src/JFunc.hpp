@@ -70,6 +70,10 @@ public:
 	{
 		return FuncStat::env->CallBooleanMethodA(obj, method, args);
 	}
+	bool callF(jvalue* args)
+	{
+		return FuncStat::env->CallFloatMethodA(obj, method, args);
+	}
 	jobject call(jvalue* args)
 	{
 		return FuncStat::env->CallObjectMethod(obj, method, args);

@@ -27,17 +27,17 @@ class LuaStdlib(val opmode: LinearOpMode)
 		throw JNIError(msg);
 	}
 
-	fun telem(label: String, msg: String)
+	fun addData(label: String, msg: String)
 	{
 		opmode.telemetry.addData(label, msg);
 	}
 
-	fun updateTelem()
+	fun update()
 	{
 		opmode.telemetry.update();
 	}
 
-	fun delay(time: Double): Boolean
+	fun delay(time: Float): Boolean
 	{
 		val e = ElapsedTime();
 		e.reset();
@@ -49,10 +49,5 @@ class LuaStdlib(val opmode: LinearOpMode)
 	fun checkRunning(): Boolean
 	{
 		return !opmode.opModeIsActive();
-	}
-
-	fun isActive(): Boolean
-	{
-		return opmode.opModeIsActive();
 	}
 }
