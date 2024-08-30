@@ -20,7 +20,7 @@ abstract class LuaAutoBase : LinearOpMode()
 		telemetry.addLine("initing lua");
 		telemetry.update();
 		
-		luaRR.initLua();
+		luaRR.init();
 		
 		val obj = TestModule(this);
 		
@@ -29,13 +29,13 @@ abstract class LuaAutoBase : LinearOpMode()
 		builder.setCurrentObject(obj);
 		
 		builder.newClass();
-		builder.addFun("setPos", LuaType.Void, listOf(LuaType.Float));
-		builder.addFun("setPos2", LuaType.Void, listOf(LuaType.Float));
+		builder.addFun("setPos", LuaType.Void, listOf(LuaType.Double));
+		builder.addFun("setPos2", LuaType.Void, listOf(LuaType.Double));
 		builder.endClass("servos");
 		
 		val str = getOpmodeName();
 		
-		luaRR.init(str);
+		luaRR.loadOpmode(str);
 		
 		telemetry.clearAll();
 		telemetry.addLine("inited");

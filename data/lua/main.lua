@@ -4,6 +4,7 @@ local dir = 0
 ---@type Opmode[]
 Opmodes = {
 	require("opmodes.main"),
+	require("opmodes.main2"),
 	{
 		name = "test thing",
 		start = function()

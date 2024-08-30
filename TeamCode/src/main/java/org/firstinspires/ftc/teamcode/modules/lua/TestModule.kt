@@ -14,13 +14,13 @@ class TestModule(opmode: OpMode)
 		servo2 = opmode.hardwareMap.servo.get("servo2");
 	}
 	
-	fun setPos(pos: Float)
+	fun setPos(pos: Double)
 	{
-		servo.position = pos.toDouble();
+		servo.position = pos;
 	}
 	
-	fun setPos2(pos: Float)
+	fun setPos2(pos: Double)
 	{
-		servo2.position = pos.toDouble();
+		servo2.position = pos;
 	}
 }

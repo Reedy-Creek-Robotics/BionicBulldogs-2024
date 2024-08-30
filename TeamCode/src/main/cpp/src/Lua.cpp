@@ -3,8 +3,17 @@
 #include <lua/lua.hpp>
 #include <string>
 #include <unordered_map>
+#include <cstring>
 
-lua_State* l = nullptr;
+static lua_State* l = nullptr;
+
+bool running = true;
+
+void stop()
+{
+  running = false;
+}
+
 JFunc<void, jstring> printF;
 JFunc<void, jstring> errorF;
 JFunc<void, jstring> jniErrorF;
@@ -60,9 +69,17 @@ std::string getPathName(const std::string& name)
 extern "C" JNIEXPORT jobjectArray JNICALL
 Java_org_firstinspires_ftc_teamcode_modules_lua_Lua_internalInit(JNIEnv* env, jobject thiz, jobject stdlib)
 {
-	jobject ref = env->NewGlobalRef(stdlib);
-	addObject(ref);
-	FuncStat::setVals(env, ref);
+	FuncStat::env = env;
+
+	deleteRefs();
+
+	if (l != nullptr)
+	{
+		lua_close(l);
+	}
+
+	addObject(stdlib);
+
 	printF.init("print", "(Ljava/lang/String;)V");
 	errorF.init("err", "(Ljava/lang/String;)V");
 	jniErrorF.init("jniErr", "(Ljava/lang/String;)V");
@@ -137,7 +154,6 @@ extern "C" JNIEXPORT void JNICALL Java_org_firstinspires_ftc_teamcode_modules_lu
 																							int recognition)
 {
 	lua_settop(l, 0);
-	lua_newtable(l);
 	FuncStat::obj = thiz;
 	lua_getglobal(l, "Opmodes");
 	int ind = -1;
@@ -151,22 +167,23 @@ extern "C" JNIEXPORT void JNICALL Java_org_firstinspires_ftc_teamcode_modules_lu
 		}
 	}
 	if (ind == -1)
+	{
 		err(("opmodes table doesnt contain opmode " + std::string(c)).c_str());
+		return;
+	}
 
 	lua_rawgeti(l, -1, ind);
 	lua_getfield(l, -1, "start");
 	if (lua_type(l, -1) == LUA_TFUNCTION)
 	{
-		lua_pushvalue(l, 1);
 		lua_pushinteger(l, recognition);
-		if (lua_pcall(l, 2, 0, 0))
+		if (lua_pcall(l, 1, 0, 0))
 		{
 			err(lua_tostring(l, -1));
 			return;
 		}
 	}
 	lua_settop(l, 1);
-	lua_getglobal(l, "Opmodes");
 	lua_rawgeti(l, -1, ind);
 	lua_getfield(l, -1, "markers");
 	if (lua_type(l, -1) != LUA_TTABLE)
@@ -177,25 +194,26 @@ extern "C" JNIEXPORT void JNICALL Java_org_firstinspires_ftc_teamcode_modules_lu
 	dispMarkerInd = 0;
 }
 
-extern "C" JNIEXPORT void JNICALL Java_org_firstinspires_ftc_teamcode_modules_lua_Lua_update(JNIEnv* env, jobject thiz,
-																							 float deltaTime,
-																							 float elapsedTime)
+extern "C" JNIEXPORT jboolean JNICALL Java_org_firstinspires_ftc_teamcode_modules_lua_Lua_update(JNIEnv* env, jobject thiz,
+																							 double deltaTime,
+																							 double elapsedTime)
 {
-	lua_getfield(l, -2, "update");
+	lua_getfield(l, 2, "update");
 	if (lua_isfunction(l, -1))
 	{
-		lua_pushvalue(l, 1);
 		lua_newtable(l);
 		lua_pushnumber(l, deltaTime);
 		lua_setfield(l, -2, "delta");
 		lua_pushnumber(l, elapsedTime);
 		lua_setfield(l, -2, "elapsed");
-		if (lua_pcall(l, 2, 0, 0))
+		if (lua_pcall(l, 1, 0, 0))
 		{
-			err(lua_tostring(l, -1));
-			return;
+      if(running)
+        err(lua_tostring(l, -1));
+			return true;
 		}
 	}
+  return false;
 }
 
 extern "C" JNIEXPORT void JNICALL Java_org_firstinspires_ftc_teamcode_modules_lua_Lua_stop(JNIEnv* env, jobject thiz)
@@ -209,11 +227,10 @@ void callNextDispMarker(std::string str)
 	if (str == "")
 	{
 		dispMarkerInd++;
-		lua_rawgeti(l, 4, dispMarkerInd);
+		lua_rawgeti(l, 3, dispMarkerInd);
 		if (lua_type(l, -1) == LUA_TFUNCTION)
 		{
-			lua_pushvalue(l, 1);
-			if (lua_pcall(l, 1, 0, 0))
+			if (lua_pcall(l, 0, 0, 0))
 			{
 				err(lua_tostring(l, -1));
 				return;
@@ -222,11 +239,10 @@ void callNextDispMarker(std::string str)
 	}
 	else
 	{
-		lua_getfield(l, 4, str.c_str());
+		lua_getfield(l, 3, str.c_str());
 		if (lua_type(l, -1) == LUA_TFUNCTION)
 		{
-			lua_pushvalue(l, 1);
-			if (lua_pcall(l, 1, 0, 0))
+			if (lua_pcall(l, 0, 0, 0))
 			{
 				err(lua_tostring(l, -1));
 				return;
@@ -235,23 +251,24 @@ void callNextDispMarker(std::string str)
 	}
 }
 
-extern "C" JNIEXPORT void JNICALL Java_org_firstinspires_ftc_teamcode_modules_lua_LuaFunctionBuilder_setCurrentObject(JNIEnv* env,
-																								jobject thiz,
-																								jobject thing)
+extern "C" JNIEXPORT void JNICALL Java_org_firstinspires_ftc_teamcode_modules_lua_LuaFunctionBuilder_setCurrentObject(
+	JNIEnv* env, jobject thiz, jobject thing)
 {
-	FuncStat::setVals(env, thiz);
-	if (l != nullptr)
-	{
-		deleteRefs();
-		lua_close(l);
-	}
+	FuncStat::env = env;
 	addObject(thing);
 }
 
 extern "C" JNIEXPORT void JNICALL Java_org_firstinspires_ftc_teamcode_modules_lua_LuaFunctionBuilder_addFunction(
 	JNIEnv* env, jobject thiz, jstring name, jstring signature, jint argc, jint rtnType)
 {
-	addFunction(name, signature, argc, rtnType, l);
+	FuncStat::env = env;
+	const char* name2 = env->GetStringUTFChars(name, nullptr);
+	const char* signature2 = env->GetStringUTFChars(signature, nullptr);
+
+	addFunction(name2, signature2, argc, rtnType);
+
+	env->ReleaseStringUTFChars(name, name2);
+	env->ReleaseStringUTFChars(signature, signature2);
 }
 
 extern "C" JNIEXPORT void JNICALL
@@ -264,6 +281,6 @@ extern "C" JNIEXPORT void JNICALL
 Java_org_firstinspires_ftc_teamcode_modules_lua_LuaFunctionBuilder_endClass(JNIEnv* env, jobject thiz, jstring name)
 {
 	const char* str = env->GetStringUTFChars(name, nullptr);
-	endClass(l, str);
+	endClass(str);
 	env->ReleaseStringUTFChars(name, str);
 }

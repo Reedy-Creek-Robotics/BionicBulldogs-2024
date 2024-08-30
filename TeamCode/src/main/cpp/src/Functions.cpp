@@ -3,19 +3,24 @@
 #include "Lua.hpp"
 #include "macros/Helpers.hpp"
 
+#include <cstring>
 #include <lua/lua.hpp>
 #include <string>
-#include <unordered_map>
 #include <vector>
+
+static lua_State* l;
+
+std::vector<jobject> objects;
 
 bool inClass = false;
 
 void startClass()
 {
 	inClass = true;
+	lua_newtable(l);
 }
 
-void endClass(lua_State* l, const char* name)
+void endClass(const char* name)
 {
 	inClass = false;
 	lua_setglobal(l, name);
@@ -23,22 +28,9 @@ void endClass(lua_State* l, const char* name)
 
 std::vector<JFunc2> funcs;
 
-void errCheck()
-{
-	JNIEnv* env = FuncStat::env;
-	if (env->ExceptionCheck())
-	{
-		env->ExceptionDescribe();
-		env->ExceptionClear();
-		jniErr("JNI error, check logs for error message");
-	}
-}
-
-std::unordered_map<std::string, jobject> objects = {};
-
 int callJFunc(lua_State* l)
 {
-	int argc = lua_gettop(l);
+	int argc = lua_gettop(l) - 1;
 	lua_getfield(l, 1, "id");
 
 	int i = lua_tointeger(l, -1);
@@ -50,28 +42,64 @@ int callJFunc(lua_State* l)
 		luaL_error(l, ("expected " + std::to_string(fun.argc) + " args, got " + std::to_string(argc)).c_str());
 	}
 
-	jvalue* args = new jvalue[argc];
-
-	for (int i = 0; i < argc; i++)
+	jvalue* args = nullptr;
+	if (argc > 0)
 	{
-		int type = lua_type(l, i + 1);
-		if (type == LUA_TNUMBER)
-			args[i].f = lua_tonumber(l, i + 1);
-		if (type == LUA_TBOOLEAN)
-			args[i].z = lua_toboolean(l, i + 1);
-		if (type == LUA_TSTRING)
+		args = new jvalue[argc];
+
+		for (int i = 0; i < argc; i++)
 		{
-			const char* str = lua_tostring(l, i + 1);
-			args[i].l = FuncStat::env->NewStringUTF(str);
+			int type = lua_type(l, i + 2);
+			if (type != fun.argTypes[i])
+			{
+				const char* msg;
+				const char* typearg; /* name for the type of the actual argument */
+				if (luaL_getmetafield(l, i + 2, "__name") == LUA_TSTRING)
+					typearg = lua_tostring(l, -1); /* use the given type name */
+				else if (lua_type(l, i + 2) == LUA_TLIGHTUSERDATA)
+					typearg = "light userdata"; /* special name for messages */
+				else
+					typearg = luaL_typename(l, i + 2); /* standard name */
+				msg = lua_pushfstring(l, "%s expected, got %s", luaL_typename(l, fun.argTypes[i]), typearg);
+				luaL_argerror(l, i + 1, msg);
+        return 0;
+			}
+			switch (type)
+			{
+			case LUA_TNUMBER:
+				args[i].d = lua_tonumber(l, i + 2);
+				break;
+			case LUA_TBOOLEAN:
+				args[i].z = lua_toboolean(l, i + 2);
+				break;
+			case LUA_TSTRING: {
+				const char* str = lua_tostring(l, i + 2);
+				args[i].l = FuncStat::env->NewStringUTF(str);
+				break;
+			}
+			default:
+				break;
+			}
 		}
 	}
 
 	switch (fun.rtnType)
 	{
-	case LUA_TNONE:
+	case LUA_TNONE: {
+		bool rtn = fun.callB(args);
+		if (rtn)
+		{
+			stop();
+			luaL_error(l, "opmode stopped :)");
+		}
+		delete[] args;
+		return 0;
+	}
+	case LUA_TNIL: {
 		fun.callV(args);
 		delete[] args;
 		return 0;
+	}
 	case LUA_TNUMBER: {
 		float rtn = fun.callF(args);
 		lua_pushnumber(l, rtn);
@@ -95,69 +123,77 @@ int callJFunc(lua_State* l)
 	return 0;
 }
 
-void loadFuncs(lua_State* l)
+void loadFuncs(lua_State* L)
 {
-	luaL_newmetatable(l, "jfunc");
+	l = L;
+	luaL_newmetatable(l, "jfunc::call");
 	lua_pushcfunction(l, callJFunc);
 	lua_setfield(l, -2, "__call");
-	lua_pop(l, 1);
 }
 
 void addObject(jobject object)
 {
-	jclass clazz = FuncStat::env->GetObjectClass(object);
-	jmethodID mid = FuncStat::env->GetMethodID(clazz, "getClass", "()Ljava/lang/Class;");
-	jobject clsObj = FuncStat::env->CallObjectMethod(object, mid);
-	jclass clazzz = FuncStat::env->GetObjectClass(clsObj);
-	mid = FuncStat::env->GetMethodID(clazzz, "getCanonicalName", "()Ljava/lang/String;");
-	jstring strObj = (jstring)FuncStat::env->CallObjectMethod(clsObj, mid);
-
-	const char* str = FuncStat::env->GetStringUTFChars(strObj, nullptr);
-	std::string res(str);
-
-	FuncStat::env->ReleaseStringUTFChars(strObj, str);
-
-	for (char& c : res)
-	{
-		if (c == '.')
-		{
-			c = '/';
-		}
-	}
-
-	objects[res] = FuncStat::env->NewGlobalRef(object);
+	jobject obj = FuncStat::env->NewGlobalRef(object);
+	objects.push_back(obj);
+	FuncStat::setVals(FuncStat::env, obj);
 }
 
-void addFunction(jstring name, jstring signature, int rtn, int argc, lua_State* l)
+void addFunction(const char* name, const char* signature, int rtn, int argc)
 {
-	const char* str = FuncStat::env->GetStringUTFChars(name, nullptr);
-	const char* str2 = FuncStat::env->GetStringUTFChars(signature, nullptr);
-
 	lua_newtable(l);
 	lua_pushinteger(l, funcs.size());
 	lua_setfield(l, -2, "id");
-	luaL_getmetatable(l, "jfunc");
+	luaL_getmetatable(l, "jfunc::call");
 	lua_setmetatable(l, -2);
 
 	if (inClass)
-		lua_setfield(l, -2, str);
+		lua_setfield(l, -2, name);
 	else
-		lua_setglobal(l, str);
+		lua_setglobal(l, name);
 
 	funcs.push_back({});
+
 	JFunc2& fun = funcs[funcs.size() - 1];
 
-	fun.init(str, str2, rtn, argc);
+	int len = strlen(signature);
 
-	FuncStat::env->ReleaseStringUTFChars(name, str);
-	FuncStat::env->ReleaseStringUTFChars(signature, str2);
+	for (int i = 0; i < len; i++)
+	{
+		char c = signature[i];
+		switch (c)
+		{
+		case 'Z':
+			fun.argTypes.push_back(LUA_TBOOLEAN);
+			break;
+		case 'L':
+			fun.argTypes.push_back(LUA_TSTRING);
+			break;
+		case 'D':
+			fun.argTypes.push_back(LUA_TNUMBER);
+			break;
+		default:
+			break;
+		}
+	}
+
+	fun.init(name, signature, rtn, argc);
+	JNIEnv* env = FuncStat::env;
+	if (env->ExceptionCheck())
+	{
+		env->ExceptionDescribe();
+		env->ExceptionClear();
+		jniErr(
+			("could not find function \'" + std::string(name) + "\' with signature \'" + std::string(signature) + '\'')
+				.c_str());
+	}
 }
 
 void deleteRefs()
 {
-	for (auto& [k, v] : objects)
+	for (jobject& obj : objects)
 	{
-		FuncStat::env->DeleteGlobalRef(v);
+		FuncStat::env->DeleteGlobalRef(obj);
 	}
 	objects.clear();
+	funcs.clear();
 }

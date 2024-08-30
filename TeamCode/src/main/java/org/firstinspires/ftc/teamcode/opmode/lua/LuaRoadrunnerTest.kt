@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.teamcode.modules.ui.UI
 import org.firstinspires.ftc.teamcode.modules.lua.LuaRoadRunner
+import org.firstinspires.ftc.teamcode.modules.lua.LuaType
+import org.firstinspires.ftc.teamcode.modules.lua.TestModule
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive
 
 @Autonomous
@@ -21,8 +23,19 @@ class LuaRoadrunnerTest : LinearOpMode()
 		val drive = SampleMecanumDrive(hardwareMap);
 		val luaRR = LuaRoadRunner(drive, this);
 		
-		opmodes = luaRR.initLua();
-		
+		opmodes = luaRR.init();
+
+		val builder = luaRR.lua.getFunctionBuilder();
+
+		val servos = TestModule(this);
+
+		builder.setCurrentObject(servos);
+
+		builder.newClass();
+		builder.addFun("setPos", LuaType.Void, listOf(LuaType.Double));
+		builder.addFun("setPos2", LuaType.Void, listOf(LuaType.Double));
+		builder.endClass("servos");
+
 		ui.init(telemetry, gamepad1)
 
 		while(opModeInInit())
@@ -35,7 +48,7 @@ class LuaRoadrunnerTest : LinearOpMode()
 					if(ui.button(s))
 					{
 						selected = s;
-						luaRR.init(selected);
+						luaRR.loadOpmode(selected);
 					}
 				}
 			}

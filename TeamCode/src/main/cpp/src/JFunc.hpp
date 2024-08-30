@@ -1,6 +1,8 @@
 #pragma once
 #include <jni.h>
 #include <string>
+#include <vector>
+
 struct FuncStat
 {
 	static jobject obj;
@@ -23,11 +25,11 @@ template <typename T, typename... Args> class JFunc
 	void init(const char* name, const char* sig)
 	{
 		method = FuncStat::env->GetMethodID(FuncStat::clazz, name, sig);
-    obj = FuncStat::obj;
+		obj = FuncStat::obj;
 	}
 	void callV(Args... args)
 	{
-    FuncStat::env->CallVoidMethod(obj, method, args...);
+		FuncStat::env->CallVoidMethod(obj, method, args...);
 	}
 	bool callB(Args... args)
 	{
@@ -40,24 +42,25 @@ template <typename T, typename... Args> class JFunc
 
   private:
 	jmethodID method;
-  jobject obj;
+	jobject obj;
 };
 
 class JFunc2
 {
-public:
+  public:
 	char argc;
-	char rtnType;
+	int rtnType;
+	std::vector<char> argTypes;
 	JFunc2()
 	{
 	}
-	JFunc2(const char* name, const char* sig, char rtnType, char argc)
+	JFunc2(const char* name, const char* sig, int rtnType, char argc)
 	{
 		init(name, sig, rtnType, argc);
 	}
-	void init(const char* name, const char* sig, char rtnType2, char argc2)
+	void init(const char* name, const char* sig, int rtnType2, char argc2)
 	{
-		method = FuncStat::env->GetMethodID(FuncStat::clazz, name, sig);
+		method = FuncStat::env->GetMethodID(FuncStat::env->GetObjectClass(FuncStat::obj), name, sig);
 		obj = FuncStat::obj;
 		argc = argc2;
 		rtnType = rtnType2;
@@ -79,7 +82,7 @@ public:
 		return FuncStat::env->CallObjectMethod(obj, method, args);
 	}
 
-private:
+  private:
 	jmethodID method;
 	jobject obj;
 };

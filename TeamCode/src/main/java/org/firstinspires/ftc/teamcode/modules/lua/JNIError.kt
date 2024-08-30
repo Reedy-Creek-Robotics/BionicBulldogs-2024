@@ -10,7 +10,7 @@ class JNIError : RuntimeException
 		msg = _msg;
 	}
 	
-	override fun getLocalizedMessage(): String?
+	override fun getLocalizedMessage(): String
 	{
 		return msg;
 	}

@@ -4,8 +4,8 @@
 #include <jni.h>
 #include <string>
 
-extern "C" JNIEXPORT void JNICALL
-Java_org_firstinspires_ftc_teamcode_modules_lua_LuaRoadRunnerBuilder_callDisplacement(JNIEnv* env, jobject thiz, jstring str)
+extern "C" JNIEXPORT void JNICALL Java_org_firstinspires_ftc_teamcode_modules_lua_LuaRoadRunnerBuilder_callDisplacement(
+	JNIEnv* env, jobject thiz, jstring str)
 {
 	callNextDispMarker(env->GetStringUTFChars(str, nullptr));
 }
@@ -16,9 +16,10 @@ void setup();
 
 jobject builder2;
 
-extern "C" JNIEXPORT void JNICALL Java_org_firstinspires_ftc_teamcode_modules_lua_LuaRoadRunner_internalInit(JNIEnv* env, jobject thiz, jobject builder)
+extern "C" JNIEXPORT void JNICALL
+Java_org_firstinspires_ftc_teamcode_modules_lua_LuaRoadRunner_internalInit(JNIEnv* env, jobject thiz, jobject builder)
 {
-    builder2 = env->NewGlobalRef(builder);
+	builder2 = env->NewGlobalRef(builder);
 	FuncStat::setVals(env, builder2);
 
 	Save::makeBuilder.init("makeBuilder", "(DDD)V");
@@ -54,10 +55,8 @@ extern "C" JNIEXPORT void JNICALL Java_org_firstinspires_ftc_teamcode_modules_lu
 	Save::exp(&grid);
 }
 
-extern "C" JNIEXPORT void JNICALL Java_org_firstinspires_ftc_teamcode_modules_lua_LuaRoadRunner_close(
-        JNIEnv* env, jobject thiz
-        )
+extern "C" JNIEXPORT void JNICALL Java_org_firstinspires_ftc_teamcode_modules_lua_LuaRoadRunner_close(JNIEnv* env,
+																									  jobject thiz)
 {
-    env->DeleteGlobalRef(builder2);
+	env->DeleteGlobalRef(builder2);
 }
-

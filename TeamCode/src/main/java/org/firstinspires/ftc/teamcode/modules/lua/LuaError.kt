@@ -11,7 +11,7 @@ class LuaError : RuntimeException
 		msg = m;
 	}
 	
-	override fun getLocalizedMessage(): String?
+	override fun getLocalizedMessage(): String
 	{
 		return msg;
 	}

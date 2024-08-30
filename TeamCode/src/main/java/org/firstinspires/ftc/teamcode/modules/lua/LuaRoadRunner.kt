@@ -15,8 +15,6 @@ class LuaRoadRunner(drive2: SampleMecanumDrive, opmode: LinearOpMode)
 	private val builder: LuaRoadRunnerBuilder = LuaRoadRunnerBuilder(drive);
 	private val trajectories: java.util.ArrayList<TrajectorySequence> = java.util.ArrayList(3);
 
-	private var luaInitilized = false;
-
 	init
 	{
 		telemetry = opmode.telemetry
@@ -27,19 +25,17 @@ class LuaRoadRunner(drive2: SampleMecanumDrive, opmode: LinearOpMode)
 	 * initalizes lua and returns the list of opmodes
 	 * not required to be run
 	 */
-	fun initLua(): Array<String>
+	fun init(): Array<String>
 	{
-		luaInitilized = true;
 		return lua.init();
 	}
 
 	/**
 	 * initalizes lua and builds all roadrunner paths
 	 */
-	fun init(name: String)
+	fun loadOpmode(name: String)
 	{
 		opmodeName = name;
-		if(!luaInitilized) lua.init();
 
 		internalInit(builder);
 
@@ -77,13 +73,14 @@ class LuaRoadRunner(drive2: SampleMecanumDrive, opmode: LinearOpMode)
 		lua.start(opmodeName, r2);
 		drive.followTrajectorySequenceAsync(trajectories[r2]);
 		val elapsedTime = ElapsedTime();
-		var prevTime = 0.0f;
+		var prevTime = 0.0;
 		while(drive.isBusy)
 		{
-			val deltaTime = elapsedTime.seconds() - prevTime;
-			prevTime = elapsedTime.seconds().toFloat();
+			val curTime = elapsedTime.seconds();
+			val deltaTime = curTime - prevTime;
+			prevTime = curTime;
 			drive.update();
-			lua.update(deltaTime.toFloat(), elapsedTime.seconds().toFloat());
+			lua.update(deltaTime, curTime);
 		}
 	}
 

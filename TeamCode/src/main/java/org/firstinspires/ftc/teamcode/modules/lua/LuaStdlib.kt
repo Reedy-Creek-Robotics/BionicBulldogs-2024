@@ -37,7 +37,7 @@ class LuaStdlib(val opmode: LinearOpMode)
 		opmode.telemetry.update();
 	}
 
-	fun delay(time: Float): Boolean
+	fun delay(time: Double): Boolean
 	{
 		val e = ElapsedTime();
 		e.reset();
@@ -49,5 +49,10 @@ class LuaStdlib(val opmode: LinearOpMode)
 	fun checkRunning(): Boolean
 	{
 		return !opmode.opModeIsActive();
+	}
+
+	fun stop(): Boolean
+	{
+		return true;
 	}
 }
