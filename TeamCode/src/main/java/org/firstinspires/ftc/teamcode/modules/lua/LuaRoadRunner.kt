@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySe
 
 class LuaRoadRunner(drive2: SampleMecanumDrive, opmode: LinearOpMode)
 {
-	val lua: Lua;
+	private val lua: Lua;
 	private var opmodeName: String = "";
 	private val telemetry: Telemetry;
 	private val drive: SampleMecanumDrive = drive2;
@@ -19,6 +19,11 @@ class LuaRoadRunner(drive2: SampleMecanumDrive, opmode: LinearOpMode)
 	{
 		telemetry = opmode.telemetry
 		lua = Lua(opmode)
+	}
+
+	fun getLua(): Lua
+	{
+		return lua;
 	}
 
 	/**

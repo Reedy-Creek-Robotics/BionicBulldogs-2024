@@ -2,7 +2,9 @@ package org.firstinspires.ftc.teamcode.modules.lua
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.util.ElapsedTime
+import com.acmerobotics.dashboard.config.Config
 
+@Config
 class Lua(opmode2: LinearOpMode)
 {
 	companion object

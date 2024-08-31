@@ -176,6 +176,19 @@ bool Save::exp(NodeGrid* grid)
 								 .c_str());
 						return false;
 					}
+
+					for (int j = 0; j < segments.size(); j++)
+					{
+						PathSegment* seg2 = grid->segs[j];
+						if (seg->endNode == seg2->endNode)
+						{
+							perr((std::string("found path loop at segs ") + std::to_string(j) + ", " +
+								  std::to_string(i) + " | recognition: " + std::to_string(grid->recognitionId))
+									 .c_str());
+							return false;
+						}
+					}
+
 					foundNode = true;
 					foundInd = seg->endNode;
 					segments.push_back(i);
