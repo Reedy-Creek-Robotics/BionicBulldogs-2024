@@ -36,8 +36,11 @@ fun startFileServer(context: Context)
 						a2 = "";
 						continue;
 					}
-					else if(writing) if(arg == 1) str += buf[0].toInt().toChar();
-					else a2 += buf[0].toInt().toChar();
+					else if(writing)
+					{
+						if(arg == 1) str += buf[0].toInt().toChar();
+						else a2 += buf[0].toInt().toChar();
+					}
 				}
 				while(len > 0);
 				Log.d("FServer", a2);
@@ -46,7 +49,7 @@ fun startFileServer(context: Context)
 					Log.d("FServer", "get");
 					val d = File("$storageDir/$a2");
 					var out = "";
-					d.walk().forEach {file ->
+					d.walk().forEach { file ->
 						if(file.isFile)
 						{
 							Log.d("FServer", "reading ${file.path}");
@@ -65,7 +68,7 @@ fun startFileServer(context: Context)
 					else
 					{
 						File("$storageDir/$a2").walk()
-							.forEach {file -> if(file.isFile) file.delete(); else file.deleteRecursively();}
+							.forEach { file -> if(file.isFile) file.delete(); else file.deleteRecursively(); }
 						Log.d("FServer", "done");
 						socket.getOutputStream().write("done\r".toByteArray());
 					}
@@ -77,7 +80,7 @@ fun startFileServer(context: Context)
 					var out = "";
 					var count = 0;
 					var size: Long = 0;
-					d.walk().forEach {file ->
+					d.walk().forEach { file ->
 						if(file.isFile)
 						{
 							out += file.relativeTo(storageDir).toString() + '\n';
@@ -104,7 +107,7 @@ fun startFileServer(context: Context)
 						{
 							val a = path.split('/');
 							var folders = "";
-							for(i in 0 .. a.size - 2)
+							for(i in 0..a.size - 2)
 							{
 								folders += a[i];
 								if(i < a.size - 2)

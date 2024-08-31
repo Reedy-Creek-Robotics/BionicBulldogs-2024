@@ -46,7 +46,7 @@ extern "C" JNIEXPORT void JNICALL Java_org_firstinspires_ftc_teamcode_modules_lu
 	{
 		return;
 	}
-	int rtn = Save::load(&grid, (FuncStat::storageDir + "/paths/" + path));
+	bool rtn = Save::load(&grid, (FuncStat::storageDir + "/paths/" + path));
 	if (rtn == false)
 	{
 		return;

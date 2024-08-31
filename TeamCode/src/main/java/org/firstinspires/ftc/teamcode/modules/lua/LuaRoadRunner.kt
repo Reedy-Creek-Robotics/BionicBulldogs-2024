@@ -63,15 +63,16 @@ class LuaRoadRunner(drive2: SampleMecanumDrive, opmode: LinearOpMode)
 		close();
 	}
 
-	fun start(recognition: Int = -1)
+	fun start()
 	{
-		var r2 = recognition;
-		if(r2 == -1)
-		{
-			r2 = Lua.defaultRecognition;
-		}
-		lua.start(opmodeName, r2);
-		drive.followTrajectorySequenceAsync(trajectories[r2]);
+		start(Lua.defaultRecognition);
+	}
+	
+	fun start(recognition: Int)
+	{
+		drive.poseEstimate = trajectories[recognition].start();
+		lua.start(opmodeName, recognition);
+		drive.followTrajectorySequenceAsync(trajectories[recognition]);
 		val elapsedTime = ElapsedTime();
 		var prevTime = 0.0;
 		while(drive.isBusy)

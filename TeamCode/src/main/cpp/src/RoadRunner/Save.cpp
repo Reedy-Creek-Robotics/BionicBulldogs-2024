@@ -19,21 +19,20 @@ JFunc<void, jstring> Save::pathErr = {};
 void perr(const std::string& str)
 {
 	jstring s = FuncStat::env->NewStringUTF(str.c_str());
-	Save::pathErr.call(s);
-	FuncStat::env->ReleaseStringUTFChars(s, FuncStat::env->GetStringUTFChars(s, nullptr));
+	Save::pathErr.callV(s);
 }
 
-int Save::load(NodeGrid* grid, const std::string& path)
+bool Save::load(NodeGrid* grid, const std::string& path)
 {
-  for(int i = 0; i < grid->nodes.count; i++)
-  {
-    PathNode* node = grid->nodes[i];
-    for(NodePart* part : node->parts)
-    {
-      delete part;
-    }
-    node->parts.clear();
-  }
+	for (int i = 0; i < grid->nodes.count; i++)
+	{
+		PathNode* node = grid->nodes[i];
+		for (NodePart* part : node->parts)
+		{
+			delete part;
+		}
+		node->parts.clear();
+	}
 	grid->nodes.count = 0;
 	grid->segs.count = 0;
 	FILE* file = fopen(path.c_str(), "r");
@@ -117,7 +116,7 @@ int Save::load(NodeGrid* grid, const std::string& path)
 	return true;
 }
 
-void Save::exp(NodeGrid* grid)
+bool Save::exp(NodeGrid* grid)
 {
 	uint8_t* segUsage = new uint8_t[grid->nodes.count];
 	memset(segUsage, 0, grid->nodes.count);
@@ -144,7 +143,7 @@ void Save::exp(NodeGrid* grid)
 			{
 				perr((std::string("path has multiple start nodes | recognition: ") +
 					  std::to_string(grid->recognitionId)));
-				return;
+				return false;
 			}
 		}
 		if (segUsage[j] == 0)
@@ -175,7 +174,7 @@ void Save::exp(NodeGrid* grid)
 						perr((std::string("fork found at node ") + std::to_string((int)seg->startNode) +
 							  " | recognition: " + std::to_string(grid->recognitionId))
 								 .c_str());
-						return;
+						return false;
 					}
 					foundNode = true;
 					foundInd = seg->endNode;
@@ -283,4 +282,5 @@ void Save::exp(NodeGrid* grid)
 		prevPos = node->pos;
 		prevHeading = node->rot;
 	}
+	return true;
 }

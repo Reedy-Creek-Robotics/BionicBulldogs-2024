@@ -1,7 +1,7 @@
 ---@type Opmode
 local opmode = {
 	name = "main",
-	path = "testPath.path",
+	path = "what.path",
 	markers = {},
 }
 
