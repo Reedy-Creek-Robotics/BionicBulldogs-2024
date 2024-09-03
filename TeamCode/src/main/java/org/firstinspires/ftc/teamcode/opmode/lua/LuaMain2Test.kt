@@ -2,22 +2,21 @@ package org.firstinspires.ftc.teamcode.opmode.lua
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
-import com.qualcomm.robotcore.util.ElapsedTime
-import org.firstinspires.ftc.teamcode.modules.lua.Lua
-import org.firstinspires.ftc.teamcode.modules.lua.LuaType
-import org.firstinspires.ftc.teamcode.modules.lua.TestModule
+import org.firstinspires.ftc.teamcode.modules.TestModule
+import org.firstinspires.ftc.teamcode.opmodeloader.LuaType
+import org.firstinspires.ftc.teamcode.opmodeloader.OpmodeLoader
 
 @Autonomous
 class LuaMain2Test: LinearOpMode()
 {
 	override fun runOpMode()
 	{
-		val lua = Lua(this);
+		val lua = OpmodeLoader(this);
 		lua.init();
 
 		val builder = lua.getFunctionBuilder();
 
-		val servos = TestModule(this);
+		val servos = TestModule(hardwareMap);
 
 		builder.setCurrentObject(servos);
 
@@ -26,8 +25,10 @@ class LuaMain2Test: LinearOpMode()
 		builder.addFun("setPos2", LuaType.Void, listOf(LuaType.Double));
 		builder.endClass("servos");
 
+		lua.loadOpmode("main2");
+		
 		waitForStart();
 
-		lua.startLoop("main2");
+		lua.startLoop();
 	}
 }

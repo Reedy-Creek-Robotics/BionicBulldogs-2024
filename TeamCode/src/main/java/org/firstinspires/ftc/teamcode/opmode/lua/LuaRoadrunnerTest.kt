@@ -4,10 +4,10 @@ import com.acmerobotics.dashboard.FtcDashboard
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
+import org.firstinspires.ftc.teamcode.modules.TestModule
 import org.firstinspires.ftc.teamcode.modules.ui.UI
-import org.firstinspires.ftc.teamcode.modules.lua.LuaRoadRunner
-import org.firstinspires.ftc.teamcode.modules.lua.LuaType
-import org.firstinspires.ftc.teamcode.modules.lua.TestModule
+import org.firstinspires.ftc.teamcode.opmodeloader.OpmodeLoaderRR
+import org.firstinspires.ftc.teamcode.opmodeloader.LuaType
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive
 
 @Autonomous
@@ -21,13 +21,13 @@ class LuaRoadrunnerTest : LinearOpMode()
 	{
 		telemetry = MultipleTelemetry(telemetry, FtcDashboard.getInstance().telemetry);
 		val drive = SampleMecanumDrive(hardwareMap);
-		val luaRR = LuaRoadRunner(drive, this);
+		val luaRR = OpmodeLoaderRR(drive, this);
 		
 		opmodes = luaRR.init();
 
-		val builder = luaRR.lua.getFunctionBuilder();
+		val builder = luaRR.getFunctionBuilder();
 
-		val servos = TestModule(this);
+		val servos = TestModule(hardwareMap);
 
 		builder.setCurrentObject(servos);
 

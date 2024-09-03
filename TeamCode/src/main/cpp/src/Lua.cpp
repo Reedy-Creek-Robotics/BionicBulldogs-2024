@@ -67,7 +67,7 @@ std::string getPathName(const std::string& name)
 }
 
 extern "C" JNIEXPORT jobjectArray JNICALL
-Java_org_firstinspires_ftc_teamcode_modules_lua_Lua_internalInit(JNIEnv* env, jobject thiz, jobject stdlib)
+Java_org_firstinspires_ftc_teamcode_opmodeloader_OpmodeLoader_internalInit(JNIEnv* env, jobject thiz, jobject stdlib)
 {
 	FuncStat::env = env;
 
@@ -149,7 +149,7 @@ Java_org_firstinspires_ftc_teamcode_modules_lua_Lua_internalInit(JNIEnv* env, jo
 	return arr;
 }
 
-extern "C" JNIEXPORT void JNICALL Java_org_firstinspires_ftc_teamcode_modules_lua_Lua_start(JNIEnv* env, jobject thiz,
+extern "C" JNIEXPORT void JNICALL Java_org_firstinspires_ftc_teamcode_opmodeloader_OpmodeLoader_start(JNIEnv* env, jobject thiz,
 																							jstring name,
 																							int recognition)
 {
@@ -194,7 +194,7 @@ extern "C" JNIEXPORT void JNICALL Java_org_firstinspires_ftc_teamcode_modules_lu
 	dispMarkerInd = 0;
 }
 
-extern "C" JNIEXPORT jboolean JNICALL Java_org_firstinspires_ftc_teamcode_modules_lua_Lua_update(JNIEnv* env, jobject thiz,
+extern "C" JNIEXPORT jboolean JNICALL Java_org_firstinspires_ftc_teamcode_opmodeloader_OpmodeLoader_update(JNIEnv* env, jobject thiz,
 																							 double deltaTime,
 																							 double elapsedTime)
 {
@@ -216,7 +216,7 @@ extern "C" JNIEXPORT jboolean JNICALL Java_org_firstinspires_ftc_teamcode_module
   return false;
 }
 
-extern "C" JNIEXPORT void JNICALL Java_org_firstinspires_ftc_teamcode_modules_lua_Lua_stop(JNIEnv* env, jobject thiz)
+extern "C" JNIEXPORT void JNICALL Java_org_firstinspires_ftc_teamcode_opmodeloader_OpmodeLoader_stop(JNIEnv* env, jobject thiz)
 {
 	lua_close(l);
 	l = nullptr;
@@ -251,14 +251,14 @@ void callNextDispMarker(std::string str)
 	}
 }
 
-extern "C" JNIEXPORT void JNICALL Java_org_firstinspires_ftc_teamcode_modules_lua_LuaFunctionBuilder_setCurrentObject(
+extern "C" JNIEXPORT void JNICALL Java_org_firstinspires_ftc_teamcode_opmodeloader_FunctionBuilder_setCurrentObject(
 	JNIEnv* env, jobject thiz, jobject thing)
 {
 	FuncStat::env = env;
 	addObject(thing);
 }
 
-extern "C" JNIEXPORT void JNICALL Java_org_firstinspires_ftc_teamcode_modules_lua_LuaFunctionBuilder_addFunction(
+extern "C" JNIEXPORT void JNICALL Java_org_firstinspires_ftc_teamcode_opmodeloader_FunctionBuilder_addFunction(
 	JNIEnv* env, jobject thiz, jstring name, jstring signature, jint argc, jint rtnType)
 {
 	FuncStat::env = env;
@@ -272,13 +272,13 @@ extern "C" JNIEXPORT void JNICALL Java_org_firstinspires_ftc_teamcode_modules_lu
 }
 
 extern "C" JNIEXPORT void JNICALL
-Java_org_firstinspires_ftc_teamcode_modules_lua_LuaFunctionBuilder_newClass(JNIEnv* env, jobject thiz)
+Java_org_firstinspires_ftc_teamcode_opmodeloader_FunctionBuilder_newClass(JNIEnv* env, jobject thiz)
 {
 	startClass();
 }
 
 extern "C" JNIEXPORT void JNICALL
-Java_org_firstinspires_ftc_teamcode_modules_lua_LuaFunctionBuilder_endClass(JNIEnv* env, jobject thiz, jstring name)
+Java_org_firstinspires_ftc_teamcode_opmodeloader_FunctionBuilder_endClass(JNIEnv* env, jobject thiz, jstring name)
 {
 	const char* str = env->GetStringUTFChars(name, nullptr);
 	endClass(str);

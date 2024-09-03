@@ -4,11 +4,10 @@ import com.acmerobotics.dashboard.FtcDashboard
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
-import com.qualcomm.robotcore.util.ElapsedTime
-import org.firstinspires.ftc.teamcode.modules.lua.Lua
-import org.firstinspires.ftc.teamcode.modules.lua.LuaType
-import org.firstinspires.ftc.teamcode.modules.lua.TestModule
+import org.firstinspires.ftc.teamcode.modules.TestModule
 import org.firstinspires.ftc.teamcode.modules.ui.UI
+import org.firstinspires.ftc.teamcode.opmodeloader.LuaType
+import org.firstinspires.ftc.teamcode.opmodeloader.OpmodeLoader
 
 @Autonomous
 class LuaTest: LinearOpMode()
@@ -20,13 +19,13 @@ class LuaTest: LinearOpMode()
 	override fun runOpMode()
 	{
 		telemetry = MultipleTelemetry(telemetry, FtcDashboard.getInstance().telemetry);
-		val lua = Lua(this);
+		val lua = OpmodeLoader(this);
 
 		opmodes = lua.init();
 
 		val builder = lua.getFunctionBuilder();
 
-		val servos = TestModule(this);
+		val servos = TestModule(hardwareMap);
 
 		builder.setCurrentObject(servos);
 
@@ -47,6 +46,7 @@ class LuaTest: LinearOpMode()
 					if(ui.button(s))
 					{
 						selected = s;
+						lua.loadOpmode(s);
 					}
 				}
 			}
@@ -57,16 +57,6 @@ class LuaTest: LinearOpMode()
 			ui.update();
 		}
 		if(!opModeIsActive()) return;
-		lua.start(selected);
-		val elapsedTime = ElapsedTime();
-		elapsedTime.reset();
-		var prevTime = 0.0;
-		while(opModeIsActive())
-		{
-			val curTime = elapsedTime.seconds();
-			val deltaTime = curTime - prevTime;
-			lua.update(deltaTime, curTime);
-			prevTime = curTime;
-		}
+		lua.startLoop();
 	}
 }

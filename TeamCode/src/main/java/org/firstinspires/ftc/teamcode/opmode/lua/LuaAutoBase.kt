@@ -3,10 +3,10 @@ package org.firstinspires.ftc.teamcode.opmode.lua
 import com.acmerobotics.dashboard.FtcDashboard
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
-import org.firstinspires.ftc.teamcode.modules.lua.LuaRoadRunner
-import org.firstinspires.ftc.teamcode.modules.lua.LuaType
+import org.firstinspires.ftc.teamcode.modules.TestModule
+import org.firstinspires.ftc.teamcode.opmodeloader.LuaType
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive
-import org.firstinspires.ftc.teamcode.modules.lua.TestModule
+import org.firstinspires.ftc.teamcode.opmodeloader.OpmodeLoaderRR
 
 abstract class LuaAutoBase : LinearOpMode()
 {
@@ -14,17 +14,16 @@ abstract class LuaAutoBase : LinearOpMode()
 	{
 		telemetry = MultipleTelemetry(telemetry, FtcDashboard.getInstance().telemetry);
 		val drive = SampleMecanumDrive(hardwareMap);
-		val luaRR = LuaRoadRunner(drive, this);
-		val lua = luaRR.lua;
+		val luaRR = OpmodeLoaderRR(drive, this);
 		
 		telemetry.addLine("initing lua");
 		telemetry.update();
 		
 		luaRR.init();
 		
-		val obj = TestModule(this);
+		val obj = TestModule(hardwareMap);
 		
-		val builder = lua.getFunctionBuilder();
+		val builder = luaRR.getFunctionBuilder();
 		
 		builder.setCurrentObject(obj);
 		

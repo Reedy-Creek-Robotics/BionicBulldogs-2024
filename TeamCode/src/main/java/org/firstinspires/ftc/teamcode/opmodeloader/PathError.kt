@@ -1,11 +1,10 @@
-package org.firstinspires.ftc.teamcode.modules.lua
+package org.firstinspires.ftc.teamcode.opmodeloader
 
 import java.lang.RuntimeException
 
-class LuaError : RuntimeException
+class PathError : RuntimeException
 {
-	private var msg: String = "";
-	
+	var msg: String = "";
 	constructor(m: String)
 	{
 		msg = m;

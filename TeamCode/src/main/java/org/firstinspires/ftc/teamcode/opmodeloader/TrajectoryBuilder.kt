@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.modules.lua
+package org.firstinspires.ftc.teamcode.opmodeloader
 
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.geometry.Vector2d
@@ -6,7 +6,7 @@ import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequenceBuilder
 
-class LuaRoadRunnerBuilder
+class TrajectoryBuilder
 {
 	private val drive: SampleMecanumDrive;
 	private lateinit var builder: TrajectorySequenceBuilder;

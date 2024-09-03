@@ -1,11 +1,11 @@
-package org.firstinspires.ftc.teamcode.modules.lua
+package org.firstinspires.ftc.teamcode.opmodeloader
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.util.ElapsedTime
 import com.acmerobotics.dashboard.config.Config
 
 @Config
-class Lua(opmode2: LinearOpMode)
+open class OpmodeLoader(opmode2: LinearOpMode)
 {
 	companion object
 	{
@@ -14,22 +14,26 @@ class Lua(opmode2: LinearOpMode)
 			System.loadLibrary("ftcrobotcontroller");
 		}
 		
-		@JvmStatic
+		@JvmField
 		val defaultRecognition: Int = 0;
 	}
 	
-	private val opmode = opmode2;
+	protected val opmode = opmode2;
 	private val stdlib = LuaStdlib(opmode2);
-	private val builder = LuaFunctionBuilder();
+	private val builder = FunctionBuilder();
+	protected var opmodeName: String = "'";
 	
 	/**
-	 * creates and returns a function builder object for exposing functions to lua
+	 * returns a function builder object for exposing functions to lua
 	 */
-	fun getFunctionBuilder(): LuaFunctionBuilder
+	fun getFunctionBuilder(): FunctionBuilder
 	{
 		return builder;
 	}
 	
+	/**
+	 * initalizes the lua instance and returns a list with all of the opmode names
+	 */
 	fun init(): Array<String>
 	{
 		val opmodes = internalInit(stdlib);
@@ -49,19 +53,44 @@ class Lua(opmode2: LinearOpMode)
 		return opmodes;
 	}
 	
-	fun start(name: String)
+	/**
+	 * loads an opmode to be run
+	 */
+	open fun loadOpmode(name: String)
 	{
-		start(name, defaultRecognition);
+		opmodeName = name;
 	}
-
-	fun startLoop(name: String)
+	
+	/**
+	 * starts the opmode using the default recognition value
+	 */
+	fun start()
 	{
-		startLoop(name, defaultRecognition);
+		start(opmodeName, defaultRecognition);
 	}
-
-	fun startLoop(name: String, recognition: Int)
+	
+	/**
+	 * starts the opmode
+	 */
+	fun start(recognition: Int)
 	{
-		start(name, recognition)
+		start(opmodeName, recognition);
+	}
+	
+	/**
+	 * starts the opmode using the default recognition value and repeatedly calls update
+	 */
+	fun startLoop()
+	{
+		startLoop(defaultRecognition);
+	}
+	
+	/**
+	 * starts the opmode and repeatedly calls update
+	 */
+	open fun startLoop(recognition: Int)
+	{
+		start(opmodeName, recognition)
 
 		val elapsedTime = ElapsedTime();
 		elapsedTime.reset();
@@ -78,7 +107,6 @@ class Lua(opmode2: LinearOpMode)
 	}
 	
 	private external fun internalInit(luaStdlib: LuaStdlib): Array<String>;
-	external fun start(name: String, recognition: Int);
-	external fun stop();
+	private external fun start(name: String, recognition: Int);
 	external fun update(deltaTime: Double, elapsedTime: Double): Boolean;
 }

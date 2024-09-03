@@ -1,7 +1,6 @@
 #include "JFunc.hpp"
 #include "LoadFunc.hpp"
 #include "Lua.hpp"
-#include "macros/Helpers.hpp"
 
 #include <cstring>
 #include <lua/lua.hpp>

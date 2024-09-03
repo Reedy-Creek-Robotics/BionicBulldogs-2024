@@ -4,7 +4,7 @@
 #include <jni.h>
 #include <string>
 
-extern "C" JNIEXPORT void JNICALL Java_org_firstinspires_ftc_teamcode_modules_lua_LuaRoadRunnerBuilder_callDisplacement(
+extern "C" JNIEXPORT void JNICALL Java_org_firstinspires_ftc_teamcode_opmodeloader_TrajectoryBuilder_callDisplacement(
 	JNIEnv* env, jobject thiz, jstring str)
 {
 	callNextDispMarker(env->GetStringUTFChars(str, nullptr));
@@ -17,7 +17,7 @@ void setup();
 jobject builder2;
 
 extern "C" JNIEXPORT void JNICALL
-Java_org_firstinspires_ftc_teamcode_modules_lua_LuaRoadRunner_internalInit(JNIEnv* env, jobject thiz, jobject builder)
+Java_org_firstinspires_ftc_teamcode_opmodeloader_OpmodeLoaderRR_internalInit(JNIEnv* env, jobject thiz, jobject builder)
 {
 	builder2 = env->NewGlobalRef(builder);
 	FuncStat::setVals(env, builder2);
@@ -37,7 +37,7 @@ Java_org_firstinspires_ftc_teamcode_modules_lua_LuaRoadRunner_internalInit(JNIEn
 	Save::pathErr.init("pathErr", "(Ljava/lang/String;)V");
 }
 
-extern "C" JNIEXPORT void JNICALL Java_org_firstinspires_ftc_teamcode_modules_lua_LuaRoadRunner_buildPath(
+extern "C" JNIEXPORT void JNICALL Java_org_firstinspires_ftc_teamcode_opmodeloader_OpmodeLoaderRR_buildPath(
 	JNIEnv* env, jobject thiz, jstring name, int recognition)
 {
 	std::string str = env->GetStringUTFChars(name, nullptr);
@@ -55,7 +55,7 @@ extern "C" JNIEXPORT void JNICALL Java_org_firstinspires_ftc_teamcode_modules_lu
 	Save::exp(&grid);
 }
 
-extern "C" JNIEXPORT void JNICALL Java_org_firstinspires_ftc_teamcode_modules_lua_LuaRoadRunner_close(JNIEnv* env,
+extern "C" JNIEXPORT void JNICALL Java_org_firstinspires_ftc_teamcode_opmodeloader_OpmodeLoaderRR_close(JNIEnv* env,
 																									  jobject thiz)
 {
 	env->DeleteGlobalRef(builder2);

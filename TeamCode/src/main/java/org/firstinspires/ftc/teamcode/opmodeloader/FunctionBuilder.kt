@@ -1,11 +1,11 @@
-package org.firstinspires.ftc.teamcode.modules.lua
+package org.firstinspires.ftc.teamcode.opmodeloader
 
 enum class LuaType(val id: Int)
 {
 	Double(3), Bool(1), String(4), Void(0), CheckRun(-1);
 }
 
-class LuaFunctionBuilder
+class FunctionBuilder
 {
 	/**
 	 * sets the object to pull functions from to expose to lua
@@ -28,7 +28,9 @@ class LuaFunctionBuilder
 	 * if a class is active when this is called the function will be put in that table
 	 * else the function will be set as a global
 	 */
-	fun addFun(name: String, rtnType: LuaType = LuaType.Void, argTypes: List<LuaType> = listOf(LuaType.Void))
+	fun addFun(name: String, rtnType: LuaType = LuaType.Void, argTypes: List<LuaType> = listOf(
+		LuaType.Void
+	))
 	{
 		var funSignature = "(";
 		var argc = 0;
