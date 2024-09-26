@@ -22,16 +22,16 @@ public class LocalizationTest extends LinearOpMode {
 
         drive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-//        drive.setPoseEstimate(new Pose2d(-48, 48, 0));
+        drive.setPoseEstimate(new Pose2d(-48, 48, 0));
 
         waitForStart();
 
         while (!isStopRequested()) {
             drive.setWeightedDrivePower(
                     new Pose2d(
-                            gamepad1.left_stick_y,
-                            gamepad1.left_stick_x,
-                            -gamepad1.right_stick_x
+                            gamepad1.left_stick_y * 0.5,
+                            gamepad1.left_stick_x * 0.5,
+                            -gamepad1.right_stick_x * 0.5
                     )
             );
 

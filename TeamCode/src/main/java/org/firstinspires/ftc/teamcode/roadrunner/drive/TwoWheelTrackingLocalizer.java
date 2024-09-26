@@ -33,16 +33,20 @@ import java.util.List;
  *    \--------------/
  *
  */
-public class TwoWheelTrackingLocalizer extends TwoTrackingWheelLocalizer {
+public class TwoWheelTrackingLocalizer extends TwoTrackingWheelLocalizer
+{
     public static double TICKS_PER_REV = 2000;
     public static double WHEEL_RADIUS = 1.89 / 2; // in
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (encoder) speed
 
-    public static double PARALLEL_X = 0; // X is the up and down direction
-    public static double PARALLEL_Y = 0; // Y is the strafe direction
+    public static double PARALLEL_X = 5; // X is the up and down direction
+    public static double PARALLEL_Y = -4.25; // Y is the strafe direction
 
-    public static double PERPENDICULAR_X = 0;
-    public static double PERPENDICULAR_Y = 0;
+    public static double PERPENDICULAR_X = -4.25;
+    public static double PERPENDICULAR_Y = 1;
+
+    public static double XMULTIPLIER = 0.996;
+    public static double YMULTIPLIER = 1.091;
 
     // Parallel/Perpendicular to the forward axis
     // Parallel wheel is parallel to the forward axis
@@ -51,7 +55,8 @@ public class TwoWheelTrackingLocalizer extends TwoTrackingWheelLocalizer {
 
     private SampleMecanumDrive drive;
 
-    public TwoWheelTrackingLocalizer(HardwareMap hardwareMap, SampleMecanumDrive drive) {
+    public TwoWheelTrackingLocalizer(HardwareMap hardwareMap, SampleMecanumDrive drive)
+    {
         super(Arrays.asList(
                 new Pose2d(PARALLEL_X, PARALLEL_Y, 0),
                 new Pose2d(PERPENDICULAR_X, PERPENDICULAR_Y, Math.toRadians(90))
@@ -68,39 +73,44 @@ public class TwoWheelTrackingLocalizer extends TwoTrackingWheelLocalizer {
         // TODO: reverse any encoders using Encoder.setDirection(Encoder.Direction.REVERSE)
     }
 
-    public static double encoderTicksToInches(double ticks) {
+    public static double encoderTicksToInches(double ticks)
+    {
         return WHEEL_RADIUS * 2 * Math.PI * GEAR_RATIO * ticks / TICKS_PER_REV;
     }
 
     @Override
-    public double getHeading() {
+    public double getHeading()
+    {
         return drive.getRawExternalHeading();
     }
 
     @Override
-    public Double getHeadingVelocity() {
+    public Double getHeadingVelocity()
+    {
         return drive.getExternalHeadingVelocity();
     }
 
     @NonNull
     @Override
-    public List<Double> getWheelPositions() {
+    public List<Double> getWheelPositions()
+    {
         return Arrays.asList(
-                encoderTicksToInches(parallelEncoder.getCurrentPosition()),
-                encoderTicksToInches(perpendicularEncoder.getCurrentPosition())
+                encoderTicksToInches(parallelEncoder.getCurrentPosition()) * XMULTIPLIER,
+                encoderTicksToInches(perpendicularEncoder.getCurrentPosition()) * YMULTIPLIER
         );
     }
 
     @NonNull
     @Override
-    public List<Double> getWheelVelocities() {
+    public List<Double> getWheelVelocities()
+    {
         // TODO: If your encoder velocity can exceed 32767 counts / second (such as the REV Through Bore and other
         //  competing magnetic encoders), change Encoder.getRawVelocity() to Encoder.getCorrectedVelocity() to enable a
         //  compensation method
 
         return Arrays.asList(
-                encoderTicksToInches(parallelEncoder.getRawVelocity()),
-                encoderTicksToInches(perpendicularEncoder.getRawVelocity())
+                encoderTicksToInches(parallelEncoder.getRawVelocity()) * XMULTIPLIER,
+                encoderTicksToInches(perpendicularEncoder.getRawVelocity()) * YMULTIPLIER
         );
     }
 }
