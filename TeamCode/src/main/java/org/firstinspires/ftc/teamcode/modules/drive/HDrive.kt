@@ -12,7 +12,6 @@ import org.firstinspires.ftc.teamcode.modules.Vec2
 import org.firstinspires.ftc.teamcode.modules.hardware.MotorGroup
 import org.firstinspires.ftc.teamcode.modules.robot.Acceleration
 import org.firstinspires.ftc.teamcode.opmode.config.HDriveConfig
-import java.lang.RuntimeException
 import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.sin
