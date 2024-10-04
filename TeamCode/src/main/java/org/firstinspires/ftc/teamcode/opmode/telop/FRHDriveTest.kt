@@ -58,7 +58,9 @@ class FRHDriveTest: LinearOpMode()
 		waitForStart()
 
 		//Initial values
-		gripper.position = 0.25
+		gripper.position = 0.0
+		//Notice: arm is shared across two methods
+		arm.position = 0.5
 
 		slide.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
 		slide.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
@@ -143,9 +145,8 @@ class FRHDriveTest: LinearOpMode()
 	//Dpad = rotators | x/b = close/open grip | left/right bumpers = lower/raise arm
 	private fun cMech()
 	{
-
 		if (gamepad1.left_bumper) {
-			arm.position = 0.95
+			arm.position = 0.96
 		}; if (gamepad1.right_bumper) {
 			arm.position = 0.5
 		}; if (gamepad1.x) {
