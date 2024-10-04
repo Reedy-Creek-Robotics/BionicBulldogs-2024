@@ -1,30 +1,38 @@
 package org.firstinspires.ftc.teamcode.opmode.telop
 
+import com.qualcomm.hardware.sparkfun.SparkFunOTOS
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
-import com.qualcomm.robotcore.hardware.*
+import com.qualcomm.robotcore.hardware.CRServo
+import com.qualcomm.robotcore.hardware.DcMotor
+import com.qualcomm.robotcore.hardware.DcMotorSimple
+import com.qualcomm.robotcore.hardware.Servo
 import org.firstinspires.ftc.teamcode.modules.drive.HDrive
-import org.firstinspires.ftc.teamcode.modules.drive.IMULocalizer
-import org.firstinspires.ftc.teamcode.modules.hardware.ImuEx
+import org.firstinspires.ftc.teamcode.modules.drive.SparkfunImuLocalizer
 import org.firstinspires.ftc.teamcode.opmode.config.HDriveConfig
 
 @TeleOp(group = "test")
 class FRHDriveTest: LinearOpMode()
 {
-
-	//Sample intake
+		//Sample intake (Eli's Mechanism)
+	//Rotates the arm attaching the mechanism
 	private lateinit var arm: Servo
+	//Rotates the wheel on the mechanism
 	private lateinit var rotateServo: CRServo
 
-	//Drivetrain
+		//Drivetrain
 	private lateinit var hDrive: HDrive
 
-	//Specimen claw
+		//Specimen claw (JD's Mechanism)
+	//Controls the claw
 	private lateinit var claw: Servo
+	//Controls the slide attached to the mechanism
 	private lateinit var slide: DcMotor
 
-	//Caleb's mechanism
+		//Sample intake (Caleb's Mechanism)
+	//Adjusts the grip of the mechanism
 	private lateinit var gripper: Servo
+	//Controls the two rods/wheels on the mechanism
 	private lateinit var rotator0: CRServo
 	private lateinit var rotator1: CRServo
 
@@ -43,11 +51,14 @@ class FRHDriveTest: LinearOpMode()
 		slide.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
 		slide.direction = DcMotorSimple.Direction.REVERSE
 
-		val imu = ImuEx(hardwareMap.get(IMU::class.java, "imu"))
-
-		hDrive.setLocalizer(IMULocalizer(imu))
+		//Swapped internal localizer to external
+		val imu = hardwareMap.get(SparkFunOTOS::class.java, "imu2");
+		hDrive.setLocalizer(SparkfunImuLocalizer(imu))
 
 		waitForStart()
+
+		//Initial values
+		gripper.position = 0.25
 
 		slide.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
 		slide.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
@@ -75,10 +86,10 @@ class FRHDriveTest: LinearOpMode()
 		}
 	}
 
-	//Costs bumpers and all buttons except Y
-	private fun eMech() {
-
-		//Eli's mechanism
+	//Eli's Mechanism (Sample Intake)
+	//Bumper left/right = arm raise/lower | Rotate in/out/stop = gamepad x/y/a
+	private fun eMech()
+	{
 
 		if (gamepad1.left_bumper) {
 			arm.position = 0.0
@@ -92,13 +103,12 @@ class FRHDriveTest: LinearOpMode()
 		}; if (gamepad1.a) {
 			rotateServo.power = 0.0
 		};
-
 	}
 
-	//Costs horizontal dpad and triggers
-	private fun jMech() {
-
-		//JD's mechanism
+	//JD's mechanism (Specimen claw)
+	//Dpad left/right = Claw closed/open | Trigger left/right = Slide down/up
+	private fun jMech()
+	{
 
 		if (gamepad1.dpad_left) {
 			claw.position = 0.0
@@ -127,13 +137,12 @@ class FRHDriveTest: LinearOpMode()
 
 		telemetry.addData("slide pos:", slide.currentPosition)
 		telemetry.addData("slide target:", slide.targetPosition)
-
 	}
 
-	//Costs dpad and horizontal buttons (x/b)
-	private fun cMech() {
-
-		//Caleb's mechanism
+	//Caleb's mechanism
+	//Dpad = rotators | x/b = close/open grip | left/right bumpers = lower/raise arm
+	private fun cMech()
+	{
 
 		if (gamepad1.left_bumper) {
 			arm.position = 0.95
@@ -155,6 +164,5 @@ class FRHDriveTest: LinearOpMode()
 		}
 
 		telemetry.addData("grip pos: ", gripper.position)
-
 	}
 }
