@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.opmode.config.HDriveConfig
 @TeleOp(group = "test")
 class FRHDriveTest: LinearOpMode()
 {
+
 	//Sample intake
 	private lateinit var arm: Servo
 	private lateinit var rotateServo: CRServo
@@ -139,7 +140,7 @@ class FRHDriveTest: LinearOpMode()
 		}; if (gamepad1.right_bumper) {
 			arm.position = 0.5
 		}; if (gamepad1.x) {
-			gripper.position = 0.01
+			gripper.position = 0.0
 		}; if (gamepad1.b) {
 			gripper.position = 0.25
 		}; if (gamepad1.dpad_up) {
