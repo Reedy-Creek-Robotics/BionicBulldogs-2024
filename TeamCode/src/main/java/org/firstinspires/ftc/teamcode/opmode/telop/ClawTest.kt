@@ -61,6 +61,8 @@ class ClawTest: LinearOpMode()
 			{
 				slides.stop()
 			};
+			telemetry.addData("slides pos", slides.getPosition());
+			telemetry.update();
 		}
 	}
 }
