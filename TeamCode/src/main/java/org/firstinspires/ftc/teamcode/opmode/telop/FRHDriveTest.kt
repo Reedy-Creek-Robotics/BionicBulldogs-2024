@@ -4,8 +4,6 @@ import com.qualcomm.hardware.sparkfun.SparkFunOTOS
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.CRServo
-import com.qualcomm.robotcore.hardware.DcMotor
-import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.Servo
 import org.firstinspires.ftc.teamcode.modules.drive.HDrive
 import org.firstinspires.ftc.teamcode.modules.drive.SparkfunImuLocalizer
@@ -24,10 +22,6 @@ class FRHDriveTest: LinearOpMode()
 	//Drivetrain
 	private lateinit var hDrive: HDrive;
 
-	//Specimen claw (JD's Mechanism)
-	//Controls the claw
-
-
 	//Sample intake (Caleb's Mechanism)
 	//Adjusts the grip of the mechanism
 	private lateinit var gripper: Servo;
@@ -40,7 +34,8 @@ class FRHDriveTest: LinearOpMode()
 	{
 		hDrive = HDrive(HDriveConfig(hardwareMap));
 
-		arm = hardwareMap.servo.get("arm");        //rotateServo = hardwareMap.crservo.get("rotate")
+		arm = hardwareMap.servo.get("arm");
+		//rotateServo = hardwareMap.crservo.get("rotate")
 		gripper = hardwareMap.servo.get("gripper");
 		rotator0 = hardwareMap.crservo.get("rotator0");
 		rotator1 = hardwareMap.crservo.get("rotator1");
