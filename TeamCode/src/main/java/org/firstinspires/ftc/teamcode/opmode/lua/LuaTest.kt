@@ -1,43 +1,52 @@
 package org.firstinspires.ftc.teamcode.opmode.lua
 
-import android.util.Log
 import com.acmerobotics.dashboard.FtcDashboard
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
-import org.firstinspires.ftc.teamcode.modules.Ui.UI
-import org.firstinspires.ftc.teamcode.modules.lua.Lua
+import org.firstinspires.ftc.teamcode.modules.TestModule
+import org.firstinspires.ftc.teamcode.modules.ui.UI
+import org.firstinspires.ftc.teamcode.opmodeloader.LuaType
+import org.firstinspires.ftc.teamcode.opmodeloader.OpmodeLoader
 
 @Autonomous
-class LuaTest : LinearOpMode()
+class LuaTest: LinearOpMode()
 {
-	private var opmodes: Array<String>? = null;
-	private var ui: UI = UI();
+	private lateinit var opmodes: Array<String>;
+	private val ui: UI = UI();
 	private var selected: String = "";
-	var lua: Lua? = null;
-	
+
 	override fun runOpMode()
 	{
 		telemetry = MultipleTelemetry(telemetry, FtcDashboard.getInstance().telemetry);
-		lua = Lua(this);
-		opmodes = lua?.init();
+		val lua = OpmodeLoader(this);
+
+		opmodes = lua.init();
+
+		val builder = lua.getFunctionBuilder();
+
+		val servos = TestModule(hardwareMap);
+
+		builder.setCurrentObject(servos);
+
+		builder.newClass();
+		builder.addFun("setPos", LuaType.Void, listOf(LuaType.Double));
+		builder.addFun("setPos2", LuaType.Void, listOf(LuaType.Double));
+		builder.endClass("servos");
+
 		ui.init(telemetry, gamepad1)
-		Log.d("LuaTest", opmodes?.size.toString());
-		if(opmodes == null)
-		{
-			return;
-		}
+
 		while(opModeInInit())
 		{
 			if(selected == "")
 			{
 				ui.label("select opmode");
-				for(s in opmodes!!)
+				for(s in opmodes)
 				{
 					if(ui.button(s))
 					{
 						selected = s;
-						lua?.initRR(selected);
+						lua.loadOpmode(s);
 					}
 				}
 			}
@@ -47,16 +56,7 @@ class LuaTest : LinearOpMode()
 			}
 			ui.update();
 		}
-		if(!opModeIsActive())
-			return;
-		if(lua?.isRR() == true)
-		{
-			lua?.startRR(selected, 4);
-		}
-		else
-		{
-			lua?.start(selected, 4);
-		}
-		lua?.stop();
+		if(!opModeIsActive()) return;
+		lua.startLoop();
 	}
 }

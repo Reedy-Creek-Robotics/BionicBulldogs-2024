@@ -23,6 +23,6 @@ class Save
 	static JFunc<void, jdouble> rotate;
 	static JFunc<void, jstring> marker;
   static JFunc<void, jstring> pathErr;
-	static int load(NodeGrid* grid, const std::string& path);
-	static void exp(NodeGrid* grid);
+	static bool load(NodeGrid* grid, const std::string& path);
+	static bool exp(NodeGrid* grid);
 };

@@ -3,29 +3,38 @@ package org.firstinspires.ftc.teamcode.opmode.lua
 import com.acmerobotics.dashboard.FtcDashboard
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
-import org.firstinspires.ftc.teamcode.modules.lua.Lua
-import org.firstinspires.ftc.teamcode.modules.lua.LuaError
-import org.firstinspires.ftc.teamcode.modules.lua.TestModule
-import java.lang.Exception
+import org.firstinspires.ftc.teamcode.modules.TestModule
+import org.firstinspires.ftc.teamcode.opmodeloader.LuaType
+import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive
+import org.firstinspires.ftc.teamcode.opmodeloader.OpmodeLoaderRR
 
 abstract class LuaAutoBase : LinearOpMode()
 {
 	override fun runOpMode()
 	{
 		telemetry = MultipleTelemetry(telemetry, FtcDashboard.getInstance().telemetry);
-		val lua = Lua(this);
-		
-		val obj = TestModule(this);
-		lua.addObject(obj);
+		val drive = SampleMecanumDrive(hardwareMap);
+		val luaRR = OpmodeLoaderRR(drive, this);
 		
 		telemetry.addLine("initing lua");
 		telemetry.update();
 		
-		lua.init();
+		luaRR.init();
+		
+		val obj = TestModule(hardwareMap);
+		
+		val builder = luaRR.getFunctionBuilder();
+		
+		builder.setCurrentObject(obj);
+		
+		builder.newClass();
+		builder.addFun("setPos", LuaType.Void, listOf(LuaType.Double));
+		builder.addFun("setPos2", LuaType.Void, listOf(LuaType.Double));
+		builder.endClass("servos");
 		
 		val str = getOpmodeName();
 		
-		lua.initRR(str);
+		luaRR.loadOpmode(str);
 		
 		telemetry.clearAll();
 		telemetry.addLine("inited");
@@ -36,7 +45,7 @@ abstract class LuaAutoBase : LinearOpMode()
 		telemetry.clearAll();
 		telemetry.update();
 		
-		lua.startRR(str);
+		luaRR.start(1);
 	}
 	
 	abstract fun getOpmodeName(): String;

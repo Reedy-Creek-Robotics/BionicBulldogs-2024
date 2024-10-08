@@ -7,6 +7,8 @@ function delay(time) end
 
 function checkRunning() end
 
+function stop() end
+
 telem = {}
 
 ---@param lbl string
