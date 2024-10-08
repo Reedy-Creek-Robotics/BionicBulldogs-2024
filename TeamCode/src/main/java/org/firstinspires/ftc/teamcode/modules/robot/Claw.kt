@@ -7,9 +7,9 @@ class Claw(private val claw: Servo)
 	companion object
 	{
 		@JvmField
-		var openPos: Double = 1.0;
+		var openPos: Double = 0.75;
 		@JvmField
-		var closePos: Double = 0.0;
+		var closePos: Double = 0.4;
 	}
 
 	fun open()

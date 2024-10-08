@@ -7,18 +7,18 @@ class Arm (private val arm: Servo) {
     companion object
     {
         @JvmField
-        var armClose : Double = 0.0;
+        var armDown : Double = 0.5;
         @JvmField
-        var armOpen : Double = 0.63;
+        var armUp : Double = 0.96;
     }
 
     fun down()
     {
-        arm.position = armClose;
+        arm.position = armDown;
     }
 
     fun up()
     {
-        arm.position = armOpen;
+        arm.position = armUp;
     }
 }

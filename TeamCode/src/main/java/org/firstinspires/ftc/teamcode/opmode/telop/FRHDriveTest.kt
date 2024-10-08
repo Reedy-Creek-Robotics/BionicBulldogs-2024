@@ -34,8 +34,6 @@ class FRHDriveTest: LinearOpMode()
 	{
 		hDrive = HDrive(HDriveConfig(hardwareMap));
 
-		arm = hardwareMap.servo.get("arm");
-		//rotateServo = hardwareMap.crservo.get("rotate")
 		gripper = hardwareMap.servo.get("gripper");
 		rotator0 = hardwareMap.crservo.get("rotator0");
 		rotator1 = hardwareMap.crservo.get("rotator1");
@@ -50,8 +48,6 @@ class FRHDriveTest: LinearOpMode()
 		gripper.position = 0.0;        //Notice: arm is shared across two methods
 		arm.position = 0.5;
 
-		//slide.targetPosition = 0
-		//slide.mode = DcMotor.RunMode.RUN_TO_POSITION
 
 		while(opModeIsActive())
 		{
@@ -72,34 +68,6 @@ class FRHDriveTest: LinearOpMode()
 			telemetry.update()
 
 		}
-	}
-
-	//Eli's Mechanism (Sample Intake)
-	//Bumper left/right = arm raise/lower | Rotate in/out/stop = gamepad x/y/a
-	private fun eMech()
-	{
-
-		if(gamepad1.left_bumper)
-		{
-			arm.position = 0.0;
-		}
-		if(gamepad1.right_bumper)
-		{
-			arm.position = 0.63;
-		}
-		if(gamepad1.x)
-		{
-			rotateServo.power = -0.5;            //changed from gamepad.b -> gamepad.y
-		}
-		if(gamepad1.y)
-		{
-			rotateServo.power = 0.5;
-		}
-		if(gamepad1.a)
-		{
-			rotateServo.power = 0.0;
-		}
-
 	}
 
 	//Caleb's mechanism
