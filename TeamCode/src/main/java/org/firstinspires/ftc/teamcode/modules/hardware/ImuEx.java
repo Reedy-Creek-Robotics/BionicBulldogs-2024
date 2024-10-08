@@ -7,7 +7,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 public class ImuEx {
     IMU imu;
-
     public ImuEx(IMU _imu, RevHubOrientationOnRobot.UsbFacingDirection usb, RevHubOrientationOnRobot.LogoFacingDirection logo) {
         imu = _imu;
         imu.initialize(new IMU.Parameters(new RevHubOrientationOnRobot(logo, usb)));
@@ -19,8 +18,8 @@ public class ImuEx {
         imu.initialize(
                 new IMU.Parameters(
                         new RevHubOrientationOnRobot(
-                                RevHubOrientationOnRobot.LogoFacingDirection.LEFT,// Right, Back for control hub : Left, Forward for expansion hub : Forward, Up for test bot
-                                RevHubOrientationOnRobot.UsbFacingDirection.FORWARD
+                                RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                                RevHubOrientationOnRobot.UsbFacingDirection.LEFT
                         )
                 )
         );
