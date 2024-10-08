@@ -13,7 +13,9 @@ class Slides(private val slides: DcMotor)
 
 	init
 	{
+		slides.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER;
 		slides.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER;
+		slides.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE;
 	}
 
 	fun reverse()
@@ -34,5 +36,24 @@ class Slides(private val slides: DcMotor)
 	fun stop()
 	{
 		slides.power = 0.0;
+	}
+
+	fun runToPosition(pos: Int)
+	{
+		slides.power = 0.0;
+		slides.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER;
+		slides.targetPosition = pos;
+		slides.mode = DcMotor.RunMode.RUN_TO_POSITION;
+		slides.power = slideSpeed;
+	}
+
+	fun getPosition(): Int
+	{
+		return slides.currentPosition;
+	}
+
+	fun isBusy(): Boolean
+	{
+		return slides.isBusy;
 	}
 }
