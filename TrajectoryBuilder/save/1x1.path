@@ -1,0 +1,83 @@
+{
+    "nodes": [
+        {
+            "heading": 0.0,
+            "layer": 0,
+            "pos": {
+                "x": 48.0,
+                "y": 24.0
+            },
+            "rot": 0.0
+        },
+        {
+            "heading": 270.0,
+            "layer": 0,
+            "pos": {
+                "x": 24.0,
+                "y": 24.0
+            },
+            "rot": 270.0
+        },
+        {
+            "heading": 180.0,
+            "layer": 0,
+            "pos": {
+                "x": 24.0,
+                "y": 0.0
+            },
+            "rot": 180.0
+        },
+        {
+            "heading": 90.0,
+            "layer": 0,
+            "pos": {
+                "x": 48.0,
+                "y": 0.0
+            },
+            "rot": 90.0
+        },
+        {
+            "heading": 0.0,
+            "layer": 1,
+            "pos": {
+                "x": 48.0,
+                "y": 24.0
+            },
+            "rot": 0.0
+        }
+    ],
+    "segs": [
+        {
+            "endNode": 1,
+            "heading": 2,
+            "layer": 0,
+            "path": 1,
+            "recognitionId": -1,
+            "startNode": 0
+        },
+        {
+            "endNode": 2,
+            "heading": 2,
+            "layer": 0,
+            "path": 1,
+            "recognitionId": -1,
+            "startNode": 1
+        },
+        {
+            "endNode": 3,
+            "heading": 2,
+            "layer": 0,
+            "path": 1,
+            "recognitionId": -1,
+            "startNode": 2
+        },
+        {
+            "endNode": 4,
+            "heading": 2,
+            "layer": 1,
+            "path": 1,
+            "recognitionId": -1,
+            "startNode": 3
+        }
+    ]
+}
