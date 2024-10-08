@@ -164,6 +164,7 @@ class FRHDriveTest: LinearOpMode()
 			rotator1.power = 0.0
 		}
 
+
 		telemetry.addData("grip pos: ", gripper.position)
 	}
 }
