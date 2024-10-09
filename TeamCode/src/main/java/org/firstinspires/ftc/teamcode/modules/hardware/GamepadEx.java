@@ -4,12 +4,9 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 public class GamepadEx {
     Gamepad gamepad;
-    Gamepad curGamepad;
     Gamepad prevGamepad;
     public GamepadEx(Gamepad _gamepad){
         gamepad = _gamepad;
-        curGamepad = new Gamepad();
-        curGamepad.copy(gamepad);
         prevGamepad = new Gamepad();
     }
 
@@ -17,8 +14,7 @@ public class GamepadEx {
      * copy gamepad for rising edge detection
      */
     public void copy(){
-        prevGamepad.copy(curGamepad);
-        curGamepad.copy(gamepad);
+        prevGamepad.copy(gamepad);
     }
 
     // buttons

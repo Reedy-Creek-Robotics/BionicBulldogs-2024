@@ -204,6 +204,6 @@ class HDrive(config: HDriveConfig)
 	companion object
 	{
 		@JvmField
-		var maxPower = 0.7;
+		var maxPower = 1;
 	}
 }

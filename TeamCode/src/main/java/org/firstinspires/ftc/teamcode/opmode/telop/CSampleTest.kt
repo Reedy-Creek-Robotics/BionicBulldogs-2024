@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.opmode.telop
 
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.modules.drive.HDrive
 import org.firstinspires.ftc.teamcode.modules.drive.SparkfunImuLocalizer
 import org.firstinspires.ftc.teamcode.modules.hardware.GamepadEx
@@ -10,6 +11,7 @@ import org.firstinspires.ftc.teamcode.modules.robot.Gripper
 import org.firstinspires.ftc.teamcode.modules.robot.Spin
 import org.firstinspires.ftc.teamcode.opmode.config.HDriveConfig
 
+@TeleOp
 class CSampleTest: LinearOpMode() {
     override fun runOpMode() {
 
