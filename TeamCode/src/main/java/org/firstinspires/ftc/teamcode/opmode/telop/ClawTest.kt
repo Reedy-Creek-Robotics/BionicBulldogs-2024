@@ -36,14 +36,15 @@ class ClawTest: LinearOpMode()
 			drive.driveFR(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
 
 			// claw
-			if(gamepad.dpadLeft())
-			{
-				claw.close()
-			};
-
 			if(gamepad.dpadRight())
 			{
-				claw.open()
+				if(claw.state == Claw.State.Closed)
+				{
+					claw.open()
+				} else if(claw.state == Claw.State.Open)
+				{
+					claw.close()
+				}
 			};
 
 			// slides

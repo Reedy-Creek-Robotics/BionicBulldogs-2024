@@ -4,6 +4,14 @@ import com.qualcomm.robotcore.hardware.Servo
 
 class Claw(private val claw: Servo)
 {
+
+	enum class State {
+		Closed,
+		Open
+	}
+
+	var state: State = State.Closed;
+
 	companion object
 	{
 		@JvmField
@@ -15,10 +23,12 @@ class Claw(private val claw: Servo)
 	fun open()
 	{
 		claw.position = openPos;
+		state = State.Open;
 	}
 
 	fun close()
 	{
 		claw.position = closePos;
+		state = State.Closed;
 	}
 }

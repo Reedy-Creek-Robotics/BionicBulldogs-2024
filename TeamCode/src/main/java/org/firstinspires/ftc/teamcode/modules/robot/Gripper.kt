@@ -4,6 +4,13 @@ import com.qualcomm.robotcore.hardware.Servo
 
 class Gripper(private val gripper: Servo) {
 
+    enum class State {
+        Open,
+        Close
+    }
+
+    var state: State = State.Open;
+
     companion object
     {
         @JvmField
@@ -15,10 +22,12 @@ class Gripper(private val gripper: Servo) {
     fun close()
     {
         gripper.position = gripClose
+        state = State.Close;
     }
     fun open()
     {
         gripper.position = gripOpen
+        state = State.Open;
     }
 
 }

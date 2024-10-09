@@ -19,7 +19,7 @@ class CSampleTest: LinearOpMode() {
         val gripper = Gripper(hardwareMap.servo.get("gripper"));
         val spin = Spin(hardwareMap.crservo.get("rotator0"), hardwareMap.crservo.get("rotator1"));
         val drive = HDrive(HDriveConfig(hardwareMap));
-        drive.setLocalizer(SparkfunImuLocalizer(hardwareMap.get(SparkFunOTOS::class.java, "imu2")))
+        drive.setLocalizer(SparkfunImuLocalizer(hardwareMap.get(SparkFunOTOS::class.java, "imu2")));
 
         val gamepad = GamepadEx(gamepad1);
 
@@ -32,34 +32,34 @@ class CSampleTest: LinearOpMode() {
 
             drive.driveFR(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
 
-            if(gamepad.leftBumper())
+            if(gamepad.leftTriggerb())
             {
                 arm.up()
             };
 
-            if(gamepad.rightBumper())
+            if(gamepad.rightTriggerb())
             {
                 arm.down()
             };
 
-            if(gamepad.square())
+            if(gamepad.leftBumper())
             {
-                gripper.close()
+                if (gripper.state != Gripper.State.Open)
+                {
+                    gripper.open();
+                } else {
+                    gripper.close();
+                }
             };
 
-            if(gamepad.circle())
+            if(gamepad.rightBumper())
             {
-                gripper.open()
-            };
-
-            if(gamepad.dpadUp())
-            {
-                spin.forward()
-            };
-
-            if(gamepad.dpadDown())
-            {
-                spin.reverse()
+                if (spin.state != Spin.State.Forward)
+                {
+                    spin.forward();
+                } else {
+                    spin.reverse();
+                }
             };
 
             if(gamepad.dpadLeft() || gamepad.dpadRight())
