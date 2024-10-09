@@ -4,6 +4,15 @@ import com.qualcomm.robotcore.hardware.CRServo
 
 class Spin(private val spin0: CRServo, private val spin1: CRServo) {
 
+    enum class State
+    {
+        Forward,
+        Stop,
+        Reverse
+    }
+
+    var state: State = State.Stop;
+
     companion object
     {
         @JvmField
@@ -16,17 +25,20 @@ class Spin(private val spin0: CRServo, private val spin1: CRServo) {
     {
         spin0.power = spinPower;
         spin1.power = -spinPower;
+        state = State.Forward;
     }
 
     fun reverse()
     {
         spin0.power = -spinPower;
         spin1.power = spinPower;
+        state = State.Reverse;
     }
 
     fun stop()
     {
         spin0.power = spinStop;
         spin1.power = spinStop;
+        state = State.Stop;
     }
 }
