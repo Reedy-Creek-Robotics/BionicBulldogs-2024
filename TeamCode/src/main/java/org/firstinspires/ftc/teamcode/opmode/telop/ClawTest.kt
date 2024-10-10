@@ -40,28 +40,29 @@ class ClawTest: LinearOpMode()
 			{
 				if(claw.state == Claw.State.Closed)
 				{
-					claw.open()
-				} else if(claw.state == Claw.State.Open)
-				{
-					claw.close()
+					claw.open();
 				}
-			};
+				else if(claw.state == Claw.State.Open)
+				{
+					claw.close();
+				}
+			}
 
 			// slides
 			if(gamepad1.dpad_up)
 			{
-				slides.up()
-			};
+				slides.up();
+			}
 
 			if(gamepad1.dpad_down)
 			{
-				slides.up()
-			};
+				slides.down();
+			}
 
 			if(!gamepad1.dpad_up && !gamepad1.dpad_down)
 			{
-				slides.stop()
-			};
+				slides.stop();
+			}
 		}
 	}
 }
