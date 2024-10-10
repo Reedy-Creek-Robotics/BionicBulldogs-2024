@@ -5,17 +5,32 @@ import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 
 @Config
-class Slides(private val slides: DcMotor)
+class Slide(private val slides: DcMotor)
 {
+
+    enum class State {
+        Lower,
+        Raise
+    }
+
+    var state = State.Raise;
+
 	companion object
 	{
 		@JvmField
 		var slideSpeed = 0.5;
+        @JvmField
+        var Top = 1800;
+        @JvmField
+        var Bottom = 0;
 	}
 
 	init
 	{
 		slides.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER;
+        /*slides.mode = DcMotor.RunMOde.STOP_AND_RESET_ENCODER;
+        slides.position = Bottom;
+        slides.mode = DcMotor.RunMode.RUN_TO_POSITION;*/
         slides.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE;
 	}
 
@@ -23,6 +38,18 @@ class Slides(private val slides: DcMotor)
 	{
 		slides.direction = DcMotorSimple.Direction.REVERSE;
 	}
+
+    fun raise()
+    {
+        //slides.setPosition(Top);
+        state = State.Lower;
+    }
+
+    fun lower()
+    {
+        //slides.setPosition(Bottom);
+        state = State.Raise;
+    }
 
 	fun up()
 	{

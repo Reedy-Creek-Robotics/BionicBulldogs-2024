@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.modules.drive.HDrive
 import org.firstinspires.ftc.teamcode.modules.drive.SparkfunImuLocalizer
 import org.firstinspires.ftc.teamcode.modules.hardware.GamepadEx
 import org.firstinspires.ftc.teamcode.modules.robot.Claw
-import org.firstinspires.ftc.teamcode.modules.robot.Slides
+import org.firstinspires.ftc.teamcode.modules.robot.Slide
 import org.firstinspires.ftc.teamcode.opmode.config.HDriveConfig
 
 @TeleOp
@@ -16,11 +16,11 @@ class ClawTest: LinearOpMode()
 	override fun runOpMode()
 	{
 		val claw = Claw(hardwareMap.servo.get("claw"));
-		val slides = Slides(hardwareMap.dcMotor.get("slide"));
+		val slide = Slide(hardwareMap.dcMotor.get("slide"));
 		val drive = HDrive(HDriveConfig(hardwareMap));
 		drive.setLocalizer(SparkfunImuLocalizer(hardwareMap.get(SparkFunOTOS::class.java, "imu2")));
 
-		slides.reverse();
+		slide.reverse();
 
 		val gamepad = GamepadEx(gamepad1);
 
@@ -51,17 +51,17 @@ class ClawTest: LinearOpMode()
 			// slides
 			if(gamepad1.dpad_up)
 			{
-				slides.up();
+				slide.up();
 			}
 
 			if(gamepad1.dpad_down)
 			{
-				slides.down();
+				slide.down();
 			}
 
 			if(!gamepad1.dpad_up && !gamepad1.dpad_down)
 			{
-				slides.stop();
+				slide.stop();
 			}
 		}
 	}
