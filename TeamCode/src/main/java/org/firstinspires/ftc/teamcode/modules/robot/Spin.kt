@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.modules.robot
 
+import com.acmerobotics.dashboard.config.Config
 import com.qualcomm.robotcore.hardware.CRServo
 
+@Config
 class Spin(private val spin0: CRServo, private val spin1: CRServo) {
 
     companion object
