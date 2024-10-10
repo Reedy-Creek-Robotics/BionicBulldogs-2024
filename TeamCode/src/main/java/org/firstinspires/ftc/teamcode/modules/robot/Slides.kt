@@ -1,8 +1,10 @@
 package org.firstinspires.ftc.teamcode.modules.robot
 
+import com.acmerobotics.dashboard.config.Config
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 
+@Config
 class Slides(private val slides: DcMotor)
 {
 	companion object
