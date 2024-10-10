@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.modules.drive.HDrive
 import org.firstinspires.ftc.teamcode.modules.drive.SparkfunImuLocalizer
 import org.firstinspires.ftc.teamcode.modules.hardware.GamepadEx
-import org.firstinspires.ftc.teamcode.modules.robot.Slides
+import org.firstinspires.ftc.teamcode.modules.robot.Slide
 import org.firstinspires.ftc.teamcode.modules.robot.Spin
 import org.firstinspires.ftc.teamcode.opmode.config.HDriveConfig
 
@@ -15,7 +15,7 @@ class EmSampleTest: LinearOpMode() {
     override fun runOpMode() {
 
         val spin = Spin(hardwareMap.crservo.get("claw"), hardwareMap.crservo.get("gripper"));
-        val slide = Slides(hardwareMap.dcMotor.get("slide"));
+        val slide = Slide(hardwareMap.dcMotor.get("slide"));
         val drive = HDrive(HDriveConfig(hardwareMap));
         drive.setLocalizer(SparkfunImuLocalizer(hardwareMap.get(SparkFunOTOS::class.java, "imu2")));
 
