@@ -14,6 +14,7 @@ class Slides(private val slides: DcMotor)
 	init
 	{
 		slides.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER;
+        slides.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE;
 	}
 
 	fun reverse()
