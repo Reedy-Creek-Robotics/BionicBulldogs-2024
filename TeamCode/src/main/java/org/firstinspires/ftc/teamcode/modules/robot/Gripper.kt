@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.modules.robot
 
+import com.acmerobotics.dashboard.config.Config
 import com.qualcomm.robotcore.hardware.Servo
 
+@Config
 class Gripper(private val gripper: Servo) {
 
     companion object
