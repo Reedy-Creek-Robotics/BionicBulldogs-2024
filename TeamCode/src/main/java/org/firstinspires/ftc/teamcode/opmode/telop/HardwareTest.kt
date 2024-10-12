@@ -23,6 +23,7 @@ class HardwareTester : OpMode() {
     }
 
     override fun loop() {
+        controller.copy();
         // Output the selected device to telemetry
         val device = devices[selectedDevice]
         telemetry.addData("Device Count", selectedDevice.toString() + " of " + devices!!.size)

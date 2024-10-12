@@ -9,28 +9,30 @@ import org.firstinspires.ftc.robotcore.external.Telemetry
 class Slide(private val slides: DcMotor)
 {
 
-    enum class State {
-        Lower,
-        Raise
-    }
+	enum class State
+	{
+		Lower, Raise
+	}
 
-    var state = State.Raise;
+	var state = State.Raise;
 
 	companion object
 	{
 		@JvmField
 		var slideSpeed = 0.5;
-        @JvmField
-        var Top = 1800;
-        @JvmField
-        var Bottom = 0;
+
+		@JvmField
+		var Top = 1800;
+
+		@JvmField
+		var Bottom = 0;
 	}
 
 	init
 	{
 		slides.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER;
-        slides.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER;
-        slides.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE;
+		slides.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER;
+		slides.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE;
 	}
 
 	fun reverse()
@@ -38,17 +40,17 @@ class Slide(private val slides: DcMotor)
 		slides.direction = DcMotorSimple.Direction.REVERSE;
 	}
 
-    fun raise()
-    {
-        runToPosition(1400);
-        state = State.Lower;
-    }
+	fun raise()
+	{
+		runToPosition(1400);
+		state = State.Lower;
+	}
 
-    fun lower()
-    {
-        runToPosition(0);
-        state = State.Raise;
-    }
+	fun lower()
+	{
+		runToPosition(0);
+		state = State.Raise;
+	}
 
 	fun up()
 	{
@@ -65,19 +67,24 @@ class Slide(private val slides: DcMotor)
 		slides.power = 0.0;
 	}
 
-    fun runToPosition(pos: Int)
-    {
-        slides.power = 0.0;
-        slides.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER;
-        slides.targetPosition = pos;
-        slides.mode = DcMotor.RunMode.RUN_TO_POSITION;
-        slides.power = slideSpeed;
-    }
+	fun runToPosition(pos: Int)
+	{
+		slides.power = 0.0;
+		slides.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER;
+		slides.targetPosition = pos;
+		slides.mode = DcMotor.RunMode.RUN_TO_POSITION;
+		slides.power = slideSpeed;
+	}
 
-    fun telem(t: Telemetry)
-    {
-        t.addData("Slides: position", slides.currentPosition);
-        t.addData("Slides: targetPosition", slides.targetPosition);
-        t.addData("Slides: power", slides.power);
-    }
+	fun busy(): Boolean
+	{
+		return slides.isBusy;
+	}
+
+	fun telem(t: Telemetry)
+	{
+		t.addData("Slides: position", slides.currentPosition);
+		t.addData("Slides: targetPosition", slides.targetPosition);
+		t.addData("Slides: power", slides.power);
+	}
 }
