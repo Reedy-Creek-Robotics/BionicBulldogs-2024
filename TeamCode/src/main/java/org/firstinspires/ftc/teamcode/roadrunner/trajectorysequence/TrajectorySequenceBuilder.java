@@ -19,6 +19,7 @@ import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAcceleration
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 import com.acmerobotics.roadrunner.util.Angle;
 
+import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.sequencesegment.FunctionSegment;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.sequencesegment.SequenceSegment;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.sequencesegment.TrajectorySegment;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.sequencesegment.TurnSegment;
@@ -463,6 +464,14 @@ public class TrajectorySequenceBuilder {
 
         currentDuration += seconds;
         return this;
+    }
+
+    public FunctionSegment functionSegment()
+    {
+        pushPath();
+        FunctionSegment seg = new FunctionSegment(lastPose, Collections.emptyList());
+        sequenceSegments.add(seg);
+        return seg;
     }
 
     public TrajectorySequenceBuilder addTrajectory(Trajectory trajectory) {

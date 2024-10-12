@@ -10,7 +10,7 @@ class Slides(private val slides: DcMotor)
 	companion object
 	{
 		@JvmField
-		var slideSpeed = 0.5;
+		var slideSpeed = 1.0;
 	}
 
 	init
@@ -40,13 +40,19 @@ class Slides(private val slides: DcMotor)
 		slides.power = 0.0;
 	}
 
-	fun runToPosition(pos: Int)
+	fun runToPosition(pos: Int, speed: Double = -1.0)
 	{
 		slides.power = 0.0;
 		slides.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER;
 		slides.targetPosition = pos;
 		slides.mode = DcMotor.RunMode.RUN_TO_POSITION;
-		slides.power = slideSpeed;
+		if(speed == -1.0) slides.power = slideSpeed;
+		else slides.power = speed;
+	}
+
+	fun runToPosition2(pos: Double)
+	{
+		runToPosition(pos.toInt());
 	}
 
 	fun getPosition(): Int

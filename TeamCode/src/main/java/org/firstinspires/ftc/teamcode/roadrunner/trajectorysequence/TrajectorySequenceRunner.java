@@ -18,6 +18,7 @@ import com.acmerobotics.roadrunner.util.NanoClock;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.teamcode.roadrunner.drive.DriveConstants;
+import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.sequencesegment.FunctionSegment;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.sequencesegment.SequenceSegment;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.sequencesegment.TrajectorySegment;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.sequencesegment.TurnSegment;
@@ -179,6 +180,16 @@ public class TrajectorySequenceRunner {
                     driveSignal = new DriveSignal();
                 }
             } else if (currentSegment instanceof WaitSegment) {
+                lastPoseError = new Pose2d();
+
+                targetPose = currentSegment.getStartPose();
+                driveSignal = new DriveSignal();
+
+                if (deltaTime >= currentSegment.getDuration()) {
+                    currentSegmentIndex++;
+                }
+            }
+            else if (currentSegment instanceof FunctionSegment) {
                 lastPoseError = new Pose2d();
 
                 targetPose = currentSegment.getStartPose();
