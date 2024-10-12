@@ -23,7 +23,7 @@ class OpmodeLoaderRR(drive2: SampleMecanumDrive, opmode: LinearOpMode) : OpmodeL
 	 */
 	override fun loadOpmode(name: String)
 	{
-		opmodeName = name;
+		/*opmodeName = name;
 
 		internalInit(builder);
 
@@ -48,7 +48,7 @@ class OpmodeLoaderRR(drive2: SampleMecanumDrive, opmode: LinearOpMode) : OpmodeL
 		telemetry.addLine("done");
 		telemetry.update();
 
-		close();
+		close();*/
 	}
 	
 	/**
@@ -56,7 +56,7 @@ class OpmodeLoaderRR(drive2: SampleMecanumDrive, opmode: LinearOpMode) : OpmodeL
 	 */
 	override fun startLoop(recognition: Int)
 	{
-		drive.poseEstimate = trajectories[recognition].start();
+		/*drive.poseEstimate = trajectories[recognition].start();
 		start(recognition);
 		drive.followTrajectorySequenceAsync(trajectories[recognition]);
 		val elapsedTime = ElapsedTime();
@@ -68,10 +68,10 @@ class OpmodeLoaderRR(drive2: SampleMecanumDrive, opmode: LinearOpMode) : OpmodeL
 			prevTime = curTime;
 			drive.update();
 			update(deltaTime, curTime);
-		}
+		}*/
 	}
 
-	private external fun buildPath(name: String, recognition: Int);
-	private external fun internalInit(builder: TrajectoryBuilder);
-	private external fun close();
+	//private external fun buildPath(name: String, recognition: Int);
+	//private external fun internalInit(builder: TrajectoryBuilder);
+	//private external fun close();
 }

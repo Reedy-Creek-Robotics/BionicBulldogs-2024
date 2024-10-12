@@ -1,11 +1,10 @@
-cmake_minimum_required(VERSION 3.22.1)
+cmake_minimum_required(VERSION 3.18.1)
 project("ftcrobotcontroller")
 add_library(
              ftcrobotcontroller
              SHARED
-./src/Functions.cpp
-./src/JFunc.cpp
-./src/Lua.cpp
+./src/main.cpp
+./src/print.cpp
 ./include/lua/lapi.c
 ./include/lua/lauxlib.c
 ./include/lua/lbaselib.c
@@ -40,9 +39,6 @@ add_library(
 ./include/lua/lutf8lib.c
 ./include/lua/lvm.c
 ./include/lua/lzio.c
-./src/RoadRunner/Marker.cpp
-./src/RoadRunner/NodeGrid.cpp
-./src/RoadRunner/Save.cpp
         )
 target_include_directories(ftcrobotcontroller PRIVATE src include)
 
