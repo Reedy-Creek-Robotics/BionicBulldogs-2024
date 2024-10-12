@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmode.telop
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
+import com.qualcomm.robotcore.util.ElapsedTime
 import org.firstinspires.ftc.teamcode.modules.drive.HDrive
 import org.firstinspires.ftc.teamcode.modules.drive.SparkfunImuLocalizer
 import org.firstinspires.ftc.teamcode.modules.hardware.GamepadEx
@@ -96,7 +97,9 @@ class MainTelop: LinearOpMode() {
 
             //Combo
             if(gamepad.touchpad()) {
+                drive.drive(0.0f, 0.0f, 0.0f);
                 claw.close();
+                delay(0.5);
                 slide.raise();
             }
 
@@ -114,5 +117,11 @@ class MainTelop: LinearOpMode() {
             telemetry.addData("square count", count);
             telemetry.update();
         }
+    }
+    private fun delay(time: Double)
+    {
+        val e = ElapsedTime();
+        e.reset();
+        while(e.seconds() < time);
     }
 }

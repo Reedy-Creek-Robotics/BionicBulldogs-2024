@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode.opmode.telop;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.teamcode.modules.robot.Claw;
 
+@TeleOp
 public class CoachTestMode extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {

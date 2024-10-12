@@ -3,11 +3,13 @@ package org.firstinspires.ftc.teamcode.modules.hardware;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 public class GamepadEx {
+    Gamepad currentGamepad;
     Gamepad gamepad;
     Gamepad prevGamepad;
     public GamepadEx(Gamepad _gamepad){
-        gamepad = _gamepad;
+        currentGamepad = _gamepad;
         prevGamepad = new Gamepad();
+        gamepad = new Gamepad();
     }
 
     /**
@@ -15,6 +17,7 @@ public class GamepadEx {
      */
     public void copy(){
         prevGamepad.copy(gamepad);
+        gamepad.copy(currentGamepad);
     }
 
     // buttons
