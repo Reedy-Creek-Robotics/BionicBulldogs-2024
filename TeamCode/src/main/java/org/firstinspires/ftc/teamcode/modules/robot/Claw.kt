@@ -19,7 +19,7 @@ class Claw(private val claw: Servo)
 		@JvmField
 		var openPos: Double = 0.75;
 		@JvmField
-		var closePos: Double = 0.35;
+		var closePos: Double = 0.3;
 	}
 
 	fun open()

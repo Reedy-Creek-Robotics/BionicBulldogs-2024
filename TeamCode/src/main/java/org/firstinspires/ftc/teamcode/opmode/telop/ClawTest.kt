@@ -32,10 +32,10 @@ class ClawTest: LinearOpMode()
 		{
 			gamepad.copy();
 
-			// drive
+			//drive
 			drive.driveFR(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
 
-			// claw
+			//claw
 			if(gamepad.dpadRight())
 			{
 				if(claw.state == Claw.State.Closed)
@@ -48,7 +48,7 @@ class ClawTest: LinearOpMode()
 				}
 			}
 
-			// slides
+			//slides
 			if(gamepad1.dpad_up)
 			{
 				slide.up();

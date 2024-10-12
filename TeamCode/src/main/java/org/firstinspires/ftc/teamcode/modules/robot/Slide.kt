@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.modules.robot
 import com.acmerobotics.dashboard.config.Config
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorSimple
+import org.firstinspires.ftc.robotcore.external.Telemetry
 
 @Config
 class Slide(private val slides: DcMotor)
@@ -28,9 +29,7 @@ class Slide(private val slides: DcMotor)
 	init
 	{
 		slides.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER;
-        /*slides.mode = DcMotor.RunMOde.STOP_AND_RESET_ENCODER;
-        slides.position = Bottom;
-        slides.mode = DcMotor.RunMode.RUN_TO_POSITION;*/
+        slides.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER;
         slides.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE;
 	}
 
@@ -41,13 +40,13 @@ class Slide(private val slides: DcMotor)
 
     fun raise()
     {
-        //slides.setPosition(Top);
+        runToPosition(1400);
         state = State.Lower;
     }
 
     fun lower()
     {
-        //slides.setPosition(Bottom);
+        runToPosition(0);
         state = State.Raise;
     }
 
@@ -65,4 +64,20 @@ class Slide(private val slides: DcMotor)
 	{
 		slides.power = 0.0;
 	}
+
+    fun runToPosition(pos: Int)
+    {
+        slides.power = 0.0;
+        slides.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER;
+        slides.targetPosition = pos;
+        slides.mode = DcMotor.RunMode.RUN_TO_POSITION;
+        slides.power = slideSpeed;
+    }
+
+    fun telem(t: Telemetry)
+    {
+        t.addData("Slides: position", slides.currentPosition);
+        t.addData("Slides: targetPosition", slides.targetPosition);
+        t.addData("Slides: power", slides.power);
+    }
 }

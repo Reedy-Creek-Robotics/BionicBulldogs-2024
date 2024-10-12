@@ -2,15 +2,16 @@ package org.firstinspires.ftc.teamcode.opmode.telop
 
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.modules.drive.HDrive
 import org.firstinspires.ftc.teamcode.modules.drive.SparkfunImuLocalizer
 import org.firstinspires.ftc.teamcode.modules.hardware.GamepadEx
 import org.firstinspires.ftc.teamcode.modules.robot.Arm
 import org.firstinspires.ftc.teamcode.modules.robot.Claw
-import org.firstinspires.ftc.teamcode.modules.robot.Rotate
 import org.firstinspires.ftc.teamcode.modules.robot.Slide
+import org.firstinspires.ftc.teamcode.modules.robot.Spin
 import org.firstinspires.ftc.teamcode.opmode.config.HDriveConfig
-
+@TeleOp
 class MainTelop: LinearOpMode() {
     override fun runOpMode() {
 
@@ -18,7 +19,7 @@ class MainTelop: LinearOpMode() {
         val claw = Claw(hardwareMap.servo.get("claw"));
         val slide = Slide(hardwareMap.dcMotor.get("slide"));
         val arm = Arm(hardwareMap.servo.get("arm"));
-        val rotate = Rotate(hardwareMap.crservo.get("rotate"))
+        val rotate = Spin(hardwareMap.crservo.get("rotator0"), hardwareMap.crservo.get("rotator1"))
 
         val drive = HDrive(HDriveConfig(hardwareMap));
         drive.setLocalizer(SparkfunImuLocalizer(hardwareMap.get(SparkFunOTOS::class.java, "imu2")));
@@ -32,6 +33,7 @@ class MainTelop: LinearOpMode() {
         claw.close();
         arm.up();
 
+        var count = 0;
 
         //Controls:
         //Claw - Circle toggles open/close
@@ -48,28 +50,36 @@ class MainTelop: LinearOpMode() {
             drive.driveFR(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
 
             //Claw
-            if (gamepad.circle()) {
-                if (claw.state != Claw.State.Closed) {
+            if (gamepad.circle())
+            {
+                if (claw.state != Claw.State.Closed)
+                {
                     claw.close();
-                } else if (claw.state != Claw.State.Open) {
+                }
+                else if (claw.state != Claw.State.Open)
+                {
                     claw.open();
                 }
             }
 
             //Rotate rBumper
-            if (gamepad.rightBumper()) {
-                if (rotate.state != Rotate.State.Stop) {
+            if (gamepad.rightBumper())
+            {
+                if (rotate.state != Spin.State.Stop)
+                {
                     rotate.stop();
-                } else if (rotate.state != Rotate.State.Forward) {
+                }
+                else if (rotate.state != Spin.State.Forward)
+                {
                     rotate.forward();
                 }
             }
 
             //Rotate lBumper
             if(gamepad.leftBumper()) {
-                if (rotate.state != Rotate.State.Stop) {
+                if (rotate.state != Spin.State.Stop) {
                     rotate.stop();
-                } else if (rotate.state != Rotate.State.Reverse) {
+                } else if (rotate.state != Spin.State.Reverse) {
                     rotate.reverse();
                 }
             }
@@ -92,12 +102,17 @@ class MainTelop: LinearOpMode() {
 
             //Arm
             if(gamepad.square()) {
+                count++;
                 if(arm.state == Arm.State.Up) {
                     arm.down();
                 } else if(arm.state == Arm.State.Down) {
                     arm.up();
                 }
             }
+            slide.telem(telemetry);
+            telemetry.addData("square", gamepad.square());
+            telemetry.addData("square count", count);
+            telemetry.update();
         }
     }
 }
