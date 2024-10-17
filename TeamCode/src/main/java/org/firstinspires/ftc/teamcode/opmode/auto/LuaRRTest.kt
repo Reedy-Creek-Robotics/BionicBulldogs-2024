@@ -31,13 +31,14 @@ class LuaRRTest: LinearOpMode()
 			).build();
 
 
-		val path2 = drive.trajectorySequenceBuilder(path.end()).lineToConstantHeading(
-			Vector2d(48.0, -55.0), velOverride(DriveConstants.MAX_VEL / 2), accelOverride()
-		).turn(Math.toRadians(180.0)).build();
+		val path2 = drive.trajectorySequenceBuilder(path.end()).lineToLinearHeading(
+			Pose2d(48.0, -55.0, Math.toRadians(90.0)),
+			velOverride(DriveConstants.MAX_VEL / 2, DriveConstants.MAX_ANG_VEL / 2),
+			accelOverride()
+		).build();
 
-		val path3 = drive.trajectorySequenceBuilder(path2.end()).turn(Math.toRadians(180.0))
-			.lineToConstantHeading(
-				path2.start().vec(), velOverride(DriveConstants.MAX_VEL / 2), accelOverride()
+		val path3 = drive.trajectorySequenceBuilder(path2.end()).lineToLinearHeading(
+				path2.start(), velOverride(DriveConstants.MAX_VEL / 2, DriveConstants.MAX_ANG_VEL / 2), accelOverride()
 			).build();
 
 		drive.poseEstimate = path.start();
