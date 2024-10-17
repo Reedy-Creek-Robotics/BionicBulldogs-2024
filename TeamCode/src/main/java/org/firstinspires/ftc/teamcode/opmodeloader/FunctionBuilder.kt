@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.opmodeloader
 
 enum class LuaType(val id: Int)
 {
-	Double(3), Bool(1), String(4), Void(0), CheckRun(-1);
+	Double(3), Integer(3), Bool(1), String(4), Void(0), CheckRun(-1);
 }
 
 class FunctionBuilder
@@ -10,11 +10,7 @@ class FunctionBuilder
 	/**
 	 * sets the object to pull functions from to expose to lua
 	 */
-	fun <T> setCurrentObject(thing: T)
-	{
-	
-	}
-	//external fun <T> setCurrentObject(thing: T);
+	external fun <T> setCurrentObject(thing: T);
 	
 	/**
 	 * starts a new lua table for functions
@@ -57,15 +53,17 @@ class FunctionBuilder
 		}
 		funSignature += ')';
 		funSignature += typeToStr(rtnType);
-		//addFunction(name, funSignature, rtnType.id, argc);
+		addFunction(name, funSignature, rtnType.id, argc);
 	}
 	
-	//private external fun addFunction(name: String, funSignature: String, rtnType: Int, argc: Int);
+	private external fun addFunction(name: String, funSignature: String, rtnType: Int, argc: Int);
 	
 	private fun typeToStr(type: LuaType): String
 	{
 		if(type == LuaType.Double)
 			return "D";
+		if(type == LuaType.Integer)
+			return "I";
 		if(type == LuaType.Bool)
 			return "Z";
 		if(type == LuaType.Void)

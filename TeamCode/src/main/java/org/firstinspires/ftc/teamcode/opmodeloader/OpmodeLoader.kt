@@ -38,7 +38,7 @@ open class OpmodeLoader(opmode2: LinearOpMode)
 	{
 		val opmodes = internalInit(stdlib);
 
-		/*builder.setCurrentObject(stdlib);
+		builder.setCurrentObject(stdlib);
 
 		builder.addFun("print", LuaType.Void, listOf(LuaType.String));
 		builder.addFun("delay", LuaType.CheckRun, listOf(LuaType.Double));
@@ -48,7 +48,7 @@ open class OpmodeLoader(opmode2: LinearOpMode)
 		builder.newClass();
 		builder.addFun("addData", LuaType.Void, listOf(LuaType.String, LuaType.String));
 		builder.addFun("update", LuaType.Void);
-		builder.endClass("telem");*/
+		builder.endClass("telem");
 
 		return opmodes;
 	}
@@ -59,6 +59,7 @@ open class OpmodeLoader(opmode2: LinearOpMode)
 	open fun loadOpmode(name: String)
 	{
 		opmodeName = name;
+		internalLoadOpmode(name);
 	}
 	
 	/**
@@ -66,15 +67,15 @@ open class OpmodeLoader(opmode2: LinearOpMode)
 	 */
 	fun start()
 	{
-		//start(opmodeName, defaultRecognition);
+		start(defaultRecognition);
 	}
 	
 	/**
 	 * starts the opmode
 	 */
-	fun start(recognition: Int)
+	open fun start(recognition: Int)
 	{
-		//start(opmodeName, recognition);
+		internalStart(recognition);
 	}
 	
 	/**
@@ -82,7 +83,7 @@ open class OpmodeLoader(opmode2: LinearOpMode)
 	 */
 	fun startLoop()
 	{
-		//startLoop(defaultRecognition);
+		startLoop(defaultRecognition);
 	}
 	
 	/**
@@ -90,13 +91,13 @@ open class OpmodeLoader(opmode2: LinearOpMode)
 	 */
 	open fun startLoop(recognition: Int)
 	{
-		/*start(opmodeName, recognition)
+		start(recognition)
 
 		val elapsedTime = ElapsedTime();
 		elapsedTime.reset();
 		var prevTime = 0.0;
 
-		while(opmode.opModeIsActive())
+		/*while(opmode.opModeIsActive())
 		{
 			val curTime = elapsedTime.seconds();
 			val deltaTime = curTime - prevTime;
@@ -107,6 +108,7 @@ open class OpmodeLoader(opmode2: LinearOpMode)
 	}
 	
 	private external fun internalInit(luaStdlib: LuaStdlib): Array<String>;
-	//private external fun start(name: String, recognition: Int);
+	private external fun internalLoadOpmode(name: String);
+	private external fun internalStart(recognition: Int);
 	//external fun update(deltaTime: Double, elapsedTime: Double): Boolean;
 }

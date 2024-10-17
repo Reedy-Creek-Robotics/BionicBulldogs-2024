@@ -51,6 +51,13 @@ class OpmodeLoaderRR(drive2: SampleMecanumDrive, opmode: LinearOpMode) : OpmodeL
 		close();*/
 	}
 	
+	override fun start(recognition: Int)
+	{
+		/*drive.poseEstimate = trajectories[recognition].start();
+		start(recognition);
+		drive.followTrajectorySequenceAsync(trajectories[recognition]);*/
+	}
+	
 	/**
 	 * starts the opmode and repeatedly calls init
 	 */

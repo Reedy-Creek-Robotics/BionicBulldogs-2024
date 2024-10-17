@@ -1,4 +1,19 @@
 ---@meta
+
+---@class Opmode
+---@field name string
+---@field path string?
+---@field start function?
+---@field update function?
+---@field markers any[function]?
+
+---@class Time
+---@field delta number
+---@field elapsed number
+
+---@param opmode Opmode
+function addOpmode(opmode) end
+
 ---@param msg string
 function print(msg) end
 
@@ -16,21 +31,3 @@ telem = {}
 function telem.addData(lbl, msg) end
 
 function telem.update() end
-
----@class Opmode
----@field name string
----@field path string?
----@field start function?
----@field update function?
----@field markers any[function]?
-
----@class Time
----@field delta number
----@field elapsed number
-
-servos = {}
----@param pos number
-function servos.setPos(pos) end
-
----@param pos number
-function servos.setPos2(pos) end

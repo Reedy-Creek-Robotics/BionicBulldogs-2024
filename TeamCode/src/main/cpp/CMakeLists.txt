@@ -3,6 +3,7 @@ project("ftcrobotcontroller")
 add_library(
              ftcrobotcontroller
              SHARED
+./src/functionBuilder.cpp
 ./src/main.cpp
 ./src/print.cpp
 ./include/lua/lapi.c
