@@ -4,7 +4,7 @@ jmethodID printId;
 jmethodID errId;
 jmethodID jniErrId;
 
-jobject object;
+jobject object = nullptr;
 JNIEnv* env;
 
 void print(const std::string& msg)
@@ -31,6 +31,8 @@ void jniErr(const std::string& msg)
 void initFuncs(jobject obj, JNIEnv* e)
 {
   env = e;
+  if(object)
+    env->DeleteGlobalRef(object);
   object = env->NewGlobalRef(obj);
   jclass clazz = env->GetObjectClass(obj);
   printId = env->GetMethodID(clazz, "print", "(Ljava/lang/String;)V");

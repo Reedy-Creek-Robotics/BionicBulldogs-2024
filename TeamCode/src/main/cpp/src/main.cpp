@@ -1,14 +1,15 @@
+#include "functionBuilder.hpp"
 #include <cstring>
 #include <jni.h>
 #include <lua/lua.hpp>
 #include <vector>
-#include "functionBuilder.hpp"
 
 #include "print.hpp"
 
 #define init Java_org_firstinspires_ftc_teamcode_opmodeloader_OpmodeLoader_internalInit
 #define loadOpmode Java_org_firstinspires_ftc_teamcode_opmodeloader_OpmodeLoader_internalLoadOpmode
 #define start Java_org_firstinspires_ftc_teamcode_opmodeloader_OpmodeLoader_internalStart
+#define update Java_org_firstinspires_ftc_teamcode_opmodeloader_OpmodeLoader_update
 
 std::vector<std::string> opmodes;
 
@@ -79,6 +80,9 @@ lua_State* l = nullptr;
 
 extern "C" JNIEXPORT jobjectArray JNICALL init(JNIEnv* env, jobject thiz, jobject stdlib)
 {
+	opmodes.clear();
+
+	clearRefs(env);
 	initFuncs(stdlib, env);
 
 	jclass clazz = env->GetObjectClass(stdlib);
@@ -113,7 +117,7 @@ extern "C" JNIEXPORT jobjectArray JNICALL init(JNIEnv* env, jobject thiz, jobjec
 
 	lua_pushnil(l);
 
-  initFunctionBuilder(env, l);
+	initFunctionBuilder(env, l);
 
 	jobjectArray arr = env->NewObjectArray(opmodes.size(), env->FindClass("java/lang/String"), env->NewStringUTF("T"));
 
@@ -153,9 +157,10 @@ extern "C" JNIEXPORT void JNICALL loadOpmode(JNIEnv* env, jobject thiz, jstring 
 	}
 }
 
+
 extern "C" JNIEXPORT void JNICALL start(JNIEnv* env, jobject thiz, int recognition)
 {
-  setEnv(env);
+	setEnv(env);
 	std::string s = std::to_string(opmodeIndex);
 	lua_settop(l, 0);
 	lua_getglobal(l, "data");
@@ -165,6 +170,23 @@ extern "C" JNIEXPORT void JNICALL start(JNIEnv* env, jobject thiz, int recogniti
 	if (lua_type(l, -1) == LUA_TFUNCTION)
 	{
 		lua_pushnumber(l, recognition);
+		if (lua_pcall(l, 1, 0, 0))
+		{
+			err(lua_tostring(l, -1));
+		}
+	}
+}
+
+extern "C" JNIEXPORT void JNICALL update(JNIEnv* env, jobject thiz, double delta, double elapsed)
+{
+	lua_getfield(l, -1, "start");
+	if (lua_type(l, -1) == LUA_TFUNCTION)
+	{
+    lua_newtable(l);
+		lua_pushnumber(l, elapsed);
+    lua_setfield(l, -2, "elapsedTime");
+		lua_pushnumber(l, delta);
+    lua_setfield(l, -2, "deltaTime");
 		if (lua_pcall(l, 1, 0, 0))
 		{
 			err(lua_tostring(l, -1));

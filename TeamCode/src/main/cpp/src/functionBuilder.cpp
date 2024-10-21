@@ -9,6 +9,9 @@
 #define setCurrentObject Java_org_firstinspires_ftc_teamcode_opmodeloader_FunctionBuilder_setCurrentObject
 #define addFunction Java_org_firstinspires_ftc_teamcode_opmodeloader_FunctionBuilder_addFunction
 
+#define newClass Java_org_firstinspires_ftc_teamcode_opmodeloader_FunctionBuilder_newClass
+#define endClass Java_org_firstinspires_ftc_teamcode_opmodeloader_FunctionBuilder_endClass
+
 #define LUA_TINT 8
 
 static lua_State* l;
@@ -17,18 +20,18 @@ static JNIEnv* env;
 
 struct Function
 {
-	int objectId;
+	jobject object;
 	jmethodID function;
 
-	char rtnType;
-	std::vector<char> argTypes;
+	int rtnType;
+	std::vector<unsigned char> argTypes;
 };
 
 std::vector<Function> functions;
 
 std::vector<jobject> objects;
 
-int currentObjectId;
+jobject currentObject;
 
 void setEnv(JNIEnv* env2)
 {
@@ -37,16 +40,19 @@ void setEnv(JNIEnv* env2)
 
 int callFun(lua_State* l);
 
-void initFunctionBuilder(JNIEnv* env, lua_State* L)
+void clearRefs(JNIEnv* env)
 {
-	print("nuke list");
-  l = L;
 	for (jobject object : objects)
 	{
 		env->DeleteGlobalRef(object);
 	}
 	objects.clear();
 	functions.clear();
+}
+
+void initFunctionBuilder(JNIEnv* env, lua_State* L)
+{
+	l = L;
 
 	luaL_newmetatable(l, "functionBuilder");
 	lua_pushcfunction(l, callFun);
@@ -65,7 +71,7 @@ int callFun(lua_State* l)
 
 	if (fun.argTypes.size() != argc)
 	{
-		luaL_error(l, "expected %i args, got %i", fun.argTypes.size(), argc);
+		luaL_error(l, "expected %d args, got %d", fun.argTypes.size(), argc);
 	}
 
 	jvalue* args = nullptr;
@@ -75,7 +81,7 @@ int callFun(lua_State* l)
 
 		for (int i = 0; i < argc; i++)
 		{
-			int type = lua_type(l, i + 2);
+			char type = lua_type(l, i + 2);
 			if (type != fun.argTypes[i])
 			{
 				const char* msg;
@@ -100,7 +106,7 @@ int callFun(lua_State* l)
 				break;
 			case LUA_TSTRING: {
 				const char* str = lua_tostring(l, i + 2);
-				args[i].l = env->NewStringUTF(str);
+				args[i].l = (jobject)env->NewStringUTF(str);
 				break;
 			}
 			default:
@@ -109,12 +115,12 @@ int callFun(lua_State* l)
 		}
 	}
 
-  jobject object = objects[fun.objectId];
+	jobject object = fun.object;
 
 	switch (fun.rtnType)
 	{
 	case LUA_TNONE: {
-		bool rtn = env->CallBooleanMethod(object, fun.function, args);
+		bool rtn = env->CallBooleanMethodA(object, fun.function, args);
 		if (args)
 		{
 			delete[] args;
@@ -126,7 +132,7 @@ int callFun(lua_State* l)
 		return 0;
 	}
 	case LUA_TNIL: {
-		env->CallVoidMethod(object, fun.function, args);
+		env->CallVoidMethodA(object, fun.function, args);
 		if (args)
 		{
 			delete[] args;
@@ -134,7 +140,7 @@ int callFun(lua_State* l)
 		return 0;
 	}
 	case LUA_TNUMBER: {
-		float rtn = env->CallDoubleMethod(object, fun.function, args);
+		float rtn = env->CallDoubleMethodA(object, fun.function, args);
 		lua_pushnumber(l, rtn);
 		if (args)
 		{
@@ -143,7 +149,7 @@ int callFun(lua_State* l)
 		return 1;
 	}
 	case LUA_TBOOLEAN: {
-		bool rtn = env->CallBooleanMethod(object, fun.function, args);
+		bool rtn = env->CallBooleanMethodA(object, fun.function, args);
 		lua_pushboolean(l, rtn);
 		if (args)
 		{
@@ -152,7 +158,7 @@ int callFun(lua_State* l)
 		return 1;
 	}
 	case LUA_TSTRING:
-		jstring rtn = (jstring)env->CallObjectMethod(object, fun.function, args);
+		jstring rtn = (jstring)env->CallObjectMethodA(object, fun.function, args);
 		const char* str = env->GetStringUTFChars(rtn, nullptr);
 		lua_pushstring(l, str);
 		env->ReleaseStringUTFChars(rtn, str);
@@ -167,16 +173,17 @@ int callFun(lua_State* l)
 
 extern "C" JNIEXPORT void JNICALL setCurrentObject(JNIEnv* env, jobject thiz, jobject object)
 {
-  print("add to list");
-	currentObjectId = objects.size();
-  jobject obj = env->NewGlobalRef(object);
+	jobject obj = env->NewGlobalRef(object);
 	objects.push_back(obj);
+	currentObject = obj;
 }
+
+bool inClass = false;
 
 extern "C" JNIEXPORT void JNICALL addFunction(JNIEnv* env, jobject thiz, jstring name, jstring sig, int rtnType,
 											  int argc)
 {
-	jclass clazz = env->GetObjectClass(objects[currentObjectId]);
+	jclass clazz = env->GetObjectClass(currentObject);
 
 	const char* nameStr = env->GetStringUTFChars(name, nullptr);
 	const char* signatureStr = env->GetStringUTFChars(sig, nullptr);
@@ -196,13 +203,13 @@ extern "C" JNIEXPORT void JNICALL addFunction(JNIEnv* env, jobject thiz, jstring
 	int funId = functions.size();
 	functions.push_back({});
 
-	Function& fun = functions[functions.size() - 1];
+	Function& fun = functions[funId];
 
 	int len = strlen(signatureStr);
 
 	bool end = false;
 
-	fun.objectId = currentObjectId;
+	fun.object = currentObject;
 
 	fun.function = methodId;
 
@@ -240,8 +247,25 @@ extern "C" JNIEXPORT void JNICALL addFunction(JNIEnv* env, jobject thiz, jstring
 	lua_setfield(l, -2, "id");
 	luaL_getmetatable(l, "functionBuilder");
 	lua_setmetatable(l, -2);
-	lua_setglobal(l, nameStr);
+	if (inClass)
+		lua_setfield(l, -2, nameStr);
+	else
+		lua_setglobal(l, nameStr);
 
 	env->ReleaseStringUTFChars(name, nameStr);
 	env->ReleaseStringUTFChars(sig, signatureStr);
+}
+
+extern "C" JNIEXPORT void JNICALL newClass(JNIEnv* env, jobject thiz)
+{
+	lua_newtable(l);
+	inClass = true;
+}
+
+extern "C" JNIEXPORT void JNICALL endClass(JNIEnv* env, jobject thiz, jstring name)
+{
+	const char* str = env->GetStringUTFChars(name, nullptr);
+	lua_setglobal(l, str);
+	env->ReleaseStringUTFChars(name, str);
+	inClass = false;
 }

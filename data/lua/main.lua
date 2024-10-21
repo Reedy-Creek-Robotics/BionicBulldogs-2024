@@ -1,6 +1,8 @@
 addOpmode({
 	name = "opmode",
 	start = function()
-		print("did dis work?")
+		telem.addData("lua", "did dis work")
+		telem.update()
+		delay(4)
 	end,
 })

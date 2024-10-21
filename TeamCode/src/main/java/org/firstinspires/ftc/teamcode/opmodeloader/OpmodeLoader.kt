@@ -97,18 +97,23 @@ open class OpmodeLoader(opmode2: LinearOpMode)
 		elapsedTime.reset();
 		var prevTime = 0.0;
 
-		/*while(opmode.opModeIsActive())
+		while(opmode.opModeIsActive())
 		{
 			val curTime = elapsedTime.seconds();
 			val deltaTime = curTime - prevTime;
 			if(update(deltaTime, curTime))
 				return;
 			prevTime = curTime;
-		}*/
+		}
 	}
+	
+	/**
+	 * calls the update function on the lua opmode with a Time object as the first argument
+	 */
+	external fun update(deltaTime: Double, elapsedTime: Double): Boolean;
+	
 	
 	private external fun internalInit(luaStdlib: LuaStdlib): Array<String>;
 	private external fun internalLoadOpmode(name: String);
 	private external fun internalStart(recognition: Int);
-	//external fun update(deltaTime: Double, elapsedTime: Double): Boolean;
 }

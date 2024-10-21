@@ -15,20 +15,12 @@ class FunctionBuilder
 	/**
 	 * starts a new lua table for functions
 	 */
-	fun newClass()
-	{
-	
-	}
-	//external fun newClass();
+	external fun newClass();
 	
 	/**
 	 * ends the table
 	 */
-	fun endClass(name: String)
-	{
-	
-	}
-	//external fun endClass(name: String);
+	external fun endClass(name: String);
 	
 	/**
 	 * adds a function from java to lua
