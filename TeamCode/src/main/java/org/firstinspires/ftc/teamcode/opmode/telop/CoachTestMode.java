@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.modules.robot.Claw;
+import org.firstinspires.ftc.teamcode.opmode.config.Claw;
 
 @TeleOp
 public class CoachTestMode extends LinearOpMode {

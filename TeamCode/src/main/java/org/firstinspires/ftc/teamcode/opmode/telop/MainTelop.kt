@@ -7,11 +7,7 @@ import com.qualcomm.robotcore.util.ElapsedTime
 import org.firstinspires.ftc.teamcode.modules.drive.HDrive
 import org.firstinspires.ftc.teamcode.modules.drive.SparkfunImuLocalizer
 import org.firstinspires.ftc.teamcode.modules.hardware.GamepadEx
-import org.firstinspires.ftc.teamcode.modules.robot.Arm
-import org.firstinspires.ftc.teamcode.modules.robot.Claw
-import org.firstinspires.ftc.teamcode.modules.robot.Slide
-import org.firstinspires.ftc.teamcode.modules.robot.Spin
-import org.firstinspires.ftc.teamcode.opmode.config.HDriveConfig
+import org.firstinspires.ftc.teamcode.opmode.config.*
 
 @TeleOp
 class MainTelop: LinearOpMode()
@@ -63,13 +59,13 @@ class MainTelop: LinearOpMode()
 			//Claw
 			if(gamepad.circle())
 			{
-				if(claw.state != Claw.State.Closed)
-				{
-					claw.close();
-				}
-				else if(claw.state != Claw.State.Open)
+				if(claw.state == Claw.State.Closed)
 				{
 					claw.open();
+				}
+				else if(claw.state == Claw.State.Open)
+				{
+					claw.close();
 				}
 			}
 
@@ -100,16 +96,15 @@ class MainTelop: LinearOpMode()
 			}
 
 			//Slide
-			//WIP -- Add in slide values
 			if(gamepad.cross())
 			{
 				if(slide.state == Slide.State.Raise)
 				{
-					slide.raise();
+					slide.lower();
 				}
 				else if(slide.state == Slide.State.Lower)
 				{
-					slide.lower();
+					slide.raise();
 				}
 			}
 

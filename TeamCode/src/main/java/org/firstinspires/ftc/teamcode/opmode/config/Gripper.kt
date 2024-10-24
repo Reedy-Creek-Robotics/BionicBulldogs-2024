@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.modules.robot
+package org.firstinspires.ftc.teamcode.opmode.config
 
 import com.acmerobotics.dashboard.config.Config
 import com.qualcomm.robotcore.hardware.Servo
