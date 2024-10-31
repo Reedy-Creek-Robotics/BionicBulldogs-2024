@@ -25,6 +25,7 @@ class MainTelop: LinearOpMode()
 		val slide = Slide(hardwareMap.dcMotor.get("slide"));
 		val arm = Arm(hardwareMap.servo.get("arm"));
 		val rotate = Spin(hardwareMap.crservo.get("rotator0"), hardwareMap.crservo.get("rotator1"))
+		val hSlide = HSlide(hardwareMap.servo.get("hslide"));
 
 		val drive = HDrive(HDriveConfig(hardwareMap));
 		drive.setLocalizer(SparkfunImuLocalizer(hardwareMap.get(SparkFunOTOS::class.java, "imu2")));
@@ -47,6 +48,7 @@ class MainTelop: LinearOpMode()
 		//eTake (rotate) - rBumper toggles intake (forward), lBumper toggles intake (reverse)
 		//Slide - Set to position, cross for toggling
 		//Combo - Touchpad = Closes claw + raises slides
+		//HSlide - Rtrig increments; Ltrig decrements, Triangle zeroes
 		//Arm - Square toggles up/down
 
 		while(opModeIsActive())
@@ -55,6 +57,15 @@ class MainTelop: LinearOpMode()
 
 			//Drive
 			drive.driveFR(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+
+			//hSlide
+			if (gamepad.rightTriggerb()) {
+				hSlide.increment();
+			} else if (gamepad.leftTriggerb()) {
+				hSlide.decrement();
+			}; if (gamepad.triangle()) {
+				hSlide.zero();
+			}
 
 			//Claw
 			if(gamepad.circle())
