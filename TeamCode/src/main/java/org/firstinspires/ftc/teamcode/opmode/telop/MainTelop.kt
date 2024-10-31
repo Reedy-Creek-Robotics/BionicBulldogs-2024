@@ -145,6 +145,7 @@ class MainTelop: LinearOpMode()
 				}
 			}
 			slide.telem(telemetry);
+			drive.telem(telemetry);
 			telemetry.addData("square", gamepad.square());
 			telemetry.addData("square count", count);
 			telemetry.update();
