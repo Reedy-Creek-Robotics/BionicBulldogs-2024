@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.roadrunner.drive
+package org.firstinspires.ftc.teamcode.opmode.telop
 
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
@@ -7,8 +7,8 @@ import org.firstinspires.ftc.teamcode.modules.drive.HDrive
 import org.firstinspires.ftc.teamcode.modules.drive.SparkfunImuLocalizer
 import org.firstinspires.ftc.teamcode.modules.hardware.GamepadEx
 import org.firstinspires.ftc.teamcode.opmode.config.Claw
-import org.firstinspires.ftc.teamcode.opmode.config.Slide
 import org.firstinspires.ftc.teamcode.opmode.config.HDriveConfig
+import org.firstinspires.ftc.teamcode.opmode.config.Slide
 
 @TeleOp
 class ClawTest: LinearOpMode()
