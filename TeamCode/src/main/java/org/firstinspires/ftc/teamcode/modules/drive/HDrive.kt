@@ -62,6 +62,11 @@ class HDrive(config: HDriveConfig)
 		localizer!!.poseEstimate = pos;
 	}
 
+	fun posEst(): Pose2d
+	{
+		return localizer!!.poseEstimate;
+	}
+
 	fun resetAccel()
 	{
 		acceleration.resetTime();
