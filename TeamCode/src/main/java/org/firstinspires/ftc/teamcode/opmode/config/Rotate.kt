@@ -4,7 +4,7 @@ import com.acmerobotics.dashboard.config.Config
 import com.qualcomm.robotcore.hardware.CRServo
 
 @Config
-class Rotate(private val rotateServo: CRServo) {
+class Rotate(private val rotate0: CRServo) {
 
     enum class State {
         Forward,
@@ -21,19 +21,19 @@ class Rotate(private val rotateServo: CRServo) {
 
     fun forward()
     {
-        rotateServo.power = rotatePower;
+        rotate0.power = rotatePower;
         state = State.Forward;
     }
 
     fun reverse()
     {
-        rotateServo.power = -rotatePower;
+        rotate0.power = -rotatePower;
         state = State.Reverse;
     }
 
     fun stop()
     {
-        rotateServo.power = 0.0;
+        rotate0.power = 0.0;
         state = State.Stop;
     }
 

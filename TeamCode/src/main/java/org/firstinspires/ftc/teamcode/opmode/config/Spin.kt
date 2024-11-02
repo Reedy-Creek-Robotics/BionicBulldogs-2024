@@ -28,14 +28,14 @@ class Spin(private val spin0: CRServo, private val spin1: CRServo) {
 
     fun forward()
     {
-        spin0.power = spinPower;
+        spin0.power = -spinPower;
         spin1.power = spinPower;
         state = State.Forward;
     }
 
     fun reverse()
     {
-        spin0.power = -spinPower;
+        spin0.power = spinPower;
         spin1.power = -spinPower;
         state = State.Reverse;
     }
