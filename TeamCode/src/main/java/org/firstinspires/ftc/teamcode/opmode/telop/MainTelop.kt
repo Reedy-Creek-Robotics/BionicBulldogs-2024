@@ -23,6 +23,7 @@ class MainTelop: LinearOpMode()
 		//Claw, slides (to pos), drive, eTake
 		val claw = Claw(hardwareMap.servo.get("claw"));
 		val slide = Slide(hardwareMap.dcMotor.get("slide"));
+		val grip = Gripper(hardwareMap.servo.get("gripper"));
 		val arm = Arm(hardwareMap.servo.get("arm"));
 		val rotate = Spin(hardwareMap.crservo.get("rotator0"), hardwareMap.crservo.get("rotator1"))
 		val hSlide = HSlide(hardwareMap.servo.get("hslide"));
@@ -36,6 +37,7 @@ class MainTelop: LinearOpMode()
 
 		waitForStart();
 
+		hSlide.zero();
 		claw.close();
 		arm.up();
 
@@ -45,10 +47,11 @@ class MainTelop: LinearOpMode()
 
 		//Controls:
 		//Claw - Circle toggles open/close
-		//eTake (rotate) - rBumper toggles intake (forward), lBumper toggles intake (reverse)
+		//gripTake (rotate) - rBumper toggles intake (forward), lBumper toggles intake (reverse)
 		//Slide - Set to position, cross for toggling
 		//Combo - Touchpad = Closes claw + raises slides
 		//HSlide - Rtrig increments; Ltrig decrements, Triangle zeroes
+		//Grip - Dpad (temporarily)
 		//Arm - Square toggles up/down
 
 		while(opModeIsActive())
@@ -59,13 +62,24 @@ class MainTelop: LinearOpMode()
 			drive.driveFR(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
 
 			//hSlide
-			if (gamepad.rightTriggerb()) {
+			if (gamepad1.right_trigger >= 0.5 && hSlide.pos() <= hSlide.max()) {
 				hSlide.increment();
-			} else if (gamepad.leftTriggerb()) {
+			} else if (gamepad1.left_trigger >= 0.5 && hSlide.pos() >= hSlide.min()) {
 				hSlide.decrement();
-			}; if (gamepad.triangle()) {
+			} else if (gamepad.triangle()) {
 				hSlide.zero();
 			}
+
+			//Grip
+			if(gamepad.dpadRight() || gamepad.dpadDown() || gamepad.dpadLeft() || gamepad.dpadUp())
+			{
+				if (grip.state != Gripper.State.Open)
+				{
+					grip.open();
+				} else {
+					grip.close();
+				}
+			};
 
 			//Claw
 			if(gamepad.circle())
@@ -157,6 +171,7 @@ class MainTelop: LinearOpMode()
 			}
 			slide.telem(telemetry);
 			drive.telem(telemetry);
+			telemetry.addData("hPos", hSlide.pos())
 			telemetry.addData("square", gamepad.square());
 			telemetry.addData("square count", count);
 			telemetry.update();

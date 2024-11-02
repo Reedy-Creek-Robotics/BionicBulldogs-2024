@@ -9,18 +9,24 @@ class HSlide(private val hSlide: Servo)
     companion object
     {
         @JvmField
-        var increment = 0.01;
+        var increment = 0.02;
+        @JvmField
+        var max = 0.4;
+        @JvmField
+        var min = 0.0;
     }
 
-    init
-    {
-        hSlide.position = 0.0;
+    fun pos(): Double {
+        return hSlide.position;
     }
 
-    /*fun reverse()
-    {
-        hSlide.direction = DcMotorSimple.Direction.REVERSE;
-    }*/
+    fun max(): Double {
+        return max;
+    }
+
+    fun min(): Double {
+        return min;
+    }
 
     fun increment()
     {
