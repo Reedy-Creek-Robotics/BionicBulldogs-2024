@@ -11,7 +11,7 @@ class HSlide(private val hSlide: Servo)
         @JvmField
         var increment = 0.02;
         @JvmField
-        var max = 0.4;
+        var max = 0.45;
         @JvmField
         var min = 0.0;
     }

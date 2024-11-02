@@ -39,7 +39,7 @@ class MainTelop: LinearOpMode()
 
 		hSlide.zero();
 		claw.close();
-		arm.up();
+		arm.down();
 
 		var scoreState = ScoreState.Down;
 

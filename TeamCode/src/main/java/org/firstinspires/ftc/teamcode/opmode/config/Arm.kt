@@ -16,9 +16,9 @@ class Arm (private val arm: Servo) {
     companion object
     {
         @JvmField
-        var armUp : Double = 1.0;
+        var armDown : Double = 0.91;
         @JvmField
-        var armDown : Double = 0.5;
+        var armUp : Double = 0.23;
     }
 
     fun down()

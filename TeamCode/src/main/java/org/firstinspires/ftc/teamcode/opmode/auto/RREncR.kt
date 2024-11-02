@@ -18,5 +18,7 @@ class RREncR: LinearOpMode() {
         waitForStart();
 
         drive.followTrajectorySequence(path);
+        telemetry.addLine("Look at the dashboard for comparison")
+        telemetry.update();
     }
 }

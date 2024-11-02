@@ -18,5 +18,7 @@ class RREncV: LinearOpMode() {
         waitForStart();
 
         drive.followTrajectorySequence(path);
+        telemetry.addLine("Theoretical Target: 2233")
+        telemetry.update();
     }
 }
