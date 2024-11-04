@@ -37,6 +37,7 @@ class MainTelop: LinearOpMode()
 
 		waitForStart();
 
+		grip.close();
 		hSlide.zero();
 		claw.close();
 		arm.down();
@@ -62,21 +63,28 @@ class MainTelop: LinearOpMode()
 			drive.driveFR(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
 
 			//hSlide
-			if (gamepad1.right_trigger >= 0.5 && hSlide.pos() <= hSlide.max()) {
+			if(gamepad1.right_trigger >= 0.5 && hSlide.pos() <= hSlide.max())
+			{
 				hSlide.increment();
-			} else if (gamepad1.left_trigger >= 0.5 && hSlide.pos() >= hSlide.min()) {
+			}
+			else if(gamepad1.left_trigger >= 0.5 && hSlide.pos() >= hSlide.min())
+			{
 				hSlide.decrement();
-			} else if (gamepad.triangle()) {
+			}
+			else if(gamepad.triangle())
+			{
 				hSlide.zero();
 			}
 
 			//Grip
 			if(gamepad.dpadRight() || gamepad.dpadDown() || gamepad.dpadLeft() || gamepad.dpadUp())
 			{
-				if (grip.state != Gripper.State.Open)
+				if(grip.state != Gripper.State.Open)
 				{
 					grip.open();
-				} else {
+				}
+				else
+				{
 					grip.close();
 				}
 			};
@@ -159,7 +167,6 @@ class MainTelop: LinearOpMode()
 			//Arm
 			if(gamepad.square())
 			{
-				count++;
 				if(arm.state == Arm.State.Up)
 				{
 					arm.down();
