@@ -81,8 +81,10 @@ public class ManualFeedforwardTuner extends LinearOpMode {
         NanoClock clock = NanoClock.system();
 
         telemetry.addLine("Ready!");
+        telemetry.addData("targetVelocity", 0);
+        telemetry.addData("measuredVelocity", 0);
+        telemetry.addData("error", 0);
         telemetry.update();
-        telemetry.clearAll();
 
         waitForStart();
 
