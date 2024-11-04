@@ -43,31 +43,34 @@ import java.util.Objects;
  */
 @Config
 @Autonomous(group = "drive")
-public class ManualFeedforwardTuner extends LinearOpMode {
+public class ManualFeedforwardTuner extends LinearOpMode
+{
     public static double DISTANCE = 60; // in | Changed from 105 to default (60)
 
     private FtcDashboard dashboard = FtcDashboard.getInstance();
 
     private SampleMecanumDrive drive;
 
-    enum Mode {
-        DRIVER_MODE,
-        TUNING_MODE
+    enum Mode
+    {
+        DRIVER_MODE, TUNING_MODE
     }
 
     private Mode mode;
 
-    private static MotionProfile generateProfile(boolean movingForward) {
+    private static MotionProfile generateProfile(boolean movingForward)
+    {
         MotionState start = new MotionState(movingForward ? 0 : DISTANCE, 0, 0, 0);
         MotionState goal = new MotionState(movingForward ? DISTANCE : 0, 0, 0, 0);
         return MotionProfileGenerator.generateSimpleMotionProfile(start, goal, MAX_VEL, MAX_ACCEL);
     }
 
     @Override
-    public void runOpMode() {
-        if (RUN_USING_ENCODER) {
-            RobotLog.setGlobalErrorMsg("Feedforward constants usually don't need to be tuned " +
-                    "when using the built-in drive motor velocity PID.");
+    public void runOpMode()
+    {
+        if (RUN_USING_ENCODER)
+        {
+            RobotLog.setGlobalErrorMsg("Feedforward constants usually don't need to be tuned " + "when using the built-in drive motor velocity PID.");
         }
 
         Telemetry telemetry = new MultipleTelemetry(this.telemetry, dashboard.getTelemetry());
@@ -95,19 +98,23 @@ public class ManualFeedforwardTuner extends LinearOpMode {
         double profileStart = clock.seconds();
 
 
-        while (!isStopRequested()) {
+        while (!isStopRequested())
+        {
             telemetry.addData("mode", mode);
 
-            switch (mode) {
+            switch (mode)
+            {
                 case TUNING_MODE:
-                    if (gamepad1.y) {
+                    if (gamepad1.y)
+                    {
                         mode = Mode.DRIVER_MODE;
                     }
 
                     // calculate and set the motor power
                     double profileTime = clock.seconds() - profileStart;
 
-                    if (profileTime > activeProfile.duration()) {
+                    if (profileTime > activeProfile.duration())
+                    {
                         // generate a new profile
                         movingForwards = !movingForwards;
                         activeProfile = generateProfile(movingForwards);
@@ -131,20 +138,15 @@ public class ManualFeedforwardTuner extends LinearOpMode {
                     telemetry.addData("error", motionState.getV() - currentVelo);
                     break;
                 case DRIVER_MODE:
-                    if (gamepad1.b) {
+                    if (gamepad1.b)
+                    {
                         mode = Mode.TUNING_MODE;
                         movingForwards = true;
                         activeProfile = generateProfile(movingForwards);
                         profileStart = clock.seconds();
                     }
 
-                    drive.setWeightedDrivePower(
-                            new Pose2d(
-                                    -gamepad1.left_stick_y,
-                                    -gamepad1.left_stick_x,
-                                    -gamepad1.right_stick_x
-                            )
-                    );
+                    drive.setWeightedDrivePower(new Pose2d(-gamepad1.left_stick_y, -gamepad1.left_stick_x, -gamepad1.right_stick_x));
                     break;
             }
 
