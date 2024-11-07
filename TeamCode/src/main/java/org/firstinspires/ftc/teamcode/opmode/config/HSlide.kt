@@ -6,40 +6,50 @@ import com.qualcomm.robotcore.hardware.Servo
 @Config
 class HSlide(private val hSlide: Servo)
 {
-    companion object
-    {
-        @JvmField
-        var increment = 0.02;
-        @JvmField
-        var max = 0.45;
-        @JvmField
-        var min = 0.0;
-    }
+	companion object
+	{
+		@JvmField
+		var increment = 0.02;
 
-    fun pos(): Double {
-        return hSlide.position;
-    }
+		@JvmField
+		var max = 0.95;
 
-    fun max(): Double {
-        return max;
-    }
+		@JvmField
+		var min = 0.3;
+	}
 
-    fun min(): Double {
-        return min;
-    }
+	fun pos(): Double
+	{
+		return hSlide.position;
+	}
 
-    fun increment()
-    {
-        hSlide.position += increment;
-    }
+	fun max(): Double
+	{
+		return max;
+	}
 
-    fun decrement()
-    {
-        hSlide.position -= increment;
-    }
+	fun min(): Double
+	{
+		return min;
+	}
 
-    fun zero()
-    {
-        hSlide.position = 0.0;
-    }
+	fun increment()
+	{
+		hSlide.position += increment;
+	}
+
+	fun decrement()
+	{
+		hSlide.position -= increment;
+	}
+
+	fun zero()
+	{
+		hSlide.position = 0.95;
+	}
+
+	fun gotoPos(position: Double)
+	{
+		hSlide.position = position;
+	}
 }

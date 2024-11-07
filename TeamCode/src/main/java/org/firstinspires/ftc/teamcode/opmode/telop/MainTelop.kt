@@ -63,13 +63,13 @@ class MainTelop: LinearOpMode()
 			drive.driveFR(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
 
 			//hSlide
-			if(gamepad1.right_trigger >= 0.5 && hSlide.pos() <= hSlide.max())
-			{
-				hSlide.increment();
-			}
-			else if(gamepad1.left_trigger >= 0.5 && hSlide.pos() >= hSlide.min())
+			if(gamepad1.right_trigger >= 0.5 && hSlide.pos() >= hSlide.min())
 			{
 				hSlide.decrement();
+			}
+			else if(gamepad1.left_trigger >= 0.5 && hSlide.pos() <= hSlide.max())
+			{
+				hSlide.increment();
 			}
 			else if(gamepad.triangle())
 			{

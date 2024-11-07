@@ -21,7 +21,7 @@ class Spin(private val spin0: CRServo, private val spin1: CRServo) {
     companion object
     {
         @JvmField
-        var spinPower: Double = 0.5;
+        var spinPower: Double = 1.0;
         @JvmField
         var spinStop = 0.0;
     }
