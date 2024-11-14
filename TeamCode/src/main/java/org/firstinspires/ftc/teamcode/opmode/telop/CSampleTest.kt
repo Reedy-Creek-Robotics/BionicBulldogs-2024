@@ -6,9 +6,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.modules.drive.HDrive
 import org.firstinspires.ftc.teamcode.modules.drive.SparkfunImuLocalizer
 import org.firstinspires.ftc.teamcode.modules.hardware.GamepadEx
-import org.firstinspires.ftc.teamcode.modules.robot.Arm
-import org.firstinspires.ftc.teamcode.modules.robot.Gripper
-import org.firstinspires.ftc.teamcode.modules.robot.Spin
+import org.firstinspires.ftc.teamcode.opmode.config.Arm
+import org.firstinspires.ftc.teamcode.opmode.config.Gripper
+import org.firstinspires.ftc.teamcode.opmode.config.Spin
 import org.firstinspires.ftc.teamcode.opmode.config.HDriveConfig
 
 @TeleOp

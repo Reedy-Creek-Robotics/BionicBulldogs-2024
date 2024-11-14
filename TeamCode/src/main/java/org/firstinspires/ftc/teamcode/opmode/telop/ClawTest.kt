@@ -6,9 +6,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.modules.drive.HDrive
 import org.firstinspires.ftc.teamcode.modules.drive.SparkfunImuLocalizer
 import org.firstinspires.ftc.teamcode.modules.hardware.GamepadEx
-import org.firstinspires.ftc.teamcode.modules.robot.Claw
-import org.firstinspires.ftc.teamcode.modules.robot.Slide
+import org.firstinspires.ftc.teamcode.opmode.config.Claw
 import org.firstinspires.ftc.teamcode.opmode.config.HDriveConfig
+import org.firstinspires.ftc.teamcode.opmode.config.Slide
 
 @TeleOp
 class ClawTest: LinearOpMode()
@@ -32,10 +32,10 @@ class ClawTest: LinearOpMode()
 		{
 			gamepad.copy();
 
-			// drive
+			//drive
 			drive.driveFR(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
 
-			// claw
+			//claw
 			if(gamepad.dpadRight())
 			{
 				if(claw.state == Claw.State.Closed)
@@ -48,7 +48,7 @@ class ClawTest: LinearOpMode()
 				}
 			}
 
-			// slides
+			//slides
 			if(gamepad1.dpad_up)
 			{
 				slide.up();

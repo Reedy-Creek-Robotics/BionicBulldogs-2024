@@ -62,6 +62,11 @@ class HDrive(config: HDriveConfig)
 		localizer!!.poseEstimate = pos;
 	}
 
+	fun posEst(): Pose2d
+	{
+		return localizer!!.poseEstimate;
+	}
+
 	fun resetAccel()
 	{
 		acceleration.resetTime();
@@ -168,8 +173,8 @@ class HDrive(config: HDriveConfig)
 		}
 		t.addData("(drive)forward", f);
 		t.addData("(drive)strafe", r);
-		t.addData("(drive)fl", frontLeft.currentPosition);
-		t.addData("(drive)fr", frontRight.currentPosition);
+		t.addData("(drive)fl", frontLeft.currentPosition); //Doesn't read a value
+		t.addData("(drive)fr", frontRight.currentPosition); //Doesn't read a value
 		t.addData("(drive)bl", backLeft.currentPosition);
 		t.addData("(drive)br", backRight.currentPosition);
 	}

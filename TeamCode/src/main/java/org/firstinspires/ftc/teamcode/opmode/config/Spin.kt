@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.modules.robot
+package org.firstinspires.ftc.teamcode.opmode.config
 
 import com.acmerobotics.dashboard.config.Config
 import com.qualcomm.robotcore.hardware.CRServo
@@ -21,22 +21,22 @@ class Spin(private val spin0: CRServo, private val spin1: CRServo) {
     companion object
     {
         @JvmField
-        var spinPower: Double = 0.5;
+        var spinPower: Double = 1.0;
         @JvmField
         var spinStop = 0.0;
     }
 
     fun forward()
     {
-        spin0.power = spinPower;
-        spin1.power = -spinPower;
+        spin0.power = -spinPower;
+        spin1.power = spinPower;
         state = State.Forward;
     }
 
     fun reverse()
     {
-        spin0.power = -spinPower;
-        spin1.power = spinPower;
+        spin0.power = spinPower;
+        spin1.power = -spinPower;
         state = State.Reverse;
     }
 
