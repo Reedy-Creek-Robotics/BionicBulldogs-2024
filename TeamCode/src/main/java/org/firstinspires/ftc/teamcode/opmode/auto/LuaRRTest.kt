@@ -27,7 +27,7 @@ class LuaRRTest: LinearOpMode()
 
 		val path = drive.trajectorySequenceBuilder(Pose2d(0.0, -60.0, Math.toRadians(-90.0)))
 			.lineToConstantHeading(
-				Vector2d(0.0, -30.0)
+				Vector2d(0.0, -28.0)
 			).build();
 
 
@@ -36,7 +36,7 @@ class LuaRRTest: LinearOpMode()
 		).build();
 
 		val path3 = drive.trajectorySequenceBuilder(path2.end()).lineToLinearHeading(
-			path2.start()
+			Pose2d(path2.start().x, path2.start().y - 2, path2.start().heading)
 		).build();
 
 		drive.poseEstimate = path.start();
@@ -62,6 +62,11 @@ class LuaRRTest: LinearOpMode()
 
 		slides.runToPosition(-1400);
 		drive.followTrajectorySequence(path3);
+
+		slides.runToPosition(-900, 0.5)
+		while(slides.isBusy());
+		claw.open();
+
 	}
 
 	private fun delay(time: Double)
