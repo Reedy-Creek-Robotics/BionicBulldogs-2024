@@ -61,7 +61,7 @@ class ClawTest: LinearOpMode()
 
 			if(!gamepad1.dpad_up && !gamepad1.dpad_down)
 			{
-				slide.stop();
+				slide.stop()
 			}
 		}
 	}
