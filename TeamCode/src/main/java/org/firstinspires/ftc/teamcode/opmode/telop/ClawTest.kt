@@ -6,9 +6,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.modules.drive.HDrive
 import org.firstinspires.ftc.teamcode.modules.drive.SparkfunImuLocalizer
 import org.firstinspires.ftc.teamcode.modules.hardware.GamepadEx
-import org.firstinspires.ftc.teamcode.opmode.config.Claw
+import org.firstinspires.ftc.teamcode.modules.robot.Claw
 import org.firstinspires.ftc.teamcode.opmode.config.HDriveConfig
-import org.firstinspires.ftc.teamcode.opmode.config.Slide
+import org.firstinspires.ftc.teamcode.modules.robot.Slide
 
 @TeleOp
 class ClawTest: LinearOpMode()

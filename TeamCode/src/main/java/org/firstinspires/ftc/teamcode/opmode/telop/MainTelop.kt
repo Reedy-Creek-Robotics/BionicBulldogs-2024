@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.util.ElapsedTime
 import org.firstinspires.ftc.teamcode.modules.drive.HDrive
 import org.firstinspires.ftc.teamcode.modules.drive.SparkfunImuLocalizer
 import org.firstinspires.ftc.teamcode.modules.hardware.GamepadEx
+import org.firstinspires.ftc.teamcode.modules.robot.*
 import org.firstinspires.ftc.teamcode.opmode.config.*
 
 @TeleOp
@@ -30,8 +31,6 @@ class MainTelop: LinearOpMode()
 
 		val drive = HDrive(HDriveConfig(hardwareMap));
 		drive.setLocalizer(SparkfunImuLocalizer(hardwareMap.get(SparkFunOTOS::class.java, "imu2")));
-
-		slide.reverse();
 
 		val gamepad = GamepadEx(gamepad1);
 
@@ -124,12 +123,15 @@ class MainTelop: LinearOpMode()
 				}
 				else
 				{
-					rotate.reverse();
+					rotate.outtakeForTime(1.0);
 				}
 			}
 
+
+			rotate.update();
+
 			//Slide
-			if(gamepad.cross())
+			/*if(gamepad.cross())
 			{
 				if(slide.state == Slide.State.Raise)
 				{
@@ -139,7 +141,7 @@ class MainTelop: LinearOpMode()
 				{
 					slide.raise();
 				}
-			}
+			}*/
 
 			//Combo
 			if(gamepad.touchpad())
