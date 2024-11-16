@@ -1,10 +1,10 @@
 package org.firstinspires.ftc.teamcode.modules.robot
 
 import com.acmerobotics.dashboard.config.Config
-import com.qualcomm.robotcore.hardware.Servo
+import com.qualcomm.robotcore.hardware.CRServo
 
 @Config
-class Gripper(private val gripper: Servo) {
+class Gripper(private val gripper: CRServo) {
 
     enum class State {
         Open,
@@ -16,20 +16,16 @@ class Gripper(private val gripper: Servo) {
     companion object
     {
         @JvmField
-        var gripClose : Double = 0.0;
-        @JvmField
-        var gripOpen : Double = 0.15;
+        val gripPower = 1.0;
     }
 
-    fun close()
+    fun reverse()
     {
-        gripper.position = gripClose
-        state = State.Close;
+        gripper.power -= gripPower;
     }
-    fun open()
+    fun forward()
     {
-        gripper.position = gripOpen
-        state = State.Open;
+        gripper.power += gripPower;
     }
 
 }

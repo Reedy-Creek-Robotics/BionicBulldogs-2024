@@ -7,8 +7,13 @@ import com.qualcomm.robotcore.util.ElapsedTime
 import org.firstinspires.ftc.teamcode.modules.drive.HDrive
 import org.firstinspires.ftc.teamcode.modules.drive.SparkfunImuLocalizer
 import org.firstinspires.ftc.teamcode.modules.hardware.GamepadEx
-import org.firstinspires.ftc.teamcode.modules.robot.*
-import org.firstinspires.ftc.teamcode.opmode.config.*
+import org.firstinspires.ftc.teamcode.modules.robot.Arm
+import org.firstinspires.ftc.teamcode.modules.robot.Claw
+import org.firstinspires.ftc.teamcode.modules.robot.Gripper
+import org.firstinspires.ftc.teamcode.modules.robot.HSlide
+import org.firstinspires.ftc.teamcode.modules.robot.Slide
+import org.firstinspires.ftc.teamcode.modules.robot.Spin
+import org.firstinspires.ftc.teamcode.opmode.config.HDriveConfig
 
 @TeleOp
 class MainTelop: LinearOpMode()
@@ -24,7 +29,7 @@ class MainTelop: LinearOpMode()
 		//Claw, slides (to pos), drive, eTake
 		val claw = Claw(hardwareMap.servo.get("claw"));
 		val slide = Slide(hardwareMap.dcMotor.get("slide"));
-		val grip = Gripper(hardwareMap.servo.get("gripper"));
+		val grip = Gripper(hardwareMap.crservo.get("gripper"));
 		val arm = Arm(hardwareMap.servo.get("arm"));
 		val rotate = Spin(hardwareMap.crservo.get("rotator0"), hardwareMap.crservo.get("rotator1"))
 		val hSlide = HSlide(hardwareMap.servo.get("hslide"));
@@ -36,7 +41,7 @@ class MainTelop: LinearOpMode()
 
 		waitForStart();
 
-		grip.close();
+		grip.reverse();
 		hSlide.zero();
 		claw.close();
 		arm.down();
@@ -80,11 +85,11 @@ class MainTelop: LinearOpMode()
 			{
 				if(grip.state != Gripper.State.Open)
 				{
-					grip.open();
+					grip.forward();
 				}
 				else
 				{
-					grip.close();
+					grip.reverse();
 				}
 			};
 

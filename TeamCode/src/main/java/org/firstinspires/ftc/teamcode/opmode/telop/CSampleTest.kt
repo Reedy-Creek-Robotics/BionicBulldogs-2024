@@ -16,7 +16,7 @@ class CSampleTest: LinearOpMode() {
     override fun runOpMode() {
 
         val arm = Arm(hardwareMap.servo.get("arm"));
-        val gripper = Gripper(hardwareMap.servo.get("gripper"));
+        val gripper = Gripper(hardwareMap.crservo.get("gripper"));
         val spin = Spin(hardwareMap.crservo.get("rotator0"), hardwareMap.crservo.get("rotator1"));
         val drive = HDrive(HDriveConfig(hardwareMap));
         drive.setLocalizer(SparkfunImuLocalizer(hardwareMap.get(SparkFunOTOS::class.java, "imu2")));
@@ -46,9 +46,9 @@ class CSampleTest: LinearOpMode() {
             {
                 if (gripper.state != Gripper.State.Open)
                 {
-                    gripper.open();
+                    gripper.forward();
                 } else {
-                    gripper.close();
+                    gripper.reverse();
                 }
             };
 
