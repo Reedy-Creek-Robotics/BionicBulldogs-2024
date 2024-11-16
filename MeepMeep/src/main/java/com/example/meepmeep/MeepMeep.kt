@@ -25,7 +25,7 @@ fun sampleSide(drive: DriveShim): TrajectorySequence
 		.lineToLinearHeading(Pose2d(-57.0, -57.0, Math.toRadians(45.0))).waitSeconds(1.0)
 		.lineToLinearHeading(Pose2d(-60.0, -36.0, Math.toRadians(90.0))).waitSeconds(1.0)
 		.lineToLinearHeading(Pose2d(-57.0, -57.0, Math.toRadians(45.0))).waitSeconds(1.0)
-		.lineToLinearHeading(Pose2d(-30.0, 0.0, Math.toRadians(90.0))).build();
+		.lineToLinearHeading(Pose2d(-27.0, -10.0, Math.toRadians(90.0))).build();
 }
 
 fun main()
@@ -35,7 +35,7 @@ fun main()
 	val botBuilder = DefaultBotBuilder(meepMeep);
 	botBuilder.setConstraints(60.0, 60.0, Math.toRadians(180.0), Math.toRadians(180.0), 15.0);
 	botBuilder.setDimensions(12.0, 12.0)
-	val bot = botBuilder.followTrajectorySequence {drive: DriveShim -> sampleSide(drive)};
+	val bot = botBuilder.followTrajectorySequence {drive: DriveShim -> sampleSide(drive) };
 
 	meepMeep.setBackground(MeepMeep.Background.FIELD_INTOTHEDEEP_JUICE_DARK);
 	meepMeep.setDarkMode(true);
