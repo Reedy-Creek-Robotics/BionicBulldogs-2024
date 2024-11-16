@@ -81,17 +81,23 @@ class MainTelop: LinearOpMode()
 			}
 
 			//Grip
-			if(gamepad.dpadRight() || gamepad.dpadDown() || gamepad.dpadLeft() || gamepad.dpadUp())
+			if(gamepad.dpadRight() || gamepad.dpadUp())
 			{
-				if(grip.state != Gripper.State.Open)
+				if(grip.state != Gripper.State.Forward)
 				{
 					grip.forward();
+				} else {
+					grip.stop();
 				}
-				else
-				{
+			}
+			else if (gamepad.dpadDown() || gamepad.dpadLeft())
+			{
+				if (grip.state != Gripper.State.Reverse) {
 					grip.reverse();
+				} else {
+					grip.stop();
 				}
-			};
+			}
 
 			//Claw
 			if(gamepad.circle())

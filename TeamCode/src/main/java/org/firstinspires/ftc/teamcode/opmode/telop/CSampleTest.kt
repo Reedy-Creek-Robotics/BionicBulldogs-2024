@@ -44,7 +44,7 @@ class CSampleTest: LinearOpMode() {
 
             if(gamepad.leftBumper())
             {
-                if (gripper.state != Gripper.State.Open)
+                if (gripper.state != Gripper.State.Forward)
                 {
                     gripper.forward();
                 } else {

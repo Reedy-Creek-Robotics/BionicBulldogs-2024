@@ -7,11 +7,12 @@ import com.qualcomm.robotcore.hardware.CRServo
 class Gripper(private val gripper: CRServo) {
 
     enum class State {
-        Open,
-        Close
+        Forward,
+        Reverse,
+        Stop
     }
 
-    var state: State = State.Open;
+    var state: State = State.Forward;
 
     companion object
     {
@@ -19,13 +20,20 @@ class Gripper(private val gripper: CRServo) {
         val gripPower = 1.0;
     }
 
-    fun reverse()
-    {
-        gripper.power -= gripPower;
-    }
     fun forward()
     {
+        gripper.power -= gripPower;
+        state = State.Reverse;
+    }
+    fun reverse()
+    {
         gripper.power += gripPower;
+        state = State.Forward;
+    }
+    fun stop()
+    {
+        gripper.power = 0.0;
+        state = State.Stop;
     }
 
 }
