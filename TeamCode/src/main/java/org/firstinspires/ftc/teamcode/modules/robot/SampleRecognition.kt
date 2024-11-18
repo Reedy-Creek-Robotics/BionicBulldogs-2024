@@ -16,19 +16,32 @@ class SampleRecognition(private val sampleColors: SampleColors): VisionProcessor
 {
 	private var sampleList = ArrayList<Sample>();
 
-	class SampleColors(val low: Scalar, val high: Scalar)
+	class SampleColors(val low: Scalar, val high: Scalar, val low2: Scalar?, val high2: Scalar?)
 	{
 		companion object
 		{
-			val Red = SampleColors(Scalar(0.0, 0.0, 180.0), Scalar(160.0, 120.0, 255.0));
-			val Blue = SampleColors(Scalar(130.0, 0.0, 0.0), Scalar(255.0, 120.0, 110.0));
-			val Yellow = SampleColors(Scalar(0.0, 120.0, 180.0), Scalar(160.0, 255.0, 255.0));
+			val Red = SampleColors(
+				Scalar(160.0, 150.0, 20.0),
+				Scalar(180.0, 255.0, 255.0),
+				Scalar(0.0, 150.0, 20.0),
+				Scalar(20.0, 255.0, 255.0)
+			);
+			val Blue = SampleColors(Scalar(90.0, 150.0, 20.0), Scalar(125.0, 255.0, 255.0), null, null);
+			val Red2 = SampleColors(Scalar(0.0, 0.0, 180.0), Scalar(160.0, 120.0, 255.0), null, null);
+			val Blue2 = SampleColors(Scalar(130.0, 0.0, 0.0), Scalar(255.0, 120.0, 110.0), null, null);
+			val Yellow = SampleColors(Scalar(0.0, 120.0, 180.0), Scalar(160.0, 255.0, 255.0), null, null);
 		}
 	}
 
-	fun getSampleList(): ArrayList<Sample>
+	@Synchronized
+	fun getSampleList(newList: ArrayList<Sample>?): ArrayList<Sample>
 	{
-		return sampleList;
+		val list2 = sampleList;
+		if(newList != null)
+		{
+			sampleList = newList;
+		}
+		return list2;
 	}
 
 	override fun init(width: Int, height: Int, calibration: CameraCalibration?)
@@ -37,25 +50,45 @@ class SampleRecognition(private val sampleColors: SampleColors): VisionProcessor
 
 	override fun processFrame(frame: Mat, captureTimeNanos: Long): Mat
 	{
-		Imgproc.cvtColor(frame, frame, Imgproc.COLOR_RGB2BGR);
+		Imgproc.cvtColor(frame, frame, Imgproc.COLOR_RGB2HSV);
 
-		Core.inRange(frame, sampleColors.low, sampleColors.high, frame);
+		val inRange1 = Mat();
+		Core.inRange(frame, sampleColors.low, sampleColors.high, inRange1);
 
-		var countors = ArrayList<MatOfPoint>();
-		Imgproc.findContours(frame, countors, MatOfPoint2f(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_NONE);
+		if(sampleColors.low2 != null)
+		{
+			val inRange2 = Mat();
+			Core.inRange(frame, sampleColors.low2, sampleColors.high2, inRange2);
+
+			Core.add(inRange1, inRange2, frame);
+		}
+		else
+		{
+			frame.copyTo(inRange1);
+		}
+
+
+		val countors = ArrayList<MatOfPoint>();
+		Imgproc.findContours(
+			frame, countors, MatOfPoint2f(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_NONE
+		);
 
 		val sampleList2 = ArrayList<Sample>();
 
 		for(countor in countors)
 		{
-			var countor2f = MatOfPoint2f();
+			val countor2f = MatOfPoint2f();
 			countor.convertTo(countor2f, CvType.CV_32F);
 			val rectangle = Imgproc.minAreaRect(countor2f);
-			val pos = Vec2(rectangle.center.x.toFloat(), rectangle.center.y.toFloat());
-			sampleList2.add(Sample(pos, rectangle.angle.toFloat()));
+			if(rectangle.size.width > 50 && rectangle.size.height > 50)
+			{
+				val pos = Vec2(rectangle.center.x.toFloat(), rectangle.center.y.toFloat());
+				if(rectangle.size.width > rectangle.size.height) rectangle.angle += 90;
+				sampleList2.add(Sample(pos, rectangle.angle.toFloat()));
+			}
 		}
 
-		sampleList = sampleList2;
+		getSampleList(sampleList2);
 
 		return frame;
 	}
