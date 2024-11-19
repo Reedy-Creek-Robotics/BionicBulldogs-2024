@@ -16,6 +16,9 @@ class SampleRecognition(private val sampleColors: SampleColors): VisionProcessor
 {
 	private var sampleList = ArrayList<Sample>();
 
+	var width = 0;
+	var height = 0;
+
 	class SampleColors(val low: Scalar, val high: Scalar, val low2: Scalar?, val high2: Scalar?)
 	{
 		companion object
@@ -44,8 +47,10 @@ class SampleRecognition(private val sampleColors: SampleColors): VisionProcessor
 		return list2;
 	}
 
-	override fun init(width: Int, height: Int, calibration: CameraCalibration?)
+	override fun init(width2: Int, height2: Int, calibration: CameraCalibration?)
 	{
+		width = width2;
+		height = height2;
 	}
 
 	override fun processFrame(frame: Mat, captureTimeNanos: Long): Mat
