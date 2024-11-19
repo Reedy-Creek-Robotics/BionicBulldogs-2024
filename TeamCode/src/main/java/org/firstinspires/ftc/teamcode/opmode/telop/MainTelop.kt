@@ -20,14 +20,22 @@ class MainTelop: LinearOpMode()
 
 	override fun runOpMode()
 	{
-
 		//Claw, slides (to pos), drive, eTake
 		val claw = Claw(hardwareMap.servo.get("claw"));
 		val slide = Slide(hardwareMap.dcMotor.get("slide"));
-		val grip = Gripper(hardwareMap.servo.get("gripper"));
+//		val gripper = Gripper(hardwareMap.servo.get("gripper"));
 		val arm = Arm(hardwareMap.servo.get("arm"));
-		val rotate = Spin(hardwareMap.crservo.get("rotator0"), hardwareMap.crservo.get("rotator1"))
+		val rotate = Spin(
+			hardwareMap.crservo.get("rotator0"),
+			hardwareMap.crservo.get("rotator1"),
+			hardwareMap.crservo.get("topRoller")
+		);
+//		val rotator0 = hardwareMap.crservo.get("rotator1");
 		val hSlide = HSlide(hardwareMap.servo.get("hslide"));
+
+//		var rotatorPosition = 0.0;
+
+		claw.close();
 
 		val drive = HDrive(HDriveConfig(hardwareMap));
 		drive.setLocalizer(SparkfunImuLocalizer(hardwareMap.get(SparkFunOTOS::class.java, "imu2")));
@@ -36,14 +44,13 @@ class MainTelop: LinearOpMode()
 
 		waitForStart();
 
-		grip.close();
 		hSlide.zero();
 		claw.close();
 		arm.down();
 
-		var scoreState = ScoreState.Down;
+//		rotator0.power = 0.0;
 
-		var count = 0;
+		var scoreState = ScoreState.Down;
 
 		//Controls:
 		//Claw - Circle toggles open/close
@@ -76,17 +83,35 @@ class MainTelop: LinearOpMode()
 			}
 
 			//Grip
-			if(gamepad.dpadRight() || gamepad.dpadDown() || gamepad.dpadLeft() || gamepad.dpadUp())
+			/*if(gamepad.dpadDown() || gamepad.dpadUp())
 			{
-				if(grip.state != Gripper.State.Open)
+				if(gripper.state != Gripper.State.Open)
 				{
-					grip.open();
+					gripper.open();
 				}
 				else
 				{
-					grip.close();
+					gripper.close();
 				}
-			};
+			}*/
+
+			/*if(gamepad1.dpad_left)
+			{
+				if(rotatorPosition > 0)
+				{
+					rotatorPosition += 0.1;
+					rotator0.power = rotatorPosition;
+				}
+			}
+
+			if(gamepad1.dpad_right)
+			{
+				if(rotatorPosition < 1)
+				{
+					rotatorPosition -= 0.1;
+					rotator0.power = rotatorPosition;
+				}
+			}*/
 
 			//Claw
 			if(gamepad.circle())
@@ -182,7 +207,6 @@ class MainTelop: LinearOpMode()
 			drive.telem(telemetry);
 			telemetry.addData("hPos", hSlide.pos())
 			telemetry.addData("square", gamepad.square());
-			telemetry.addData("square count", count);
 			telemetry.update();
 		}
 	}

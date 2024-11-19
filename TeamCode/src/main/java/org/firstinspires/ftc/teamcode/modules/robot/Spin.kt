@@ -2,10 +2,11 @@ package org.firstinspires.ftc.teamcode.modules.robot
 
 import com.acmerobotics.dashboard.config.Config
 import com.qualcomm.robotcore.hardware.CRServo
+import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.util.ElapsedTime
 
 @Config
-class Spin(private val spin0: CRServo, private val spin1: CRServo)
+class Spin(private val spin0: CRServo, private val spin1: CRServo?, private val spin2: CRServo?)
 {
 
 	//spin0 = rotator0 = frontrot = port2
@@ -30,24 +31,31 @@ class Spin(private val spin0: CRServo, private val spin1: CRServo)
 		var spinStop = 0.0;
 	}
 
+	init{
+		spin2?.direction = DcMotorSimple.Direction.REVERSE;
+	}
+
 	fun forward()
 	{
 		spin0.power = -spinPower;
-		spin1.power = spinPower;
+		spin1?.power = spinPower;
+		spin2?.power = spinPower;
 		state = State.Forward;
 	}
 
 	fun reverse()
 	{
 		spin0.power = spinPower;
-		spin1.power = -spinPower;
+		spin1?.power = -spinPower;
+		spin2?.power = -spinPower;
 		state = State.Reverse;
 	}
 
 	fun stop()
 	{
 		spin0.power = spinStop;
-		spin1.power = spinStop;
+		spin1?.power = spinStop;
+		spin2?.power = spinStop;
 		state = State.Stop;
 	}
 

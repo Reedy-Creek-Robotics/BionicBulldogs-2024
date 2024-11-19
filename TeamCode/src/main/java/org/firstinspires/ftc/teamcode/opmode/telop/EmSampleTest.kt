@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.opmode.config.HDriveConfig
 class EmSampleTest: LinearOpMode() {
     override fun runOpMode() {
 
-        val spin = Spin(hardwareMap.crservo.get("claw"), hardwareMap.crservo.get("gripper"));
+        val spin = Spin(hardwareMap.crservo.get("claw"), hardwareMap.crservo.get("gripper"), null);
         val slide = Slide(hardwareMap.dcMotor.get("slide"));
         val drive = HDrive(HDriveConfig(hardwareMap));
         drive.setLocalizer(SparkfunImuLocalizer(hardwareMap.get(SparkFunOTOS::class.java, "imu2")));

@@ -18,7 +18,7 @@ class Gripper(private val gripper: Servo) {
         @JvmField
         var gripClose : Double = 0.0;
         @JvmField
-        var gripOpen : Double = 0.15;
+        var gripOpen : Double = 0.25;
     }
 
     fun close()
