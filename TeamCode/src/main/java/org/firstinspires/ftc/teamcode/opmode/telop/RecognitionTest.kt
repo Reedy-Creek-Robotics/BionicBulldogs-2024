@@ -14,7 +14,7 @@ class RecognitionTest: LinearOpMode()
 {
 	override fun runOpMode()
 	{
-//		val servo = hardwareMap.servo.get("servo");
+		val servo = hardwareMap.servo.get("servo");
 
 		val processor = SampleRecognition(SampleRecognition.SampleColors.Red);
 
@@ -50,14 +50,14 @@ class RecognitionTest: LinearOpMode()
 			{
 				val closest = sampleList[closestInd];
 				telemetry.addData("closestSample", closestInd);
-				telemetry.addLine(
+				/*telemetry.addLine(
 					String.format(
-						"closest x %i, y %i, angle %i",
+						"closest x %d, y %d, angle %d",
 						closest.position.x,
 						closest.position.y,
 						closest.rotation
 					)
-				);
+				);*/
 			}
 			else
 			{
@@ -70,11 +70,12 @@ class RecognitionTest: LinearOpMode()
 				telemetry.addData("sample $i position::y", sample.position.y);
 				telemetry.addData("sample $i rotation", sample.rotation);
 			}
+			if(sampleList.size > 0)
+			{
+				servo.position = (clamp(sampleList[0].rotation + 180, 0.0f, 180.0f)/* / 180*/).toDouble();
+			}
+			telemetry.addData("pos", servo.position)
 			telemetry.update();
-//			if(sampleList.size > 0)
-//			{
-//				servo.position = (clamp(sampleList[0].rotation + 180, 0.0f, 180.0f) / 180).toDouble();
-//			}
 		}
 	}
 }
