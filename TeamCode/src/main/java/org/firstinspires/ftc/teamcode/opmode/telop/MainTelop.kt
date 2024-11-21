@@ -7,8 +7,13 @@ import com.qualcomm.robotcore.util.ElapsedTime
 import org.firstinspires.ftc.teamcode.modules.drive.HDrive
 import org.firstinspires.ftc.teamcode.modules.drive.SparkfunImuLocalizer
 import org.firstinspires.ftc.teamcode.modules.hardware.GamepadEx
-import org.firstinspires.ftc.teamcode.modules.robot.*
-import org.firstinspires.ftc.teamcode.opmode.config.*
+import org.firstinspires.ftc.teamcode.modules.robot.Arm
+import org.firstinspires.ftc.teamcode.modules.robot.Claw
+import org.firstinspires.ftc.teamcode.modules.robot.Gripper
+import org.firstinspires.ftc.teamcode.modules.robot.HSlide
+import org.firstinspires.ftc.teamcode.modules.robot.Slide
+import org.firstinspires.ftc.teamcode.modules.robot.Spin
+import org.firstinspires.ftc.teamcode.opmode.config.HDriveConfig
 
 @TeleOp
 class MainTelop: LinearOpMode()
