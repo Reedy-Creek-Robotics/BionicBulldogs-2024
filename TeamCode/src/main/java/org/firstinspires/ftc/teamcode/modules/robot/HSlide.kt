@@ -16,6 +16,14 @@ class HSlide(private val hSlide: Servo)
 
 		@JvmField
 		var min = 0.3;
+
+		@JvmField
+		var score = 0.73
+	}
+
+	fun score()
+	{
+		hSlide.position = score;
 	}
 
 	fun pos(): Double
@@ -48,8 +56,8 @@ class HSlide(private val hSlide: Servo)
 		hSlide.position = 0.95;
 	}
 
-	fun gotoPos(position: Double)
+	fun gotoPos(pos: Double)
 	{
-		hSlide.position = position;
+		hSlide.position = pos;
 	}
 }

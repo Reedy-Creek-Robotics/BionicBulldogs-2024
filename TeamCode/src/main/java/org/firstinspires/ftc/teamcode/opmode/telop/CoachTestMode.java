@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.modules.robot.Claw;
+import org.firstinspires.ftc.teamcode.modules.robot.SpeciminClaw;
 
 @TeleOp
 public class CoachTestMode extends LinearOpMode {
@@ -19,7 +19,7 @@ public class CoachTestMode extends LinearOpMode {
         Gamepad previousGamepad2 = new Gamepad();
 
         // other initialization code goes here
-        Claw claw = new Claw(hardwareMap.servo.get("claw"));
+        SpeciminClaw speciminClaw = new SpeciminClaw(hardwareMap.servo.get("claw"));
 
         waitForStart();
 
@@ -43,13 +43,13 @@ public class CoachTestMode extends LinearOpMode {
             //Claw
             if (currentGamepad1.circle && !previousGamepad1.circle)
             {
-                if (claw.getState() != Claw.State.Closed)
+                if (speciminClaw.getState() != SpeciminClaw.State.Closed)
                 {
-                    claw.close();
+                    speciminClaw.close();
                 }
-                else if (claw.getState() != Claw.State.Open)
+                else if (speciminClaw.getState() != SpeciminClaw.State.Open)
                 {
-                    claw.open();
+                    speciminClaw.open();
                 }
             }
         }

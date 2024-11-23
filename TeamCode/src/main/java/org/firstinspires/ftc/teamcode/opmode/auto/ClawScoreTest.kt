@@ -2,36 +2,37 @@ package org.firstinspires.ftc.teamcode.opmode.auto
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
-import org.firstinspires.ftc.teamcode.modules.robot.Claw
-import org.firstinspires.ftc.teamcode.modules.robot.Slides
+import com.qualcomm.robotcore.hardware.DcMotorEx
+import org.firstinspires.ftc.teamcode.modules.robot.SpeciminClaw
+import org.firstinspires.ftc.teamcode.modules.robot.Slide
 
 @Autonomous
 class ClawScoreTest: LinearOpMode()
 {
 	override fun runOpMode()
 	{
-		val claw = Claw(hardwareMap.servo.get("claw"));
+		val speciminClaw = SpeciminClaw(hardwareMap.servo.get("claw"));
 
-		val slides = Slides(hardwareMap.dcMotor.get("slide"));
+		val slides = Slide(hardwareMap.dcMotor.get("slide") as DcMotorEx);
 
 		val topPos = -1300;
 
 		waitForStart();
 
-		claw.close();
+		speciminClaw.close();
 
 		sleep(1000);
 
 		slides.runToPosition(topPos);
 
-		while(slides.isBusy());
+		while(slides.busy());
 
 		sleep(1000);
 
 		slides.runToPosition(-850);
-		while(slides.isBusy());
+		while(slides.busy());
 
-		claw.open();
+		speciminClaw.open();
 		sleep(1000);
 	}
 }

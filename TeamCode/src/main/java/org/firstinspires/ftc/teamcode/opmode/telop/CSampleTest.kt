@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.modules.drive.SparkfunImuLocalizer
 import org.firstinspires.ftc.teamcode.modules.hardware.GamepadEx
 import org.firstinspires.ftc.teamcode.modules.robot.Arm
 import org.firstinspires.ftc.teamcode.modules.robot.Gripper
-import org.firstinspires.ftc.teamcode.modules.robot.Spin
+import org.firstinspires.ftc.teamcode.modules.robot.Intake
 import org.firstinspires.ftc.teamcode.opmode.config.HDriveConfig
 
 @TeleOp
@@ -19,7 +19,7 @@ class CSampleTest: LinearOpMode()
 
 		val arm = Arm(hardwareMap.servo.get("arm"));
 		val gripper = Gripper(hardwareMap.servo.get("gripper"));
-		val spin = Spin(hardwareMap.crservo.get("rotator0"), hardwareMap.crservo.get("rotator1"), null);
+		val spin = Intake(hardwareMap.crservo.get("rotator0"), hardwareMap.crservo.get("rotator1"), null);
 		val drive = HDrive(HDriveConfig(hardwareMap));
 		drive.setLocalizer(SparkfunImuLocalizer(hardwareMap.get(SparkFunOTOS::class.java, "imu2")));
 
@@ -59,7 +59,7 @@ class CSampleTest: LinearOpMode()
 
 			if(gamepad.rightBumper())
 			{
-				if(spin.state != Spin.State.Forward)
+				if(spin.state != Intake.State.Forward)
 				{
 					spin.forward();
 				}

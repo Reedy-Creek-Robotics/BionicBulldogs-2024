@@ -21,7 +21,7 @@ class Arm(private val arm: Servo)
 		var armDown: Double = 0.98;
 
 		@JvmField
-		var armUp: Double = 0.3;
+		var armUp: Double = 0.33;
 	}
 
 	fun down()

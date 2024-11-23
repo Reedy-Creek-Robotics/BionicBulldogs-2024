@@ -4,7 +4,7 @@ import com.acmerobotics.dashboard.config.Config
 import com.qualcomm.robotcore.hardware.Servo
 
 @Config
-class Claw(private val claw: Servo)
+class SpeciminClaw(private val claw: Servo)
 {
 
 	enum class State {

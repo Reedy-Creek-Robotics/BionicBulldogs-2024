@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.util.ElapsedTime
 
 @Config
-class Spin(private val spin0: CRServo, private val spin1: CRServo?, private val spin2: CRServo?)
+class Intake(private val spin0: CRServo, private val spin1: CRServo?, private val spin2: CRServo?)
 {
 
 	//spin0 = rotator0 = frontrot = port2
