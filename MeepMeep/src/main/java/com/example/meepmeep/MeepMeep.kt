@@ -21,9 +21,10 @@ fun sampleSide(drive: DriveShim): TrajectorySequence
 {
 	return drive.trajectorySequenceBuilder(Pose2d(0.0, -60.0, Math.toRadians(-90.0)))
 		.lineToConstantHeading(Vector2d(-6.0, -30.0)).waitSeconds(1.0)
-		.lineToLinearHeading(Pose2d(-48.0, -36.0, Math.toRadians(90.0))).waitSeconds(1.0)
+		.lineToLinearHeading(Pose2d(-34.0, -33.0, Math.toRadians(180.0))).waitSeconds(1.0)
+		.lineToLinearHeading(Pose2d(-34.0, -24.0, Math.toRadians(180.0))).waitSeconds(1.0)
 		.lineToLinearHeading(Pose2d(-60.0, -55.0, Math.toRadians(45.0))).waitSeconds(1.0)
-		.lineToLinearHeading(Pose2d(-58.0, -36.0, Math.toRadians(90.0))).waitSeconds(1.0)
+		.lineToLinearHeading(Pose2d(-44.0, -24.0, Math.toRadians(180.0))).waitSeconds(1.0)
 		.lineToLinearHeading(Pose2d(-60.0, -55.0, Math.toRadians(45.0))).waitSeconds(1.0)
 		.lineToLinearHeading(Pose2d(-27.0, -10.0, Math.toRadians(180.0))).build();
 }

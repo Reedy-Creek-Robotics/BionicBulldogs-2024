@@ -33,7 +33,7 @@ class Outtake(val hardwareMap: HardwareMap)
 
 	private var state = State.Idle;
 
-	private val arm: Servo = hardwareMap.servo.get("outtakeArm");
+	val arm: Servo = hardwareMap.servo.get("outtakeArm");
 	private val bucket: Servo = hardwareMap.servo.get("bucket");
 
 	private val elapsedTime = ElapsedTime();

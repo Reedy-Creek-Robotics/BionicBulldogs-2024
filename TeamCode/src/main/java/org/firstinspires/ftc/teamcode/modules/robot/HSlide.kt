@@ -18,7 +18,7 @@ class HSlide(private val hSlide: Servo)
 		var min = 0.3;
 
 		@JvmField
-		var score = 0.73
+		var score = 0.715
 	}
 
 	fun score()
