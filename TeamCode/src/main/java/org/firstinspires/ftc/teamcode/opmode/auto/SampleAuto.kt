@@ -16,17 +16,16 @@ import org.firstinspires.ftc.teamcode.modules.robot.SpeciminClaw
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive
 import kotlin.math.PI
 
-//Maybe end paths while robot is idle?
-//Could make the robot even faster!!!!!!!!!
 @Autonomous
 @Config
 class SampleAuto: LinearOpMode()
 {
-	companion object {
+	companion object
+	{
 		@JvmField
-		val delay: Double = 0.75/2;
+		var delay = 0.375;
 		@JvmField
-		val delaytoo: Double = 1.0/2;
+		var delaytoo = 0.5;
 	}
 
 	override fun runOpMode()
@@ -61,7 +60,7 @@ class SampleAuto: LinearOpMode()
 
 		waitForStart();
 
-		/*slide.runToPosition(-1400);
+		slide.runToPosition(-1400);
 		drive.followTrajectorySequence(preload);
 
 		slide.runToPosition(-1000, 1.0);
@@ -69,7 +68,7 @@ class SampleAuto: LinearOpMode()
 		claw.open();
 		slide.runToPosition(0);
 
-		drive.followTrajectorySequence(samp1);*/
+		drive.followTrajectorySequence(samp1);
 
 		intake.forward();
 		hslide.gotoPos(0.65);
@@ -84,7 +83,7 @@ class SampleAuto: LinearOpMode()
 		delay(delay);
 
 		intake.stop();
-		/*drive.followTrajectorySequence(toScore);
+		drive.followTrajectorySequence(toScore);
 
 		arm.down();
 		hslide.gotoPos(1.0);
@@ -132,7 +131,7 @@ class SampleAuto: LinearOpMode()
 		slide.runToPosition(0, 1.0);
 		//while(slide.busy());
 
-		drive.followTrajectorySequence(park);*/
+		drive.followTrajectorySequence(park);
 	}
 
 	fun delay(time: Double)
