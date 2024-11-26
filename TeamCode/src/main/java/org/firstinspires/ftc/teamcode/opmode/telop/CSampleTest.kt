@@ -6,66 +6,73 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.modules.drive.HDrive
 import org.firstinspires.ftc.teamcode.modules.drive.SparkfunImuLocalizer
 import org.firstinspires.ftc.teamcode.modules.hardware.GamepadEx
-import org.firstinspires.ftc.teamcode.opmode.config.Arm
-import org.firstinspires.ftc.teamcode.opmode.config.Gripper
-import org.firstinspires.ftc.teamcode.opmode.config.Spin
+import org.firstinspires.ftc.teamcode.modules.robot.Arm
+import org.firstinspires.ftc.teamcode.modules.robot.Gripper
+import org.firstinspires.ftc.teamcode.modules.robot.Intake
 import org.firstinspires.ftc.teamcode.opmode.config.HDriveConfig
 
 @TeleOp
-class CSampleTest: LinearOpMode() {
-    override fun runOpMode() {
+class CSampleTest: LinearOpMode()
+{
+	override fun runOpMode()
+	{
 
-        val arm = Arm(hardwareMap.servo.get("arm"));
-        val gripper = Gripper(hardwareMap.servo.get("gripper"));
-        val spin = Spin(hardwareMap.crservo.get("rotator0"), hardwareMap.crservo.get("rotator1"));
-        val drive = HDrive(HDriveConfig(hardwareMap));
-        drive.setLocalizer(SparkfunImuLocalizer(hardwareMap.get(SparkFunOTOS::class.java, "imu2")));
+		val arm = Arm(hardwareMap.servo.get("arm"));
+		val gripper = Gripper(hardwareMap.servo.get("gripper"));
+		val spin = Intake(hardwareMap.crservo.get("rotator0"), hardwareMap.crservo.get("rotator1"), null);
+		val drive = HDrive(HDriveConfig(hardwareMap));
+		drive.setLocalizer(SparkfunImuLocalizer(hardwareMap.get(SparkFunOTOS::class.java, "imu2")));
 
-        val gamepad = GamepadEx(gamepad1);
+		val gamepad = GamepadEx(gamepad1);
 
-        waitForStart();
+		waitForStart();
 
-        arm.down()
+		arm.down()
 
-        while (opModeIsActive()) {
-            gamepad.copy()
+		while(opModeIsActive())
+		{
+			gamepad.copy()
 
-            drive.driveFR(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+			drive.driveFR(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
 
-            if(gamepad.leftTriggerb())
-            {
-                arm.up()
-            };
+			if(gamepad.leftTriggerb())
+			{
+				arm.up()
+			};
 
-            if(gamepad.rightTriggerb())
-            {
-                arm.down()
-            };
+			if(gamepad.rightTriggerb())
+			{
+				arm.down()
+			};
 
-            if(gamepad.leftBumper())
-            {
-                if (gripper.state != Gripper.State.Open)
-                {
-                    gripper.open();
-                } else {
-                    gripper.close();
-                }
-            };
+			if(gamepad.leftBumper())
+			{
+				if(gripper.state != Gripper.State.Open)
+				{
+					gripper.open();
+				}
+				else
+				{
+					gripper.close();
+				}
+			};
 
-            if(gamepad.rightBumper())
-            {
-                if (spin.state != Spin.State.Forward)
-                {
-                    spin.forward();
-                } else {
-                    spin.reverse();
-                }
-            };
+			if(gamepad.rightBumper())
+			{
+				if(spin.state != Intake.State.Forward)
+				{
+					spin.forward();
+				}
+				else
+				{
+					spin.reverse();
+				}
+			};
 
-            if(gamepad.dpadLeft() || gamepad.dpadRight())
-            {
-                spin.stop()
-            }
-        }
-    }
+			if(gamepad.dpadLeft() || gamepad.dpadRight())
+			{
+				spin.stop()
+			}
+		}
+	}
 }

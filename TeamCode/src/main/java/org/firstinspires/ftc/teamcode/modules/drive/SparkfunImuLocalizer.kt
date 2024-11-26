@@ -4,6 +4,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.localization.Localizer
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit
+import kotlin.math.PI
 
 class SparkfunImuLocalizer(override var poseEstimate: Pose2d, override val poseVelocity: Pose2d?):
 	Localizer
@@ -22,6 +23,6 @@ class SparkfunImuLocalizer(override var poseEstimate: Pose2d, override val poseV
 
 	override fun update()
 	{
-		poseEstimate = Pose2d(0.0, 0.0, imu.position.h);
+		poseEstimate = Pose2d(0.0, 0.0, imu.position.h + PI);
 	}
 }

@@ -3,20 +3,21 @@ package org.firstinspires.ftc.teamcode.opmode.telop
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
+import com.qualcomm.robotcore.hardware.DcMotorEx
 import org.firstinspires.ftc.teamcode.modules.drive.HDrive
 import org.firstinspires.ftc.teamcode.modules.drive.SparkfunImuLocalizer
 import org.firstinspires.ftc.teamcode.modules.hardware.GamepadEx
-import org.firstinspires.ftc.teamcode.opmode.config.Claw
+import org.firstinspires.ftc.teamcode.modules.robot.SpeciminClaw
 import org.firstinspires.ftc.teamcode.opmode.config.HDriveConfig
-import org.firstinspires.ftc.teamcode.opmode.config.Slide
+import org.firstinspires.ftc.teamcode.modules.robot.Slide
 
 @TeleOp
 class ClawTest: LinearOpMode()
 {
 	override fun runOpMode()
 	{
-		val claw = Claw(hardwareMap.servo.get("claw"));
-		val slide = Slide(hardwareMap.dcMotor.get("slide"));
+		val speciminClaw = SpeciminClaw(hardwareMap.servo.get("claw"));
+		val slide = Slide(hardwareMap.dcMotor.get("slide") as DcMotorEx);
 		val drive = HDrive(HDriveConfig(hardwareMap));
 		drive.setLocalizer(SparkfunImuLocalizer(hardwareMap.get(SparkFunOTOS::class.java, "imu2")));
 
@@ -26,7 +27,7 @@ class ClawTest: LinearOpMode()
 
 		waitForStart();
 
-		claw.close();
+		speciminClaw.close();
 
 		while(opModeIsActive())
 		{
@@ -38,13 +39,13 @@ class ClawTest: LinearOpMode()
 			//claw
 			if(gamepad.dpadRight())
 			{
-				if(claw.state == Claw.State.Closed)
+				if(speciminClaw.state == SpeciminClaw.State.Closed)
 				{
-					claw.open();
+					speciminClaw.open();
 				}
-				else if(claw.state == Claw.State.Open)
+				else if(speciminClaw.state == SpeciminClaw.State.Open)
 				{
-					claw.close();
+					speciminClaw.close();
 				}
 			}
 

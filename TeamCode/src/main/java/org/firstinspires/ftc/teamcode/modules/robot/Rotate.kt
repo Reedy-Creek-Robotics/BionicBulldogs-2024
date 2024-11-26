@@ -1,7 +1,8 @@
-package org.firstinspires.ftc.teamcode.opmode.config
+package org.firstinspires.ftc.teamcode.modules.robot
 
 import com.acmerobotics.dashboard.config.Config
 import com.qualcomm.robotcore.hardware.CRServo
+import com.qualcomm.robotcore.util.ElapsedTime
 
 @Config
 class Rotate(private val rotate0: CRServo) {
@@ -12,6 +13,8 @@ class Rotate(private val rotate0: CRServo) {
         Stop
     }
     var state = State.Stop;
+    var targetTime = 0.0;
+    val elapsedTime = ElapsedTime();
 
     companion object
     {
@@ -37,4 +40,25 @@ class Rotate(private val rotate0: CRServo) {
         state = State.Stop;
     }
 
+    /**
+     * @param time seconds
+     */
+    fun outtakeForTime(time: Double)
+    {
+        elapsedTime.reset();
+        targetTime = time;
+        reverse();
+    }
+
+    fun update()
+    {
+        if(targetTime > 0)
+        {
+            if(targetTime < elapsedTime.seconds())
+            {
+                forward();
+                targetTime = -1.0;
+            }
+        }
+    }
 }

@@ -6,8 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.modules.drive.HDrive
 import org.firstinspires.ftc.teamcode.modules.drive.SparkfunImuLocalizer
 import org.firstinspires.ftc.teamcode.modules.hardware.GamepadEx
-import org.firstinspires.ftc.teamcode.opmode.config.Arm
-import org.firstinspires.ftc.teamcode.opmode.config.Spin
+import org.firstinspires.ftc.teamcode.modules.robot.Arm
+import org.firstinspires.ftc.teamcode.modules.robot.Intake
 import org.firstinspires.ftc.teamcode.opmode.config.HDriveConfig
 
 @TeleOp
@@ -15,7 +15,7 @@ class ESampleTest: LinearOpMode()
 {
     override fun runOpMode()
     {
-        val rotate = Spin(hardwareMap.crservo.get("rotator0"), hardwareMap.crservo.get("rotator1"));
+        val rotate = Intake(hardwareMap.crservo.get("rotator0"), hardwareMap.crservo.get("rotator1"), null);
         val arm = Arm(hardwareMap.servo.get("arm"));
         val drive = HDrive(HDriveConfig(hardwareMap));
         drive.setLocalizer(SparkfunImuLocalizer(hardwareMap.get(SparkFunOTOS::class.java, "imu2")))
@@ -46,7 +46,7 @@ class ESampleTest: LinearOpMode()
             if(gamepad.rightBumper())
             {
                 rBump++
-                if (rotate.state != Spin.State.Reverse)
+                if (rotate.state != Intake.State.Reverse)
                 {
                     rotate.reverse()
                 } else {
@@ -57,7 +57,7 @@ class ESampleTest: LinearOpMode()
             if(gamepad.leftBumper())
             {
                 lBump++
-                if (rotate.state != Spin.State.Forward)
+                if (rotate.state != Intake.State.Forward)
                 {
                     rotate.forward()
                 } else {

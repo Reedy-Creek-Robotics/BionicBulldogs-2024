@@ -1,50 +1,56 @@
 package org.firstinspires.ftc.teamcode.opmode.telop
 
+import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
+import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.util.ElapsedTime
 import org.firstinspires.ftc.teamcode.modules.drive.HDrive
 import org.firstinspires.ftc.teamcode.modules.drive.SparkfunImuLocalizer
 import org.firstinspires.ftc.teamcode.modules.hardware.GamepadEx
-import org.firstinspires.ftc.teamcode.opmode.config.*
+import org.firstinspires.ftc.teamcode.modules.robot.*
+import org.firstinspires.ftc.teamcode.opmode.config.HDriveConfig
 
 @TeleOp
 class MainTelop: LinearOpMode()
 {
 	enum class ScoreState
 	{
-		Up, Down
+		Up, Down, Lowering
 	}
 
 	override fun runOpMode()
 	{
-
 		//Claw, slides (to pos), drive, eTake
-		val claw = Claw(hardwareMap.servo.get("claw"));
-		val slide = Slide(hardwareMap.dcMotor.get("slide"));
-		val grip = Gripper(hardwareMap.servo.get("gripper"));
+		val speciminClaw = SpeciminClaw(hardwareMap.servo.get("claw"));
+		val slide = Slide(hardwareMap.dcMotor.get("slide") as DcMotorEx);
+//		val griper = Gripper(hardwareMap.servo.get("gripper"));
 		val arm = Arm(hardwareMap.servo.get("arm"));
-		val rotate = Spin(hardwareMap.crservo.get("rotator0"), hardwareMap.crservo.get("rotator1"))
+		val intake = Intake(
+			hardwareMap.crservo.get("rotator0"), null, null
+		);
+
+		val outtake = Outtake(hardwareMap);
+
 		val hSlide = HSlide(hardwareMap.servo.get("hslide"));
 
 		val drive = HDrive(HDriveConfig(hardwareMap));
 		drive.setLocalizer(SparkfunImuLocalizer(hardwareMap.get(SparkFunOTOS::class.java, "imu2")));
-
-		slide.reverse();
+		drive.setPosEstimate(Pose2d(0.0, 0.0, 0.0));
 
 		val gamepad = GamepadEx(gamepad1);
 
 		waitForStart();
 
-		grip.close();
+		speciminClaw.close();
 		hSlide.zero();
-		claw.close();
 		arm.down();
 
-		var scoreState = ScoreState.Down;
+		outtake.armDown();
+		outtake.bucketDown();
 
-		var count = 0;
+		var scoreState = ScoreState.Down;
 
 		//Controls:
 		//Claw - Circle toggles open/close
@@ -60,9 +66,11 @@ class MainTelop: LinearOpMode()
 			gamepad.copy();
 
 			//Drive
+
 			drive.driveFR(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
 
-			//hSlide
+			//Horizontal Slides
+
 			if(gamepad1.right_trigger >= 0.5 && hSlide.pos() >= hSlide.min())
 			{
 				hSlide.decrement();
@@ -73,98 +81,155 @@ class MainTelop: LinearOpMode()
 			}
 			else if(gamepad.triangle())
 			{
-				hSlide.zero();
+				hSlide.score();
+				arm.up();
+			}
+
+			// Outtake
+
+			if(gamepad.dpadUp())
+			{
+				outtake.up();
+			}
+			if(gamepad.dpadDown())
+			{
+				outtake.armDown();
+				outtake.bucketDown()
+			}
+			if(gamepad.dpadLeft())
+			{
+				outtake.bucketScore();
+			}
+			if(gamepad.dpadRight())
+			{
+				outtake.bucketUp();
+			}
+
+			if(outtake.update() == 1)
+			{
+				slide.lower();
 			}
 
 			//Grip
-			if(gamepad.dpadRight() || gamepad.dpadDown() || gamepad.dpadLeft() || gamepad.dpadUp())
+			/*if(gamepad.dpadDown() || gamepad.dpadUp())
 			{
-				if(grip.state != Gripper.State.Open)
+				if(gripper.state != Gripper.State.Open)
 				{
-					grip.open();
+					gripper.open();
 				}
 				else
 				{
-					grip.close();
+					gripper.close();
 				}
-			};
+			}*/
 
-			//Claw
+			/*if(gamepad1.dpad_left)
+			{
+				if(rotatorPosition > 0)
+				{
+					rotatorPosition += 0.1;
+					rotator0.power = rotatorPosition;
+				}
+			}
+
+			if(gamepad1.dpad_right)
+			{
+				if(rotatorPosition < 1)
+				{
+					rotatorPosition -= 0.1;
+					rotator0.power = rotatorPosition;
+				}
+			}*/
+
+			//Specimine Claw
+
 			if(gamepad.circle())
 			{
-				if(claw.state == Claw.State.Closed)
+				if(speciminClaw.state == SpeciminClaw.State.Closed)
 				{
-					claw.open();
+					speciminClaw.open();
 				}
-				else if(claw.state == Claw.State.Open)
+				else if(speciminClaw.state == SpeciminClaw.State.Open)
 				{
-					claw.close();
+					speciminClaw.close();
 				}
 			}
 
-			//Rotate rBumper
+			// Intake
+
 			if(gamepad.rightBumper())
 			{
-				if(rotate.state == Spin.State.Forward)
+				if(intake.state == Intake.State.Forward)
 				{
-					rotate.stop();
+					intake.stop();
 				}
 				else
 				{
-					rotate.forward();
+					intake.forward();
 				}
 			}
 
-			//Rotate lBumper
 			if(gamepad.leftBumper())
 			{
-				if(rotate.state == Spin.State.Reverse)
+				if(intake.state == Intake.State.Reverse)
 				{
-					rotate.stop();
+					intake.stop();
 				}
 				else
 				{
-					rotate.reverse();
+					intake.outtakeForTime(1.0);
 				}
 			}
 
-			//Slide
+			intake.update();
+
+			// Outtake Slides
+
 			if(gamepad.cross())
 			{
 				if(slide.state == Slide.State.Raise)
 				{
-					slide.lower();
+					outtake.score();
 				}
 				else if(slide.state == Slide.State.Lower)
 				{
-					slide.raise();
+					slide.gotoPos(-2500);
+					outtake.up();
 				}
 			}
 
+			slide.update();
+
 			//Combo
+
 			if(gamepad.touchpad())
 			{
 				drive.drive(0.0f, 0.0f, 0.0f);
 				if(scoreState == ScoreState.Down)
 				{
-					claw.close();
+					speciminClaw.close();
 					delay(0.5);
 					slide.raise();
 					scoreState = ScoreState.Up;
 				}
 				else
 				{
-					slide.runToPosition(850);
-					while(slide.busy());
-					delay(0.5);
-					claw.open();
-					delay(0.5);
 					slide.lower();
+					scoreState = ScoreState.Lowering;
+				}
+			}
+
+			if(scoreState == ScoreState.Lowering)
+			{
+				if(slide.getPos() > -1000)
+				{
+					speciminClaw.open();
 					scoreState = ScoreState.Down;
 				}
 			}
 
-			//Arm
+			// Intake Arm
+
 			if(gamepad.square())
 			{
 				if(arm.state == Arm.State.Up)
@@ -180,7 +245,6 @@ class MainTelop: LinearOpMode()
 			drive.telem(telemetry);
 			telemetry.addData("hPos", hSlide.pos())
 			telemetry.addData("square", gamepad.square());
-			telemetry.addData("square count", count);
 			telemetry.update();
 		}
 	}
