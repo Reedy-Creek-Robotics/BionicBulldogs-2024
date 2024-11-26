@@ -19,13 +19,14 @@ class MainTelop: LinearOpMode()
 		val claw = SpeciminClaw(hardwareMap);
 		val slide = Slide(hardwareMap);
 		val specimenOuttake = SpecimenOuttake(claw, slide);
-//		val griper = Gripper(hardwareMap.servo.get("gripper"));
 		val arm = Arm(hardwareMap.servo.get("arm"));
 		val intake = Intake(
 			hardwareMap.crservo.get("rotator0"), null, null
 		);
 
 		val outtake = Outtake(hardwareMap);
+
+		val sampleOuttake = SampleOuttake(slide, outtake);
 
 		val hSlide = HSlide(hardwareMap.servo.get("hslide"));
 
@@ -38,11 +39,10 @@ class MainTelop: LinearOpMode()
 		waitForStart();
 
 		specimenOuttake.init();
+		sampleOuttake.init();
+
 		hSlide.zero();
 		arm.down();
-
-		outtake.armDown();
-		outtake.bucketDown();
 
 		//Controls:
 		//Claw - Circle toggles open/close
@@ -102,37 +102,6 @@ class MainTelop: LinearOpMode()
 				slide.lower();
 			}
 
-			//Grip
-			/*if(gamepad.dpadDown() || gamepad.dpadUp())
-			{
-				if(gripper.state != Gripper.State.Open)
-				{
-					gripper.open();
-				}
-				else
-				{
-					gripper.close();
-				}
-			}*/
-
-			/*if(gamepad1.dpad_left)
-			{
-				if(rotatorPosition > 0)
-				{
-					rotatorPosition += 0.1;
-					rotator0.power = rotatorPosition;
-				}
-			}
-
-			if(gamepad1.dpad_right)
-			{
-				if(rotatorPosition < 1)
-				{
-					rotatorPosition -= 0.1;
-					rotator0.power = rotatorPosition;
-				}
-			}*/
-
 			//Specimine Claw
 
 			if(gamepad.circle())
@@ -179,16 +148,16 @@ class MainTelop: LinearOpMode()
 
 			if(gamepad.cross())
 			{
-				if(slide.state == Slide.State.Raise)
+				if(slide.state == Slide.State.Lower)
 				{
-					outtake.score();
+					sampleOuttake.up();
 				}
 				else if(slide.state == Slide.State.Lower)
 				{
-					slide.gotoPos(-2500);
-					outtake.up();
+					sampleOuttake.score();
 				}
 			}
+			sampleOuttake.update();
 
 			slide.update();
 
@@ -196,7 +165,6 @@ class MainTelop: LinearOpMode()
 
 			if(gamepad.touchpad())
 			{
-				drive.drive(0.0f, 0.0f, 0.0f);
 				if(specimenOuttake.state == SpecimenOuttake.State.Down)
 				{
 					specimenOuttake.collect();
@@ -221,10 +189,10 @@ class MainTelop: LinearOpMode()
 					arm.up();
 				}
 			}
+
 			slide.telem(telemetry);
 			drive.telem(telemetry);
 			telemetry.addData("hPos", hSlide.pos())
-			telemetry.addData("square", gamepad.square());
 			telemetry.update();
 		}
 	}
