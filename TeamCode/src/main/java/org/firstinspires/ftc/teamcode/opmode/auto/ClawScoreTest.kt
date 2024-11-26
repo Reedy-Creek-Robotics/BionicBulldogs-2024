@@ -11,9 +11,9 @@ class ClawScoreTest: LinearOpMode()
 {
 	override fun runOpMode()
 	{
-		val speciminClaw = SpeciminClaw(hardwareMap.servo.get("claw"));
+		val speciminClaw = SpeciminClaw(hardwareMap);
 
-		val slides = Slide(hardwareMap.dcMotor.get("slide") as DcMotorEx);
+		val slides = Slide(hardwareMap);
 
 		val topPos = -1300;
 

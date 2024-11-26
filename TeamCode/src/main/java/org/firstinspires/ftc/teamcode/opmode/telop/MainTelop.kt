@@ -4,7 +4,6 @@ import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
-import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.util.ElapsedTime
 import org.firstinspires.ftc.teamcode.modules.drive.HDrive
 import org.firstinspires.ftc.teamcode.modules.drive.SparkfunImuLocalizer
@@ -15,16 +14,11 @@ import org.firstinspires.ftc.teamcode.opmode.config.HDriveConfig
 @TeleOp
 class MainTelop: LinearOpMode()
 {
-	enum class ScoreState
-	{
-		Up, Down, Lowering
-	}
-
 	override fun runOpMode()
 	{
-		//Claw, slides (to pos), drive, eTake
-		val speciminClaw = SpeciminClaw(hardwareMap.servo.get("claw"));
-		val slide = Slide(hardwareMap.dcMotor.get("slide") as DcMotorEx);
+		val claw = SpeciminClaw(hardwareMap);
+		val slide = Slide(hardwareMap);
+		val specimenOuttake = SpecimenOuttake(claw, slide);
 //		val griper = Gripper(hardwareMap.servo.get("gripper"));
 		val arm = Arm(hardwareMap.servo.get("arm"));
 		val intake = Intake(
@@ -43,14 +37,12 @@ class MainTelop: LinearOpMode()
 
 		waitForStart();
 
-		speciminClaw.close();
+		specimenOuttake.init();
 		hSlide.zero();
 		arm.down();
 
 		outtake.armDown();
 		outtake.bucketDown();
-
-		var scoreState = ScoreState.Down;
 
 		//Controls:
 		//Claw - Circle toggles open/close
@@ -145,13 +137,13 @@ class MainTelop: LinearOpMode()
 
 			if(gamepad.circle())
 			{
-				if(speciminClaw.state == SpeciminClaw.State.Closed)
+				if(claw.state == SpeciminClaw.State.Closed)
 				{
-					speciminClaw.open();
+					claw.open();
 				}
-				else if(speciminClaw.state == SpeciminClaw.State.Open)
+				else if(claw.state == SpeciminClaw.State.Open)
 				{
-					speciminClaw.close();
+					claw.close();
 				}
 			}
 
@@ -200,33 +192,21 @@ class MainTelop: LinearOpMode()
 
 			slide.update();
 
-			//Combo
+			// Specimen Outtake
 
 			if(gamepad.touchpad())
 			{
 				drive.drive(0.0f, 0.0f, 0.0f);
-				if(scoreState == ScoreState.Down)
+				if(specimenOuttake.state == SpecimenOuttake.State.Down)
 				{
-					speciminClaw.close();
-					delay(0.5);
-					slide.raise();
-					scoreState = ScoreState.Up;
+					specimenOuttake.collect();
 				}
 				else
 				{
-					slide.lower();
-					scoreState = ScoreState.Lowering;
+					specimenOuttake.score();
 				}
 			}
-
-			if(scoreState == ScoreState.Lowering)
-			{
-				if(slide.getPos() > -1000)
-				{
-					speciminClaw.open();
-					scoreState = ScoreState.Down;
-				}
-			}
+			specimenOuttake.update();
 
 			// Intake Arm
 

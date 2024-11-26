@@ -19,7 +19,7 @@ public class CoachTestMode extends LinearOpMode {
         Gamepad previousGamepad2 = new Gamepad();
 
         // other initialization code goes here
-        SpeciminClaw speciminClaw = new SpeciminClaw(hardwareMap.servo.get("claw"));
+        SpeciminClaw speciminClaw = new SpeciminClaw(hardwareMap);
 
         waitForStart();
 

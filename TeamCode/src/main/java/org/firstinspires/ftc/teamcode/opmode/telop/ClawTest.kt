@@ -16,8 +16,8 @@ class ClawTest: LinearOpMode()
 {
 	override fun runOpMode()
 	{
-		val speciminClaw = SpeciminClaw(hardwareMap.servo.get("claw"));
-		val slide = Slide(hardwareMap.dcMotor.get("slide") as DcMotorEx);
+		val speciminClaw = SpeciminClaw(hardwareMap);
+		val slide = Slide(hardwareMap);
 		val drive = HDrive(HDriveConfig(hardwareMap));
 		drive.setLocalizer(SparkfunImuLocalizer(hardwareMap.get(SparkFunOTOS::class.java, "imu2")));
 
