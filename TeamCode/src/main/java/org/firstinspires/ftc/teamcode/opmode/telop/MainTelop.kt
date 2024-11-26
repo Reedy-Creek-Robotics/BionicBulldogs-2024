@@ -9,7 +9,12 @@ import com.qualcomm.robotcore.util.ElapsedTime
 import org.firstinspires.ftc.teamcode.modules.drive.HDrive
 import org.firstinspires.ftc.teamcode.modules.drive.SparkfunImuLocalizer
 import org.firstinspires.ftc.teamcode.modules.hardware.GamepadEx
-import org.firstinspires.ftc.teamcode.modules.robot.*
+import org.firstinspires.ftc.teamcode.modules.robot.Arm
+import org.firstinspires.ftc.teamcode.modules.robot.HSlide
+import org.firstinspires.ftc.teamcode.modules.robot.Intake
+import org.firstinspires.ftc.teamcode.modules.robot.Outtake
+import org.firstinspires.ftc.teamcode.modules.robot.Slide
+import org.firstinspires.ftc.teamcode.modules.robot.SpeciminClaw
 import org.firstinspires.ftc.teamcode.opmode.config.HDriveConfig
 
 @TeleOp
@@ -66,11 +71,9 @@ class MainTelop: LinearOpMode()
 			gamepad.copy();
 
 			//Drive
-
 			drive.driveFR(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
 
 			//Horizontal Slides
-
 			if(gamepad1.right_trigger >= 0.5 && hSlide.pos() >= hSlide.min())
 			{
 				hSlide.decrement();
@@ -86,7 +89,6 @@ class MainTelop: LinearOpMode()
 			}
 
 			// Outtake
-
 			if(gamepad.dpadUp())
 			{
 				outtake.up();
@@ -142,7 +144,6 @@ class MainTelop: LinearOpMode()
 			}*/
 
 			//Specimine Claw
-
 			if(gamepad.circle())
 			{
 				if(speciminClaw.state == SpeciminClaw.State.Closed)
@@ -156,7 +157,6 @@ class MainTelop: LinearOpMode()
 			}
 
 			// Intake
-
 			if(gamepad.rightBumper())
 			{
 				if(intake.state == Intake.State.Forward)
@@ -181,10 +181,7 @@ class MainTelop: LinearOpMode()
 				}
 			}
 
-			intake.update();
-
 			// Outtake Slides
-
 			if(gamepad.cross())
 			{
 				if(slide.state == Slide.State.Raise)
@@ -198,10 +195,7 @@ class MainTelop: LinearOpMode()
 				}
 			}
 
-			slide.update();
-
 			//Combo
-
 			if(gamepad.touchpad())
 			{
 				drive.drive(0.0f, 0.0f, 0.0f);
@@ -229,7 +223,6 @@ class MainTelop: LinearOpMode()
 			}
 
 			// Intake Arm
-
 			if(gamepad.square())
 			{
 				if(arm.state == Arm.State.Up)
@@ -241,6 +234,9 @@ class MainTelop: LinearOpMode()
 					arm.up();
 				}
 			}
+
+			intake.update();
+			slide.update();
 			slide.telem(telemetry);
 			drive.telem(telemetry);
 			telemetry.addData("hPos", hSlide.pos())
