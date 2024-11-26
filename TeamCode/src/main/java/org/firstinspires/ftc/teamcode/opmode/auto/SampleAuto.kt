@@ -6,7 +6,13 @@ import com.acmerobotics.roadrunner.geometry.Vector2d
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.util.ElapsedTime
-import org.firstinspires.ftc.teamcode.modules.robot.*
+import org.firstinspires.ftc.teamcode.modules.robot.Arm
+import org.firstinspires.ftc.teamcode.modules.robot.HSlide
+import org.firstinspires.ftc.teamcode.modules.robot.Intake
+import org.firstinspires.ftc.teamcode.modules.robot.Outtake
+import org.firstinspires.ftc.teamcode.modules.robot.Slide
+import org.firstinspires.ftc.teamcode.modules.robot.SpecimenOuttake
+import org.firstinspires.ftc.teamcode.modules.robot.SpeciminClaw
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive
 import kotlin.math.PI
 
@@ -35,8 +41,8 @@ class SampleAuto: LinearOpMode()
 
 		val preload = drive.trajectorySequenceBuilder(Pose2d(-6.0, -60.0, Math.toRadians(-90.0)))
 			.lineToConstantHeading(Vector2d(-6.0, -28.0)).build();
-		val samp1 = drive.trajectorySequenceBuilder(preload.end()).lineToLinearHeading(Pose2d(-36.0, -36.0, PI))
-			.lineToLinearHeading(Pose2d(-36.0, -22.0, PI)).build();
+		val samp1 = drive.trajectorySequenceBuilder(preload.end())
+			.splineToLinearHeading(Pose2d(-34.0, -24.0, Math.toRadians(180.0)), Math.toRadians(90.0)).build();
 		val toScore = drive.trajectorySequenceBuilder(samp1.end())
 			.lineToLinearHeading(Pose2d(-53.5, -52.0, Math.toRadians(45.0))).build();
 		val samp2 = drive.trajectorySequenceBuilder(toScore.end())

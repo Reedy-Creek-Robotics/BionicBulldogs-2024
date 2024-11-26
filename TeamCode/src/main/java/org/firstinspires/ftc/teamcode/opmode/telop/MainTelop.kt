@@ -8,7 +8,13 @@ import com.qualcomm.robotcore.util.ElapsedTime
 import org.firstinspires.ftc.teamcode.modules.drive.HDrive
 import org.firstinspires.ftc.teamcode.modules.drive.SparkfunImuLocalizer
 import org.firstinspires.ftc.teamcode.modules.hardware.GamepadEx
-import org.firstinspires.ftc.teamcode.modules.robot.*
+import org.firstinspires.ftc.teamcode.modules.robot.Arm
+import org.firstinspires.ftc.teamcode.modules.robot.HSlide
+import org.firstinspires.ftc.teamcode.modules.robot.Intake
+import org.firstinspires.ftc.teamcode.modules.robot.Outtake
+import org.firstinspires.ftc.teamcode.modules.robot.Slide
+import org.firstinspires.ftc.teamcode.modules.robot.SpecimenOuttake
+import org.firstinspires.ftc.teamcode.modules.robot.SpeciminClaw
 import org.firstinspires.ftc.teamcode.opmode.config.HDriveConfig
 
 @TeleOp
@@ -19,7 +25,6 @@ class MainTelop: LinearOpMode()
 		val claw = SpeciminClaw(hardwareMap);
 		val slide = Slide(hardwareMap);
 		val specimenOuttake = SpecimenOuttake(claw, slide);
-//		val griper = Gripper(hardwareMap.servo.get("gripper"));
 		val arm = Arm(hardwareMap.servo.get("arm"));
 		val intake = Intake(
 			hardwareMap.crservo.get("rotator0"), null, null
