@@ -23,14 +23,12 @@ class SpecimenAuto: LinearOpMode()
 		val outtake = Outtake(hardwareMap);
 
 		val path = drive.trajectorySequenceBuilder(Pose2d(0.0, -60.0, Math.toRadians(-90.0)))
-			.lineToConstantHeading(Vector2d(0.0, -28.0))
-			.build();
+			.lineToConstantHeading(Vector2d(0.0, -28.0)).build();
 		val path2 = drive.trajectorySequenceBuilder(path.end())
-			.lineToLinearHeading(Pose2d(38.0, -55.0, Math.toRadians(90.0)),)
-			.build();
-		val path3 = drive.trajectorySequenceBuilder(path2.end())
-			.lineToLinearHeading(Pose2d(path2.start().x, path2.start().y - 2, path2.start().heading))
-			.build();
+			.lineToLinearHeading(Pose2d(38.0, -55.0, Math.toRadians(90.0)), velOverride(), accelOverride(maxAccel = 30.0)).build();
+		val path3 = drive.trajectorySequenceBuilder(path2.end()).lineToLinearHeading(
+			Pose2d(path2.start().x, path2.start().y - 6, path2.start().heading)
+		).lineToConstantHeading(Vector2d(path2.start().x, path2.start().y)).build();
 
 		drive.poseEstimate = path.start();
 
@@ -44,7 +42,7 @@ class SpecimenAuto: LinearOpMode()
 
 		drive.followTrajectorySequence(path);
 
-		slides.runToPosition(-1000, 1.0)
+		slides.runToPosition(-900, 1.0)
 		while(slides.busy());
 		claw.open();
 
@@ -62,6 +60,8 @@ class SpecimenAuto: LinearOpMode()
 		while(slides.busy());
 		claw.open();
 
+		slides.lower();
+		while(slides.getPos() < -250);
 	}
 
 	private fun delay(time: Double)
