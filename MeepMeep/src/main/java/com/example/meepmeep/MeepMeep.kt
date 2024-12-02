@@ -3,44 +3,131 @@ package com.example.meepmeep
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.geometry.Vector2d
 import org.rowlandhall.meepmeep.MeepMeep
+import org.rowlandhall.meepmeep.core.colorscheme.scheme.ColorSchemeBlueDark
 import org.rowlandhall.meepmeep.roadrunner.DefaultBotBuilder
 import org.rowlandhall.meepmeep.roadrunner.DriveShim
 import org.rowlandhall.meepmeep.roadrunner.trajectorysequence.TrajectorySequence
 
+val startX = 10.0;
+val startY = -60.0;
+
+val sampleX = arrayOf(36.0, 48.0, 60.0);
+val sampleY = -25.0;
+
+val specimineScoreY = -28.0;
+
+val noPartner = true;
+
+fun rotation(angle: Int): Double
+{
+	return Math.toRadians(-(angle.toDouble() - 90))
+}
+
+fun pos(x: Double, y: Double, angle: Int): Pose2d
+{
+	return Pose2d(x, y, rotation(angle));
+}
+
 
 fun speciminSide(drive: DriveShim): TrajectorySequence
 {
-	return drive.trajectorySequenceBuilder(Pose2d(0.0, -60.0, Math.toRadians(-90.0)))
-		.lineToConstantHeading(Vector2d(0.0, -28.0)).waitSeconds(1.0)
-		.lineToLinearHeading(Pose2d(38.0, -55.0, Math.toRadians(90.0))).waitSeconds(1.0)
-		.lineToLinearHeading(Pose2d(0.0, -28.0, Math.toRadians(-90.0))).waitSeconds(1.0)
-		.lineToConstantHeading(Vector2d(38.0, -55.0)).build()
+	val scoreY = -40.0;
+
+	val builder = drive.trajectorySequenceBuilder(pos(startX, startY, -180));
+
+	builder.lineToConstantHeading(Vector2d(startX, -28.0));
+	builder.waitSeconds(1.0);
+
+	if(noPartner)
+	{
+		builder.lineToLinearHeading(pos(sampleX[0], startY, 0));
+		builder.waitSeconds(1.0);
+		builder.lineToLinearHeading(pos(startX, specimineScoreY, 0));
+		builder.waitSeconds(1.0);
+	}
+
+	builder.setTangent(rotation(180));
+	builder.splineToLinearHeading(pos((startX + sampleX[0]) / 2, -36.0, -225), rotation(90))
+	builder.setTangent(rotation(90));
+	builder.splineToLinearHeading(pos(sampleX[0], sampleY, 90), rotation(0));
+	builder.waitSeconds(1.0);
+
+	builder.lineToLinearHeading(pos(sampleX[0], scoreY, 0));
+	builder.waitSeconds(1.0);
+
+	for(i in 1 .. 2)
+	{
+		builder.lineToLinearHeading(pos(sampleX[i], sampleY, 90));
+		builder.waitSeconds(1.0);
+
+		builder.lineToLinearHeading(pos(sampleX[i], scoreY, 0));
+		builder.waitSeconds(1.0);
+	}
+
+	builder.lineToLinearHeading(pos(sampleX[0], startY, 180));
+	builder.waitSeconds(1.0);
+
+	for(i in 0 .. 1)
+	{
+		builder.lineToLinearHeading(pos(startX, specimineScoreY, 0));
+		builder.waitSeconds(1.0);
+		builder.lineToLinearHeading(pos(sampleX[0], startY, 180));
+		builder.waitSeconds(1.0);
+	}
+
+	return builder.build();
 }
 
 fun sampleSide(drive: DriveShim): TrajectorySequence
 {
-	return drive.trajectorySequenceBuilder(Pose2d(0.0, -60.0, Math.toRadians(-90.0)))
-		.lineToConstantHeading(Vector2d(-6.0, -30.0)).waitSeconds(1.0)
-		.lineToLinearHeading(Pose2d(-34.0, -33.0, Math.toRadians(180.0))).waitSeconds(1.0)
-		.lineToLinearHeading(Pose2d(-34.0, -24.0, Math.toRadians(180.0))).waitSeconds(1.0)
-		.lineToLinearHeading(Pose2d(-60.0, -55.0, Math.toRadians(45.0))).waitSeconds(1.0)
-		.lineToLinearHeading(Pose2d(-44.0, -24.0, Math.toRadians(180.0))).waitSeconds(1.0)
-		.lineToLinearHeading(Pose2d(-60.0, -55.0, Math.toRadians(45.0))).waitSeconds(1.0)
-		.lineToLinearHeading(Pose2d(-27.0, -10.0, Math.toRadians(180.0))).build();
+	val sampleScorePos = pos(-55.0, -55.0, 45);
+
+	val builder = drive.trajectorySequenceBuilder(pos(-startX, startY, 180));
+	builder.lineToConstantHeading(Vector2d(-startX, specimineScoreY));
+	builder.waitSeconds(1.0);
+
+	builder.setTangent(rotation(180));
+	builder.splineToLinearHeading(pos((-startX - sampleX[0]) / 2, -36.0, 225), rotation(-90))
+	builder.setTangent(rotation(-90));
+	builder.splineToLinearHeading(pos(-sampleX[0], sampleY, -90), rotation(0));
+	builder.waitSeconds(1.0);
+
+	builder.lineToLinearHeading(sampleScorePos);
+	builder.waitSeconds(1.0);
+
+	for(i in 1..2)
+	{
+		builder.lineToLinearHeading(pos(-sampleX[i], sampleY, -90));
+		builder.waitSeconds(1.0);
+
+		builder.lineToLinearHeading(sampleScorePos);
+		builder.waitSeconds(1.0);
+	}
+
+	builder.lineToLinearHeading(Pose2d(-27.0, -10.0, Math.toRadians(180.0)));
+
+	return builder.build();
 }
 
 fun main()
 {
 	val meepMeep = MeepMeep(800);
 
-	val botBuilder = DefaultBotBuilder(meepMeep);
-	botBuilder.setConstraints(60.0, 60.0, Math.toRadians(180.0), Math.toRadians(180.0), 15.0);
-	botBuilder.setDimensions(12.0, 12.0)
-	val bot = botBuilder.followTrajectorySequence {drive: DriveShim -> sampleSide(drive) };
+	val specimineBotBuilder = DefaultBotBuilder(meepMeep);
+	specimineBotBuilder.setConstraints(60.0, 60.0, Math.toRadians(180.0), Math.toRadians(180.0), 15.0);
+	specimineBotBuilder.setDimensions(15.0, 13.0);
+	val specimineBot = specimineBotBuilder.followTrajectorySequence {drive: DriveShim -> speciminSide(drive)};
+
+	val sampleBotBuilder = DefaultBotBuilder(meepMeep);
+	sampleBotBuilder.setConstraints(60.0, 60.0, Math.toRadians(180.0), Math.toRadians(180.0), 15.0);
+	sampleBotBuilder.setDimensions(15.0, 13.0);
+	sampleBotBuilder.setColorScheme(ColorSchemeBlueDark());
+	val sampleBot = sampleBotBuilder.followTrajectorySequence {drive: DriveShim -> sampleSide(drive)};
 
 	meepMeep.setBackground(MeepMeep.Background.FIELD_INTOTHEDEEP_JUICE_DARK);
 	meepMeep.setDarkMode(true);
 	meepMeep.setBackgroundAlpha(0.95f);
-	meepMeep.addEntity(bot);
+	meepMeep.addEntity(sampleBot);
+	meepMeep.addEntity(specimineBot);
 	meepMeep.start();
 }

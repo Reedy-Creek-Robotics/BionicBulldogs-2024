@@ -18,10 +18,10 @@ class Gripper(private val gripper: Servo)
 	companion object
 	{
 		@JvmField
-		var gripClose: Double = 0.07;
+		var gripClose: Double = 0.9; // 0.07
 
 		@JvmField
-		var gripOpen: Double = 0.17;
+		var gripOpen: Double = 0.53; // 0.17
 	}
 
 	fun open()
