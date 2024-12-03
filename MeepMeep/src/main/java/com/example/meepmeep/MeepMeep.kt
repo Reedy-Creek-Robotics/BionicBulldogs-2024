@@ -12,9 +12,9 @@ val startX = 10.0;
 val startY = -60.0;
 
 val sampleX = arrayOf(36.0, 48.0, 60.0);
-val sampleY = -25.0;
+val sampleY = -23.0;
 
-val specimineScoreY = -28.0;
+val specimineScoreY = -30.0;
 
 val noPartner = true;
 
@@ -32,17 +32,18 @@ fun pos(x: Double, y: Double, angle: Int): Pose2d
 fun speciminSide(drive: DriveShim): TrajectorySequence
 {
 	val scoreY = -40.0;
+	val collectY = -55.0;
 
 	val builder = drive.trajectorySequenceBuilder(pos(startX, startY, -180));
 
-	builder.lineToConstantHeading(Vector2d(startX, -28.0));
+	builder.lineToConstantHeading(Vector2d(startX, specimineScoreY));
 	builder.waitSeconds(1.0);
 
 	if(noPartner)
 	{
-		builder.lineToLinearHeading(pos(sampleX[0], startY, 0));
+		builder.lineToLinearHeading(pos(sampleX[0], collectY, 0));
 		builder.waitSeconds(1.0);
-		builder.lineToLinearHeading(pos(startX, specimineScoreY, 0));
+		builder.lineToLinearHeading(pos(startX, specimineScoreY, 180));
 		builder.waitSeconds(1.0);
 	}
 
@@ -52,7 +53,7 @@ fun speciminSide(drive: DriveShim): TrajectorySequence
 	builder.splineToLinearHeading(pos(sampleX[0], sampleY, 90), rotation(0));
 	builder.waitSeconds(1.0);
 
-	builder.lineToLinearHeading(pos(sampleX[0], scoreY, 0));
+	builder.lineToLinearHeading(pos(sampleX[0], scoreY, 180));
 	builder.waitSeconds(1.0);
 
 	for(i in 1 .. 2)
@@ -60,18 +61,18 @@ fun speciminSide(drive: DriveShim): TrajectorySequence
 		builder.lineToLinearHeading(pos(sampleX[i], sampleY, 90));
 		builder.waitSeconds(1.0);
 
-		builder.lineToLinearHeading(pos(sampleX[i], scoreY, 0));
+		builder.lineToLinearHeading(pos(sampleX[i], scoreY, 180));
 		builder.waitSeconds(1.0);
 	}
 
-	builder.lineToLinearHeading(pos(sampleX[0], startY, 180));
+	builder.lineToLinearHeading(pos(sampleX[0], collectY, 0));
 	builder.waitSeconds(1.0);
 
 	for(i in 0 .. 1)
 	{
-		builder.lineToLinearHeading(pos(startX, specimineScoreY, 0));
+		builder.lineToLinearHeading(pos(startX, specimineScoreY, 180));
 		builder.waitSeconds(1.0);
-		builder.lineToLinearHeading(pos(sampleX[0], startY, 180));
+		builder.lineToLinearHeading(pos(sampleX[0], collectY, 0));
 		builder.waitSeconds(1.0);
 	}
 

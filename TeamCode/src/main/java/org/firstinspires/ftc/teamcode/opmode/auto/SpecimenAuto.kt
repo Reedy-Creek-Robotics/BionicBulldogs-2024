@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.modules.robot.Slide
 import org.firstinspires.ftc.teamcode.modules.robot.SpecimenOuttake
 import org.firstinspires.ftc.teamcode.modules.robot.SpeciminClaw
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive
+import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence
 
 @Autonomous
 class SpecimenAuto: LinearOpMode()
