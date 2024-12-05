@@ -19,9 +19,9 @@ class SpeciminClaw(hardwareMap: HardwareMap)
 	companion object
 	{
 		@JvmField
-		var openPos: Double = 0.75;
+		var openPos: Double = 0.53;
 		@JvmField
-		var closePos: Double = 0.3;
+		var closePos: Double = 0.9;
 	}
 
 	fun open()

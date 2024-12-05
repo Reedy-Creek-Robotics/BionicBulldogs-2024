@@ -14,6 +14,7 @@ import kotlin.math.abs
 class Slide(hardwareMap: HardwareMap)
 {
 	private val slide = hardwareMap.dcMotor.get("slide") as DcMotorEx;
+	private val slide2 = hardwareMap.dcMotor.get("slide2") as DcMotorEx;
 
 	enum class State
 	{
@@ -46,11 +47,16 @@ class Slide(hardwareMap: HardwareMap)
 		slide.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER;
 		slide.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER;
 		slide.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE;
+		slide2.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER;
+		slide2.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER;
+		slide2.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE;
+		slide2.direction = DcMotorSimple.Direction.REVERSE;
 	}
 
 	fun reverse()
 	{
 		slide.direction = DcMotorSimple.Direction.REVERSE;
+		slide2.direction = DcMotorSimple.Direction.FORWARD;
 	}
 
 	fun getPos(): Int
