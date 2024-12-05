@@ -1,6 +1,3 @@
 package org.firstinspires.ftc.teamcode.modules.ui
 
-class FloatPtr
-{
-	var value: Float = 0.0f;
-}
+class FloatPtr(var value: Float = 0.0f);

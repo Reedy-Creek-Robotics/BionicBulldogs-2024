@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.opmode.auto
 
-import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.geometry.Vector2d
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
@@ -13,40 +12,18 @@ import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySe
 @Autonomous
 class SpecimenAutoV2: LinearOpMode()
 {
-	val startX = 10.0;
-	val startY = -60.0;
-
-	val sampleX = arrayOf(38.0, 46.0, 56.0);
-	val sampleY = -23.0;
-
-	val specimineScoreY = -29.0;
-
-	val noPartner = true;
 
 	var scoreCount = 0;
-
-	fun rotation(angle: Int): Double
-	{
-		return Math.toRadians(-(angle.toDouble() - 90))
-	}
-
-	fun pos(x: Double, y: Double, angle: Int): Pose2d
-	{
-		return Pose2d(x, y, rotation(angle));
-	}
 
 	fun gotoChamber(builder: TrajectorySequenceBuilder)
 	{
 		builder.lineToLinearHeading(pos(startX, specimineScoreY - 4, 180));
-		builder.lineToConstantHeading(Vector2d(startX + scoreCount, specimineScoreY));
+		builder.lineToConstantHeading(Vector2d(startX + scoreCount * 1.5, specimineScoreY));
 		scoreCount++;
 	}
 
 	fun getPaths(drive: SampleMecanumDrive): List<TrajectorySequence>
 	{
-		val scoreY = -40.0;
-		val collectY = -55.0;
-
 		val paths = ArrayList<TrajectorySequence>();
 
 		var builder = drive.trajectorySequenceBuilder(pos(startX, startY, -180));
@@ -58,7 +35,7 @@ class SpecimenAutoV2: LinearOpMode()
 		if(noPartner)
 		{
 			builder = drive.trajectorySequenceBuilder(paths[paths.size - 1].end());
-			builder.lineToLinearHeading(pos(sampleX[0], collectY, 0));
+			builder.lineToLinearHeading(pos(sampleX[0], specimenCollectY, 0));
 			paths.add(builder.build());
 
 			builder = drive.trajectorySequenceBuilder(paths[paths.size - 1].end());
@@ -74,28 +51,30 @@ class SpecimenAutoV2: LinearOpMode()
 		paths.add(builder.build());
 
 		builder = drive.trajectorySequenceBuilder(paths[paths.size - 1].end());
-		builder.lineToLinearHeading(pos(sampleX[0], scoreY, 180));
+		builder.lineToLinearHeading(pos(sampleX[0], specimenDropoffY, 180));
 		paths.add(builder.build());
 
-		return paths;
 
 		for(i in 1 .. 2)
 		{
+			builder = drive.trajectorySequenceBuilder(paths[paths.size - 1].end());
 			builder.lineToLinearHeading(pos(sampleX[i], sampleY, 90));
-			builder.waitSeconds(1.0);
+			paths.add(builder.build());
 
-			builder.lineToLinearHeading(pos(sampleX[i], scoreY, 180));
-			builder.waitSeconds(1.0);
+			builder = drive.trajectorySequenceBuilder(paths[paths.size - 1].end());
+			builder.lineToLinearHeading(pos(sampleX[i], specimenDropoffY, 180));
+			paths.add(builder.build());
 		}
+		return paths;
 
-		builder.lineToLinearHeading(pos(sampleX[0], collectY, 0));
+		builder.lineToLinearHeading(pos(sampleX[0], specimenCollectY, 0));
 		builder.waitSeconds(1.0);
 
 		for(i in 0 .. 2)
 		{
 			gotoChamber(builder);
 			builder.waitSeconds(1.0);
-			builder.lineToLinearHeading(pos(sampleX[0], collectY, 0));
+			builder.lineToLinearHeading(pos(sampleX[0], specimenCollectY, 0));
 			builder.waitSeconds(1.0);
 		}
 
@@ -162,10 +141,34 @@ class SpecimenAutoV2: LinearOpMode()
 
 		while(elapsedTime.seconds() < 1.0);
 
-		hSlide.zero();
+		hSlide.gotoPos(hSlide.min());
 		intake.stop();
 
+		drive.followTrajectorySequence(path[4]);
+
+		intake.reverse();
+
 		elapsedTime.reset();
-		while(elapsedTime.seconds() < 1.0);
+		while(elapsedTime.seconds() < 0.5);
+		intake.stop();
+
+		for(i in 1 .. 2)
+		{
+			drive.followTrajectorySequence(path[3 + i * 2]);
+			intake.forward();
+			hSlide.gotoPos(0.5);
+			elapsedTime.reset();
+			while(elapsedTime.seconds() < 1.0);
+
+			hSlide.gotoPos(hSlide.min());
+			intake.stop();
+
+			drive.followTrajectorySequence(path[4 + i * 2]);
+
+			intake.reverse();
+			elapsedTime.reset();
+			while(elapsedTime.seconds() < 0.5);
+			intake.stop();
+		}
 	}
 }
