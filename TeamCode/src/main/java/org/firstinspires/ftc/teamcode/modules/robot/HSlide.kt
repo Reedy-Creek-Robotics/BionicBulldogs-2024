@@ -18,6 +18,7 @@ class HSlide(private val hSlide: Servo)
 		var min = 0.3;
 
 		@JvmField
+		//Was at 0.75 at outreach
 		var score = 0.715
 	}
 

@@ -52,13 +52,18 @@ class MainTelop: LinearOpMode()
 		arm.down();
 
 		//Controls:
-		//Claw - Circle toggles open/close
-		//gripTake (rotate) - rBumper toggles intake (forward), lBumper toggles intake (reverse)
-		//Slide - Set to position, cross for toggling
-		//Combo - Touchpad = Closes claw + raises slides
-		//HSlide - Rtrig increments; Ltrig decrements, Triangle zeroes
-		//Grip - Dpad (temporarily)
-		//Arm - Square toggles up/down
+		//Triggers retract/extend HSlides
+
+		//Cross controls bucket scoring
+		//Triangle loads specimen into bucket
+
+		//Square raises/lowers intake
+		//Right bumper toggles intake
+		//Left bumper outtakes and then intakes again
+
+		//Dpad up/down raises/lowers slides
+		//Dpad left rotates bucket to position 1.0 (for some reason)
+		//Dpad right rotates bucket to dump (position 0.9)
 
 		while(opModeIsActive())
 		{
@@ -148,7 +153,7 @@ class MainTelop: LinearOpMode()
 				}
 				else
 				{
-					intake.outtakeForTime(1.0);
+					intake.outtakeForTime(1.5);
 				}
 			}
 
