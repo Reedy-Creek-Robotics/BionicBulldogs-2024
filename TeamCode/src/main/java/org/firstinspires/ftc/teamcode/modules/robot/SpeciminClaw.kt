@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.modules.robot
 
 import com.acmerobotics.dashboard.config.Config
 import com.qualcomm.robotcore.hardware.HardwareMap
-import com.qualcomm.robotcore.hardware.Servo
 
 @Config
 class SpeciminClaw(hardwareMap: HardwareMap)
@@ -19,9 +18,9 @@ class SpeciminClaw(hardwareMap: HardwareMap)
 	companion object
 	{
 		@JvmField
-		var openPos: Double = 0.53;
+		var openPos: Double = 0.17;
 		@JvmField
-		var closePos: Double = 0.9;
+		var closePos: Double = 0.53;
 	}
 
 	fun open()
