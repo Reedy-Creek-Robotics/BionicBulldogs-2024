@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmode.auto
 
+import com.acmerobotics.dashboard.config.Config
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.geometry.Vector2d
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
@@ -13,8 +14,15 @@ import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive
 //Working 1+1 Auto
 //w/ parking
 @Autonomous
+@Config
 class SpecimenAutoV1: LinearOpMode()
 {
+
+	companion object {
+		@JvmField
+		var releasePos = -1000;
+	}
+
 	override fun runOpMode()
 	{
 		val drive = SampleMecanumDrive(hardwareMap);
@@ -26,7 +34,7 @@ class SpecimenAutoV1: LinearOpMode()
 			.lineToConstantHeading(Vector2d(0.0, -28.0))
 			.build();
 		val path2 = drive.trajectorySequenceBuilder(path.end())
-			.lineToLinearHeading(Pose2d(38.0, -55.5, Math.toRadians(90.0)),)
+			.lineToLinearHeading(Pose2d(38.0, -55.0, Math.toRadians(90.0)),)
 			.build();
 		val path3 = drive.trajectorySequenceBuilder(path2.end())
 			.lineToLinearHeading(Pose2d(path.end().x + 2, path.end().y - 5, path.end().heading))

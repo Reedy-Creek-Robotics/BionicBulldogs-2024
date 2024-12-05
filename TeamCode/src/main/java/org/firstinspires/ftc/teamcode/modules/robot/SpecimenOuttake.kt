@@ -1,9 +1,16 @@
 package org.firstinspires.ftc.teamcode.modules.robot
 
+import com.acmerobotics.dashboard.config.Config
 import com.qualcomm.robotcore.util.ElapsedTime
-
+@Config
 class SpecimenOuttake(private val claw: SpeciminClaw, private val slide: Slide)
 {
+	companion object
+	{
+		@JvmField
+		var relesePos = -1000;
+	}
+
 	private val elapsedTime = ElapsedTime();
 
 	var state = State.Down;
@@ -43,7 +50,7 @@ class SpecimenOuttake(private val claw: SpeciminClaw, private val slide: Slide)
 		}
 		if(state == State.Lowering)
 		{
-			if(slide.getPos() > -1000)
+			if(slide.getPos() > relesePos)
 			{
 				claw.open();
 				state = State.Down;

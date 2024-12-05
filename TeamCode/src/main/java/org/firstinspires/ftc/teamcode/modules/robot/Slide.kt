@@ -32,6 +32,9 @@ class Slide(hardwareMap: HardwareMap)
 
 		@JvmField
 		var Bottom = 0;
+
+		@JvmField
+		var relesePos = -1000;
 	}
 
 	private var stalled = false;
@@ -69,7 +72,7 @@ class Slide(hardwareMap: HardwareMap)
 
 	fun lower()
 	{
-		runToPosition(0);
+		runToPosition(relesePos);
 		state = State.Lower;
 	}
 
@@ -125,7 +128,7 @@ class Slide(hardwareMap: HardwareMap)
 		slide.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER;
 		slide.targetPosition = pos;
 		slide.mode = DcMotor.RunMode.RUN_TO_POSITION;
-		slide.power = power;
+		slide.power = if(power == -1.0) slideSpeed else power;
 	}
 
 	fun busy(): Boolean
