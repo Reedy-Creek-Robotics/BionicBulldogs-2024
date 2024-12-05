@@ -5,17 +5,17 @@ import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityCons
 import org.firstinspires.ftc.teamcode.roadrunner.drive.DriveConstants
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive
 
-fun velOverride(maxVel: Double, maxAngularVel: Double = -1.0): TrajectoryVelocityConstraint
+fun velOverride(maxVel: Double = -1.0, maxAngularVel: Double = -1.0): TrajectoryVelocityConstraint
 {
-	return if(maxAngularVel == -1.0) SampleMecanumDrive.getVelocityConstraint(
-		maxVel, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH
-	);
-	else SampleMecanumDrive.getVelocityConstraint(
-		maxVel, maxAngularVel, DriveConstants.TRACK_WIDTH
-	);
+	val vel = if(maxVel == -1.0) DriveConstants.MAX_VEL else maxVel;
+	val angVel = if(maxAngularVel == -1.0) DriveConstants.MAX_ANG_VEL else maxAngularVel;
+
+	return SampleMecanumDrive.getVelocityConstraint(vel, angVel, DriveConstants.TRACK_WIDTH);
 }
 
-fun accelOverride(): TrajectoryAccelerationConstraint
+fun accelOverride(maxAccel: Double = -1.0): TrajectoryAccelerationConstraint
 {
-	return SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL);
+	val accel = if(maxAccel == -1.0) DriveConstants.MAX_ACCEL else maxAccel;
+
+	return SampleMecanumDrive.getAccelerationConstraint(accel);
 }
