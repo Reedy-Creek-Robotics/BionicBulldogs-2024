@@ -86,14 +86,17 @@ class MainTelop: LinearOpMode()
 
 			// Outtake
 
-			if(gamepad.dpadUp())
+			if(gamepad1.dpad_up)
 			{
-				outtake.up();
+				slide.up();
 			}
-			if(gamepad.dpadDown())
+			else if(gamepad1.dpad_down)
 			{
-				outtake.armDown();
-				outtake.bucketDown()
+				slide.down();
+			}
+			else
+			{
+				//slide.stop();
 			}
 			if(gamepad.dpadLeft())
 			{
@@ -159,7 +162,7 @@ class MainTelop: LinearOpMode()
 				{
 					sampleOuttake.up();
 				}
-				else if(slide.state == Slide.State.Lower)
+				else if(slide.state == Slide.State.Raise)
 				{
 					sampleOuttake.score();
 				}

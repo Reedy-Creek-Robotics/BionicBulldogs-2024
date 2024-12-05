@@ -36,6 +36,9 @@ class Slide(hardwareMap: HardwareMap)
 
 		@JvmField
 		var relesePos = -1000;
+
+		@JvmField
+		var stallDifference = 0;
 	}
 
 	private var stalled = false;
@@ -78,8 +81,13 @@ class Slide(hardwareMap: HardwareMap)
 
 	fun lower()
 	{
-		runToPosition(relesePos);
+		runToPosition(0);
 		state = State.Lower;
+	}
+
+	fun specimenLower()
+	{
+		runToPosition(relesePos);
 	}
 
 	fun update()
@@ -88,9 +96,9 @@ class Slide(hardwareMap: HardwareMap)
 		{
 			slides.power = 0.0;
 		}*/
-		if(state == State.Lower)
+		if(state == State.Lower && slide.mode == DcMotor.RunMode.RUN_TO_POSITION)
 		{
-			if(abs(prevPos - slide.currentPosition) < 10 && slide.power > 0.0)
+			if(abs(prevPos - slide.currentPosition) < stallDifference && slide.power > 0.0)
 			{
 				if(!stalled)
 				{
@@ -100,8 +108,11 @@ class Slide(hardwareMap: HardwareMap)
 				if(elapsedTime.seconds() > 0.5)
 				{
 					slide.power = 0.0;
+					slide2.power = 0.0;
 					slide.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER;
+					slide2.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER;
 					slide.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER;
+					slide2.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER;
 					stalled = false;
 				}
 			}
@@ -116,25 +127,34 @@ class Slide(hardwareMap: HardwareMap)
 	fun up()
 	{
 		slide.power = slideSpeed;
+		slide2.power = slideSpeed;
 	}
 
 	fun down()
 	{
 		slide.power = -slideSpeed;
+		slide2.power = -slideSpeed;
 	}
 
 	fun stop()
 	{
 		slide.power = 0.0;
+		slide2.power = 0.0;
 	}
 
 	fun runToPosition(pos: Int, power: Double = -1.0)
 	{
+		prevPos = 400000;
 		slide.power = 0.0;
+		slide2.power = 0.0;
 		slide.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER;
+		slide2.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER;
 		slide.targetPosition = pos;
+		slide2.targetPosition = pos;
 		slide.mode = DcMotor.RunMode.RUN_TO_POSITION;
+		slide2.mode = DcMotor.RunMode.RUN_TO_POSITION;
 		slide.power = if(power == -1.0) slideSpeed else power;
+		slide2.power = if(power== -1.0) slideSpeed else power;
 	}
 
 	fun busy(): Boolean
@@ -144,9 +164,14 @@ class Slide(hardwareMap: HardwareMap)
 
 	fun telem(t: Telemetry)
 	{
-		t.addData("Slides: position", slide.currentPosition);
-		t.addData("Slides: targetPosition", slide.targetPosition);
-		t.addData("Slides: power", slide.power);
-		t.addData("Slides: current", slide.getCurrent(CurrentUnit.AMPS));
+		t.addData("Slide: position", slide.currentPosition);
+		t.addData("Slide: targetPosition", slide.targetPosition);
+		t.addData("Slide: power", slide.power);
+		t.addData("Slide: current", slide.getCurrent(CurrentUnit.AMPS));
+
+		t.addData("Slide2: position", slide2.currentPosition);
+		t.addData("Slide2: targetPosition", slide2.targetPosition);
+		t.addData("Slide2: power", slide2.power);
+		t.addData("Slide2: current", slide2.getCurrent(CurrentUnit.AMPS));
 	}
 }
