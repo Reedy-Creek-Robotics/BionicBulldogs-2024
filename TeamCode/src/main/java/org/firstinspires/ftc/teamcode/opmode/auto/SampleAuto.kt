@@ -6,7 +6,13 @@ import com.acmerobotics.roadrunner.geometry.Vector2d
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.util.ElapsedTime
-import org.firstinspires.ftc.teamcode.modules.robot.*
+import org.firstinspires.ftc.teamcode.modules.robot.Arm
+import org.firstinspires.ftc.teamcode.modules.robot.HSlide
+import org.firstinspires.ftc.teamcode.modules.robot.Intake
+import org.firstinspires.ftc.teamcode.modules.robot.Outtake
+import org.firstinspires.ftc.teamcode.modules.robot.Slide
+import org.firstinspires.ftc.teamcode.modules.robot.SpecimenOuttake
+import org.firstinspires.ftc.teamcode.modules.robot.SpeciminClaw
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive
 import kotlin.math.PI
 
@@ -83,7 +89,7 @@ class SampleAuto: LinearOpMode()
 		slide.runToPosition(-2500, 1.0);
 		while(slide.busy());
 		//Arm position to rotate to the opposite side of the bot (sample scoring pos)
-		outtake.arm.position = 0.65;
+		outtake.arm.position = 0.6;
 
 		delay(2.0);
 
@@ -114,7 +120,7 @@ class SampleAuto: LinearOpMode()
 		slide.runToPosition(-2500, 1.0);
 		while(slide.busy());
 		//Arm position to rotate to the opposite side of the bot (sample scoring pos)
-		outtake.arm.position = 0.65;
+		outtake.arm.position = 0.6;
 
 		delay(2.0);
 
