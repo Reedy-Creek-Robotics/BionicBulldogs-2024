@@ -5,7 +5,14 @@ import com.acmerobotics.roadrunner.geometry.Vector2d
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.util.ElapsedTime
-import org.firstinspires.ftc.teamcode.modules.robot.*
+import org.firstinspires.ftc.teamcode.modules.robot.Arm
+import org.firstinspires.ftc.teamcode.modules.robot.HSlide
+import org.firstinspires.ftc.teamcode.modules.robot.Intake
+import org.firstinspires.ftc.teamcode.modules.robot.Outtake
+import org.firstinspires.ftc.teamcode.modules.robot.SampleOuttake
+import org.firstinspires.ftc.teamcode.modules.robot.Slide
+import org.firstinspires.ftc.teamcode.modules.robot.SpecimenOuttake
+import org.firstinspires.ftc.teamcode.modules.robot.SpeciminClaw
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequenceBuilder
@@ -71,6 +78,8 @@ class SpecimenAutoV2: LinearOpMode()
 		builder.splineToLinearHeading(pos((startX + sampleX[0]) / 2, -36.0, -225), rotation(90))
 		builder.setTangent(rotation(90));
 		builder.splineToLinearHeading(pos(sampleX[0], sampleY, 90), rotation(0));
+		//TODO(Add below line, remove top 4 lines)
+		//builder.splineToLinearHeading(pos(sampleX[0], sampleY, -270), rotation(0))
 		paths.add(builder.build());
 
 		builder = drive.trajectorySequenceBuilder(paths[paths.size - 1].end());
