@@ -72,11 +72,9 @@ class MainTelop: LinearOpMode()
 			gamepad.copy();
 
 			//Drive
-
 			drive.driveFR(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
 
 			//Horizontal Slides
-
 			if(gamepad1.right_trigger >= 0.5 && hSlide.pos() >= hSlide.min())
 			{
 				hSlide.decrement();
@@ -92,7 +90,6 @@ class MainTelop: LinearOpMode()
 			}
 
 			// Outtake
-
 			if(gamepad.dpadLeft())
 			{
 				outtake.bucketScore();
@@ -112,7 +109,6 @@ class MainTelop: LinearOpMode()
 			}
 
 			//Specimine Claw
-
 			if(gamepad.circle())
 			{
 				if(claw.state == SpeciminClaw.State.Closed)
@@ -126,7 +122,6 @@ class MainTelop: LinearOpMode()
 			}
 
 			// Intake
-
 			if(gamepad.rightBumper())
 			{
 				if(intake.state == Intake.State.Forward)
@@ -151,10 +146,7 @@ class MainTelop: LinearOpMode()
 				}
 			}
 
-			intake.update();
-
 			// Outtake Slides
-
 			if(gamepad.cross())
 			{
 				if(slide.state == Slide.State.Lower)
@@ -171,7 +163,7 @@ class MainTelop: LinearOpMode()
 			slide.update();
 
 			// Specimen Outtake
-
+      
 			if(gamepad.touchpad())
 			{
 				if(specimenOuttake.state == SpecimenOuttake.State.Down)
@@ -186,7 +178,6 @@ class MainTelop: LinearOpMode()
 			specimenOuttake.update();
 
 			// Intake Arm
-
 			if(gamepad.square())
 			{
 				if(arm.state == Arm.State.Up)

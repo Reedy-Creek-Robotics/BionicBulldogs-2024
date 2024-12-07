@@ -42,6 +42,7 @@ class SpecimenAutoV1: LinearOpMode()
 			.build();
 		val path4 = drive.trajectorySequenceBuilder(path3.end())
 			.lineToLinearHeading(Pose2d(38.0, -56.0))
+			.lineToLinearHeading(Pose2d(path2.start().x, path2.start().y - 2, path2.start().heading))
 			.build();
 
 		drive.poseEstimate = path.start();
