@@ -65,6 +65,8 @@ class MainTelop: LinearOpMode()
 		//Dpad left rotates bucket to position 1.0 (for some reason)
 		//Dpad right rotates bucket to dump (position 0.9)
 
+		var hangingState = 0;
+
 		while(opModeIsActive())
 		{
 			gamepad.copy();
@@ -91,21 +93,13 @@ class MainTelop: LinearOpMode()
 
 			// Outtake
 
-			if(gamepad1.dpad_up)
-			{
-				slide.up();
-			}
-			else if(gamepad1.dpad_down)
-			{
-				slide.down();
-			}
-			else
-			{
-				//slide.stop();
-			}
 			if(gamepad.dpadLeft())
 			{
 				outtake.bucketScore();
+			}
+			if(gamepad.dpadUp())
+			{
+				outtake.bucketDown();
 			}
 			if(gamepad.dpadRight())
 			{
@@ -184,7 +178,7 @@ class MainTelop: LinearOpMode()
 				{
 					specimenOuttake.collect();
 				}
-				else
+				else if(specimenOuttake.state == SpecimenOuttake.State.Up)
 				{
 					specimenOuttake.score();
 				}
@@ -205,9 +199,25 @@ class MainTelop: LinearOpMode()
 				}
 			}
 
+			if(gamepad.options())
+			{
+				if(hangingState == 0)
+				{
+					hangingState = 1;
+					slide.gotoPos(-420);
+				}
+				else
+				{
+					slide.gotoPos(0);
+					hangingState = 0;
+				}
+			}
+
 			slide.telem(telemetry);
 			drive.telem(telemetry);
+			specimenOuttake.telem(telemetry);
 			telemetry.addData("hPos", hSlide.pos())
+			telemetry.addData("touchpad", gamepad1.touchpad);
 			telemetry.update();
 		}
 	}

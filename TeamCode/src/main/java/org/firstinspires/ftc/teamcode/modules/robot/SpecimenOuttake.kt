@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.modules.robot
 
 import com.acmerobotics.dashboard.config.Config
 import com.qualcomm.robotcore.util.ElapsedTime
+import org.firstinspires.ftc.robotcore.external.Telemetry
+
 @Config
 class SpecimenOuttake(private val claw: SpeciminClaw, private val slide: Slide)
 {
@@ -9,6 +11,8 @@ class SpecimenOuttake(private val claw: SpeciminClaw, private val slide: Slide)
 	{
 		@JvmField
 		var relesePos = -1000;
+		@JvmField
+		var pause = 0.125;
 	}
 
 	private val elapsedTime = ElapsedTime();
@@ -42,7 +46,7 @@ class SpecimenOuttake(private val claw: SpeciminClaw, private val slide: Slide)
 	{
 		if(state == State.Raising)
 		{
-			if(elapsedTime.seconds() > 0.5)
+			if(elapsedTime.seconds() > pause)
 			{
 				slide.raise();
 				state = State.Up;
@@ -64,5 +68,10 @@ class SpecimenOuttake(private val claw: SpeciminClaw, private val slide: Slide)
 		{
 			update();
 		}
+	}
+	fun telem(t: Telemetry)
+	{
+		t.addData("SpecimenOuttake: state", state);
+		t.addData("SpecimenOuttake: clawState", claw.state);
 	}
 }

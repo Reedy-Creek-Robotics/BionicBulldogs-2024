@@ -38,7 +38,10 @@ class Slide(hardwareMap: HardwareMap)
 		var relesePos = -1000;
 
 		@JvmField
-		var stallDifference = 0;
+		var specimenPos = 1350;
+
+		@JvmField
+		var stallDifference = 1;
 	}
 
 	private var stalled = false;
@@ -69,7 +72,7 @@ class Slide(hardwareMap: HardwareMap)
 
 	fun raise()
 	{
-		runToPosition(-1400);
+		runToPosition(-specimenPos);
 		state = State.Raise;
 	}
 
