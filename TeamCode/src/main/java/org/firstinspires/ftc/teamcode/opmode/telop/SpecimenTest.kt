@@ -3,14 +3,14 @@ package org.firstinspires.ftc.teamcode.opmode.telop
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.modules.hardware.GamepadEx
-import org.firstinspires.ftc.teamcode.modules.robot.Gripper
+import org.firstinspires.ftc.teamcode.modules.robot.SpeciminClaw
 
 @TeleOp
-class EmSampleTest: LinearOpMode()
+class SpecimenTest: LinearOpMode()
 {
 	override fun runOpMode()
 	{
-		val gripper = Gripper(hardwareMap.servo.get("servo"));
+		val claw = SpeciminClaw(hardwareMap);
 
 		waitForStart();
 
@@ -22,12 +22,12 @@ class EmSampleTest: LinearOpMode()
 
 			if(gamepad1.dpad_up)
 			{
-				gripper.open();
+				claw.open();
 			}
 
 			if(gamepad1.dpad_down)
 			{
-				gripper.close();
+				claw.close();
 			}
 		}
 	}

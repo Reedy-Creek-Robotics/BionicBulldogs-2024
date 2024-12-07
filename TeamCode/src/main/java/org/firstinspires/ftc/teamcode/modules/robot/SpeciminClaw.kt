@@ -1,11 +1,12 @@
 package org.firstinspires.ftc.teamcode.modules.robot
 
 import com.acmerobotics.dashboard.config.Config
-import com.qualcomm.robotcore.hardware.Servo
+import com.qualcomm.robotcore.hardware.HardwareMap
 
 @Config
-class SpeciminClaw(private val claw: Servo)
+class SpeciminClaw(hardwareMap: HardwareMap)
 {
+	private val claw = hardwareMap.servo.get("claw");
 
 	enum class State {
 		Closed,
@@ -17,9 +18,9 @@ class SpeciminClaw(private val claw: Servo)
 	companion object
 	{
 		@JvmField
-		var openPos: Double = 0.75;
+		var openPos: Double = 0.53;
 		@JvmField
-		var closePos: Double = 0.3;
+		var closePos: Double = 0.15;
 	}
 
 	fun open()

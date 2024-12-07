@@ -4,7 +4,6 @@ import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
-import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.util.ElapsedTime
 import org.firstinspires.ftc.teamcode.modules.drive.HDrive
 import org.firstinspires.ftc.teamcode.modules.drive.SparkfunImuLocalizer
@@ -13,30 +12,28 @@ import org.firstinspires.ftc.teamcode.modules.robot.Arm
 import org.firstinspires.ftc.teamcode.modules.robot.HSlide
 import org.firstinspires.ftc.teamcode.modules.robot.Intake
 import org.firstinspires.ftc.teamcode.modules.robot.Outtake
+import org.firstinspires.ftc.teamcode.modules.robot.SampleOuttake
 import org.firstinspires.ftc.teamcode.modules.robot.Slide
+import org.firstinspires.ftc.teamcode.modules.robot.SpecimenOuttake
 import org.firstinspires.ftc.teamcode.modules.robot.SpeciminClaw
 import org.firstinspires.ftc.teamcode.opmode.config.HDriveConfig
 
 @TeleOp
 class MainTelop: LinearOpMode()
 {
-	enum class ScoreState
-	{
-		Up, Down, Lowering
-	}
-
 	override fun runOpMode()
 	{
-		//Claw, slides (to pos), drive, eTake
-		val speciminClaw = SpeciminClaw(hardwareMap.servo.get("claw"));
-		val slide = Slide(hardwareMap.dcMotor.get("slide") as DcMotorEx);
-//		val griper = Gripper(hardwareMap.servo.get("gripper"));
+		val claw = SpeciminClaw(hardwareMap);
+		val slide = Slide(hardwareMap);
+		val specimenOuttake = SpecimenOuttake(claw, slide);
 		val arm = Arm(hardwareMap.servo.get("arm"));
 		val intake = Intake(
 			hardwareMap.crservo.get("rotator0"), null, null
 		);
 
 		val outtake = Outtake(hardwareMap);
+
+		val sampleOuttake = SampleOuttake(slide, outtake);
 
 		val hSlide = HSlide(hardwareMap.servo.get("hslide"));
 
@@ -48,23 +45,27 @@ class MainTelop: LinearOpMode()
 
 		waitForStart();
 
-		speciminClaw.close();
+		specimenOuttake.init();
+		sampleOuttake.init();
+
 		hSlide.zero();
 		arm.down();
 
-		outtake.armDown();
-		outtake.bucketDown();
-
-		var scoreState = ScoreState.Down;
-
 		//Controls:
-		//Claw - Circle toggles open/close
-		//gripTake (rotate) - rBumper toggles intake (forward), lBumper toggles intake (reverse)
-		//Slide - Set to position, cross for toggling
-		//Combo - Touchpad = Closes claw + raises slides
-		//HSlide - Rtrig increments; Ltrig decrements, Triangle zeroes
-		//Grip - Dpad (temporarily)
-		//Arm - Square toggles up/down
+		//Triggers retract/extend HSlides
+
+		//Cross controls bucket scoring
+		//Triangle loads specimen into bucket
+
+		//Square raises/lowers intake
+		//Right bumper toggles intake
+		//Left bumper outtakes and then intakes again
+
+		//Dpad up/down raises/lowers slides
+		//Dpad left rotates bucket to position 1.0 (for some reason)
+		//Dpad right rotates bucket to dump (position 0.9)
+
+		var hangingState = 0;
 
 		while(opModeIsActive())
 		{
@@ -89,18 +90,13 @@ class MainTelop: LinearOpMode()
 			}
 
 			// Outtake
-			if(gamepad.dpadUp())
-			{
-				outtake.up();
-			}
-			if(gamepad.dpadDown())
-			{
-				outtake.armDown();
-				outtake.bucketDown()
-			}
 			if(gamepad.dpadLeft())
 			{
 				outtake.bucketScore();
+			}
+			if(gamepad.dpadUp())
+			{
+				outtake.bucketDown();
 			}
 			if(gamepad.dpadRight())
 			{
@@ -112,47 +108,16 @@ class MainTelop: LinearOpMode()
 				slide.lower();
 			}
 
-			//Grip
-			/*if(gamepad.dpadDown() || gamepad.dpadUp())
-			{
-				if(gripper.state != Gripper.State.Open)
-				{
-					gripper.open();
-				}
-				else
-				{
-					gripper.close();
-				}
-			}*/
-
-			/*if(gamepad1.dpad_left)
-			{
-				if(rotatorPosition > 0)
-				{
-					rotatorPosition += 0.1;
-					rotator0.power = rotatorPosition;
-				}
-			}
-
-			if(gamepad1.dpad_right)
-			{
-				if(rotatorPosition < 1)
-				{
-					rotatorPosition -= 0.1;
-					rotator0.power = rotatorPosition;
-				}
-			}*/
-
 			//Specimine Claw
 			if(gamepad.circle())
 			{
-				if(speciminClaw.state == SpeciminClaw.State.Closed)
+				if(claw.state == SpeciminClaw.State.Closed)
 				{
-					speciminClaw.open();
+					claw.open();
 				}
-				else if(speciminClaw.state == SpeciminClaw.State.Open)
+				else if(claw.state == SpeciminClaw.State.Open)
 				{
-					speciminClaw.close();
+					claw.close();
 				}
 			}
 
@@ -177,50 +142,40 @@ class MainTelop: LinearOpMode()
 				}
 				else
 				{
-					intake.outtakeForTime(1.0);
+					intake.outtakeForTime(1.5);
 				}
 			}
 
 			// Outtake Slides
 			if(gamepad.cross())
 			{
-				if(slide.state == Slide.State.Raise)
+				if(slide.state == Slide.State.Lower)
 				{
-					outtake.score();
+					sampleOuttake.up();
 				}
-				else if(slide.state == Slide.State.Lower)
+				else if(slide.state == Slide.State.Raise)
 				{
-					slide.gotoPos(-2500);
-					outtake.up();
+					sampleOuttake.score();
 				}
 			}
+			sampleOuttake.update();
 
-			//Combo
+			slide.update();
+
+			// Specimen Outtake
+      
 			if(gamepad.touchpad())
 			{
-				drive.drive(0.0f, 0.0f, 0.0f);
-				if(scoreState == ScoreState.Down)
+				if(specimenOuttake.state == SpecimenOuttake.State.Down)
 				{
-					speciminClaw.close();
-					delay(0.5);
-					slide.raise();
-					scoreState = ScoreState.Up;
+					specimenOuttake.collect();
 				}
-				else
+				else if(specimenOuttake.state == SpecimenOuttake.State.Up)
 				{
-					slide.lower();
-					scoreState = ScoreState.Lowering;
+					specimenOuttake.score();
 				}
 			}
-
-			if(scoreState == ScoreState.Lowering)
-			{
-				if(slide.getPos() > -1000)
-				{
-					speciminClaw.open();
-					scoreState = ScoreState.Down;
-				}
-			}
+			specimenOuttake.update();
 
 			// Intake Arm
 			if(gamepad.square())
@@ -235,12 +190,25 @@ class MainTelop: LinearOpMode()
 				}
 			}
 
-			intake.update();
-			slide.update();
+			if(gamepad.options())
+			{
+				if(hangingState == 0)
+				{
+					hangingState = 1;
+					slide.gotoPos(-420);
+				}
+				else
+				{
+					slide.gotoPos(0);
+					hangingState = 0;
+				}
+			}
+
 			slide.telem(telemetry);
 			drive.telem(telemetry);
+			specimenOuttake.telem(telemetry);
 			telemetry.addData("hPos", hSlide.pos())
-			telemetry.addData("square", gamepad.square());
+			telemetry.addData("touchpad", gamepad1.touchpad);
 			telemetry.update();
 		}
 	}

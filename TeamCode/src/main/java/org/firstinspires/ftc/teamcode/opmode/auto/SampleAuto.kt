@@ -5,13 +5,13 @@ import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.geometry.Vector2d
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
-import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.util.ElapsedTime
 import org.firstinspires.ftc.teamcode.modules.robot.Arm
 import org.firstinspires.ftc.teamcode.modules.robot.HSlide
 import org.firstinspires.ftc.teamcode.modules.robot.Intake
 import org.firstinspires.ftc.teamcode.modules.robot.Outtake
 import org.firstinspires.ftc.teamcode.modules.robot.Slide
+import org.firstinspires.ftc.teamcode.modules.robot.SpecimenOuttake
 import org.firstinspires.ftc.teamcode.modules.robot.SpeciminClaw
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive
 import kotlin.math.PI
@@ -34,8 +34,9 @@ class SampleAuto: LinearOpMode()
 		val hslide = HSlide(hardwareMap.servo.get("hslide"));
 		val outtake = Outtake(hardwareMap);
 		val intake = Intake(hardwareMap.crservo.get("rotator0"), null, null);
-		val claw = SpeciminClaw(hardwareMap.servo.get("claw"));
-		val slide = Slide(hardwareMap.dcMotor.get("slide") as DcMotorEx);
+		val claw = SpeciminClaw(hardwareMap);
+		val slide = Slide(hardwareMap);
+		val specimenOuttake = SpecimenOuttake(claw, slide);
 		val arm = Arm(hardwareMap.servo.get("arm"));
 
 		val preload = drive.trajectorySequenceBuilder(Pose2d(-6.0, -60.0, Math.toRadians(-90.0)))
@@ -60,13 +61,11 @@ class SampleAuto: LinearOpMode()
 
 		waitForStart();
 
-		slide.runToPosition(-1400);
+		specimenOuttake.collect();
 		drive.followTrajectorySequence(preload);
 
-		slide.runToPosition(-1000, 1.0);
-		while(slide.busy());
-		claw.open();
-		slide.runToPosition(0);
+		specimenOuttake.score();
+		specimenOuttake.waitUntilIdle();
 
 		drive.followTrajectorySequence(samp1);
 
@@ -90,7 +89,7 @@ class SampleAuto: LinearOpMode()
 		slide.runToPosition(-2500, 1.0);
 		while(slide.busy());
 		//Arm position to rotate to the opposite side of the bot (sample scoring pos)
-		outtake.arm.position = 0.65;
+		outtake.arm.position = 0.6;
 
 		delay(2.0);
 
@@ -121,7 +120,7 @@ class SampleAuto: LinearOpMode()
 		slide.runToPosition(-2500, 1.0);
 		while(slide.busy());
 		//Arm position to rotate to the opposite side of the bot (sample scoring pos)
-		outtake.arm.position = 0.65;
+		outtake.arm.position = 0.6;
 
 		delay(2.0);
 

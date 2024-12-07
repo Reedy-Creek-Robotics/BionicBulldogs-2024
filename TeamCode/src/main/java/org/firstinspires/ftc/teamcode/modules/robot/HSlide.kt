@@ -9,7 +9,7 @@ class HSlide(private val hSlide: Servo)
 	companion object
 	{
 		@JvmField
-		var increment = 0.02;
+		var increment = 0.04;
 
 		@JvmField
 		var max = 0.95;
@@ -18,7 +18,8 @@ class HSlide(private val hSlide: Servo)
 		var min = 0.3;
 
 		@JvmField
-		var score = 0.715
+		//Was at 0.75 at outreach
+		var score = 0.75
 	}
 
 	fun score()
