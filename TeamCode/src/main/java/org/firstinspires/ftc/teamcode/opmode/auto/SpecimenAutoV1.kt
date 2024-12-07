@@ -31,8 +31,7 @@ class SpecimenAutoV1: LinearOpMode()
 		val outtake = Outtake(hardwareMap);
 
 		val path = drive.trajectorySequenceBuilder(Pose2d(0.0, -60.0, Math.toRadians(-90.0)))
-			.lineToConstantHeading(Vector2d(0.0, -28.0))
-			.build();
+			.lineToConstantHeading(Vector2d(0.0, -28.0)).build();
 		val path2 = drive.trajectorySequenceBuilder(path.end())
 			.lineToLinearHeading(Pose2d(38.0, -55.0, Math.toRadians(90.0)),)
 			.build();
@@ -57,7 +56,7 @@ class SpecimenAutoV1: LinearOpMode()
 
 		drive.followTrajectorySequence(path);
 
-		slides.runToPosition(-1000, 1.0)
+		slides.runToPosition(-900, 1.0)
 		while(slides.busy());
 		claw.open();
 
