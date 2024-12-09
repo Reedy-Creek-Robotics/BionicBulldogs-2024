@@ -16,6 +16,11 @@ class Slide(hardwareMap: HardwareMap)
 	private val slide = hardwareMap.dcMotor.get("slide") as DcMotorEx;
 	private val slide2 = hardwareMap.dcMotor.get("slide2") as DcMotorEx;
 
+  enum class Mode
+  {
+    Manual, Automatic
+  }
+
 	enum class State
 	{
 		Lower, Raise
@@ -46,6 +51,7 @@ class Slide(hardwareMap: HardwareMap)
 
 	private var stalled = false;
 	private var prevPos = 0;
+  private var mode = Mode.Automatic;
 	private val elapsedTime = ElapsedTime();
 
 	init
@@ -127,26 +133,44 @@ class Slide(hardwareMap: HardwareMap)
 		prevPos = slide.currentPosition;
 	}
 
+  fun manualMode()
+  {
+    if(mode == Mode.Manual)
+    {
+      slide.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER;
+      slide2.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER;
+      mode = Mode.Manual;
+      slide.power = 0.0;
+      slide2.power = 0.0;
+    }
+  }
+
 	fun up()
 	{
+    manualMode();
 		slide.power = slideSpeed;
 		slide2.power = slideSpeed;
 	}
 
 	fun down()
 	{
+    manualMode();
 		slide.power = -slideSpeed;
 		slide2.power = -slideSpeed;
 	}
 
 	fun stop()
 	{
-		slide.power = 0.0;
-		slide2.power = 0.0;
+    if(mode == Mode.Manual)
+    {
+		  slide.power = 0.0;
+		  slide2.power = 0.0;
+    }
 	}
 
 	fun runToPosition(pos: Int, power: Double = -1.0)
 	{
+    mode = Mode.Automatic;
 		prevPos = 400000;
 		slide.power = 0.0;
 		slide2.power = 0.0;
@@ -167,6 +191,8 @@ class Slide(hardwareMap: HardwareMap)
 
 	fun telem(t: Telemetry)
 	{
+    t.addData("Slides: Mode", mode);
+
 		t.addData("Slide: position", slide.currentPosition);
 		t.addData("Slide: targetPosition", slide.targetPosition);
 		t.addData("Slide: power", slide.power);

@@ -27,9 +27,7 @@ class MainTelop: LinearOpMode()
 		val slide = Slide(hardwareMap);
 		val specimenOuttake = SpecimenOuttake(claw, slide);
 		val arm = Arm(hardwareMap.servo.get("arm"));
-		val intake = Intake(
-			hardwareMap.crservo.get("rotator0"), null, null
-		);
+		val intake = Intake(hardwareMap.crservo.get("rotator0"));
 
 		val outtake = Outtake(hardwareMap);
 
@@ -72,9 +70,11 @@ class MainTelop: LinearOpMode()
 			gamepad.copy();
 
 			//Drive
+
 			drive.driveFR(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
 
 			//Horizontal Slides
+
 			if(gamepad1.right_trigger >= 0.5 && hSlide.pos() >= hSlide.min())
 			{
 				hSlide.decrement();
@@ -89,26 +89,23 @@ class MainTelop: LinearOpMode()
 				arm.up();
 			}
 
-			// Outtake
-			if(gamepad.dpadLeft())
-			{
-				outtake.bucketScore();
-			}
+			// Manual Slides
+
 			if(gamepad.dpadUp())
 			{
-				outtake.bucketDown();
+        slide.up();
 			}
-			if(gamepad.dpadRight())
+      else if(gamepad.dpadDown())
 			{
-				outtake.bucketUp();
+        slide.down();
 			}
-
-			if(outtake.update() == 1)
-			{
-				slide.lower();
-			}
+      else
+      {
+        slide.stop();
+      }
 
 			//Specimine Claw
+
 			if(gamepad.circle())
 			{
 				if(claw.state == SpeciminClaw.State.Closed)
@@ -122,6 +119,7 @@ class MainTelop: LinearOpMode()
 			}
 
 			// Intake
+     
 			if(gamepad.rightBumper())
 			{
 				if(intake.state == Intake.State.Forward)
@@ -147,6 +145,7 @@ class MainTelop: LinearOpMode()
 			}
 
 			// Outtake Slides
+
 			if(gamepad.cross())
 			{
 				if(slide.state == Slide.State.Lower)
@@ -178,6 +177,7 @@ class MainTelop: LinearOpMode()
 			specimenOuttake.update();
 
 			// Intake Arm
+
 			if(gamepad.square())
 			{
 				if(arm.state == Arm.State.Up)
@@ -189,6 +189,8 @@ class MainTelop: LinearOpMode()
 					arm.up();
 				}
 			}
+
+      // Hanging Slides
 
 			if(gamepad.options())
 			{

@@ -6,12 +6,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.util.ElapsedTime
 
 @Config
-class Intake(private val spin0: CRServo, private val spin1: CRServo?, private val spin2: CRServo?)
+class Intake(private val spin0: CRServo)
 {
-
-	//spin0 = rotator0 = frontrot = port2
-	//spin1 = rotator1 = backrot = port3
-
 	enum class State
 	{
 		Forward, Stop, Reverse
@@ -31,31 +27,21 @@ class Intake(private val spin0: CRServo, private val spin1: CRServo?, private va
 		var spinStop = 0.0;
 	}
 
-	init{
-		spin2?.direction = DcMotorSimple.Direction.REVERSE;
-	}
-
 	fun forward()
 	{
 		spin0.power = -spinPower;
-		spin1?.power = spinPower;
-		spin2?.power = spinPower;
 		state = State.Forward;
 	}
 
 	fun reverse()
 	{
 		spin0.power = spinPower;
-		spin1?.power = -spinPower;
-		spin2?.power = -spinPower;
 		state = State.Reverse;
 	}
 
 	fun stop()
 	{
 		spin0.power = spinStop;
-		spin1?.power = spinStop;
-		spin2?.power = spinStop;
 		state = State.Stop;
 	}
 

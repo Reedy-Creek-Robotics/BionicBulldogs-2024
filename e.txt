@@ -1,0 +1,269 @@
+* 1af9f09 - (3 weeks ago) added v1 of selecting wich sample to grab - minerkid08 (sample_recognition)
+* 646e80d - (3 weeks ago) finished v1 sample recognition - minerkid08
+* dbcb79a - (3 weeks ago) sample recognition - minerkid08
+| * 0e97464 - (10 hours ago) updated actions and test function - minerkid08 (auto_wip)
+| * 0b329d5 - (2 days ago) auto wip - minerkid08
+|/  
+*   99d4cd2 - (6 hours ago) Merge pull request #15 from Reedy-Creek-Robotics/v2_paths - minerkid08 (origin/master, origin/HEAD, master)
+|\  
+| *   83972b0 - (6 hours ago) fixed merge conflicts 2 - minerkid08
+| |\  
+| |/  
+|/|   
+* |   05ac130 - (2 days ago) Merge pull request #14 from Reedy-Creek-Robotics/auto_scoring_fix - Crowlex21
+|\ \  
+| * | b7dea0c - (11 days ago) auto scoring fix - minerkid08
+|/ /  
+| *   a05fc3a - (6 hours ago) fixed merge conflicts - minerkid08
+| |\  
+| |/  
+|/|   
+* | 644d082 - (11 days ago) SpecimenAuto.kt Powered bucket on initialization Slightly reformatted code in MainTelop.kt - Crowlex21
+| * 7150c13 - (8 hours ago) tweaked robot modules and main telop - minerkid08
+| * 8ba6189 - (2 days ago) Updated array of control comments - Crowlex21
+| * 85e3714 - (2 days ago) Fixed slides - Crowlex21
+| * a6a889f - (2 days ago) Updated armPos - Crowlex21
+| * 208ccd3 - (2 days ago) Re-added spline with no midpoint - Crowlex21
+| * 718910f - (2 days ago) Updated SpeciminClaw values - Crowlex21
+| * e17b94c - (2 days ago) tweaked specimen claw positions - minerkid08
+| * 9e085de - (2 days ago) Added releasePos - Crowlex21
+| * f694ebd - (4 days ago) Made SpecimenAutoV1 work - Crowlex21
+| * 4cecd7d - (5 days ago) added opmode for v2 specimen side - minerkid08
+| * 5409e3c - (5 days ago) v2 paths - minerkid08
+| * ea1aa12 - (11 days ago) created SampleOuttake class and changed auto and telop to use it - minerkid08
+| * cfddf08 - (11 days ago) merge auto and telop functions - minerkid08
+|/  
+*   a0891d6 - (11 days ago) Merge pull request #13 from Reedy-Creek-Robotics/meep_meep_paths - Crowlex21 (tag: v1.0.0)
+|\  
+| * 0c191f1 - (11 days ago) SampleAuto.kt update - Crowlex21
+| * 27a3395 - (12 days ago) Updated SampleAuto Implemented Speed - Crowlex21
+| * 0367ba2 - (2 weeks ago) updated sampleAuto - minerkid08
+| * 6da12eb - (2 weeks ago) Added Preload to SampleAuto.kt - Crowlex21
+| * 2da01b2 - (2 weeks ago) SpecimenAuto Refactor MeepMeep.kt tweaks - Crowlex21
+| * c005bce - (2 weeks ago) telop and auto tweaks - minerkid08
+| *   4f363fc - (2 weeks ago) fixed merge conflicts - minerkid08
+| |\  
+| | * 6dd41c9 - (3 weeks ago) Changed gripper to be a CRServo 2.0 - Crowlex21
+| | * 71c1e70 - (3 weeks ago) Changed gripper to be a CRServo - Crowlex21
+| | * 928f4aa - (3 weeks ago) Edited sampleSide auto Moved parking position slightly - Crowlex21
+| * | f9510c5 - (2 weeks ago) updated intake claw - minerkid08
+| * | 36d636a - (3 weeks ago) intake tweaks - minerkid08
+| * | f70da60 - (3 weeks ago) tweaked arm positions - minerkid08
+| |/  
+| * ee13195 - (3 weeks ago) updated arm positions - minerkid08
+| * dad43ad - (3 weeks ago) meep meep paths - minerkid08
+|/  
+*   c047c61 - (3 weeks ago) Merge pull request #12 from Reedy-Creek-Robotics/auto_scoring - minerkid08
+|\  
+| * 0074cf8 - (3 weeks ago) tweaked auto path - minerkid08
+| *   234df16 - (3 weeks ago) Merge branch 'master' into auto_scoring - minerkid08
+| |\  
+| * | b7777cc - (3 weeks ago) retuned track width and heading pid - minerkid08
+| * | 7eafaa8 - (5 weeks ago) finished tuning auto - minerkid08
+| * |   1649be6 - (5 weeks ago) fixed conflicting files - minerkid08
+| |\ \  
+| | * | 717f9df - (6 weeks ago) Added LocalizationTestFR - Crowlex21
+| | * | 6a469df - (6 weeks ago) Updated DriveConstants - Crowlex21
+| * | | 58dfc81 - (5 weeks ago) retuned feedforward - minerkid08
+| |/ /  
+| * | fe4d2cd - (7 weeks ago) updated autos with moved odo pods - minerkid08
+| * |   7ad2aed - (8 weeks ago) Merge branch 'auto_scoring' of https://github.com/Reedy-Creek-Robotics/BionicBulldogs-2024 into auto_scoring - minerkid08
+| |\ \  
+| | * \   2079839 - (8 weeks ago) Merge branch 'auto_scoring' of https://github.com/Reedy-Creek-Robotics/BionicBulldogs-2024 into auto_scoring - minerkid08
+| | |\ \  
+| | | * | 88dceae - (8 weeks ago) Added @Config - xander
+| | * | | f5cb966 - (8 weeks ago) updated auto - minerkid08
+| | |/ /  
+| | * | a0e5dab - (9 weeks ago) auto scoring - minerkid08
+| * | | 0a814f0 - (8 weeks ago) updated auto - minerkid08
+| * | | da74582 - (8 weeks ago) Added @Config - xander
+| * | | 3251da0 - (9 weeks ago) auto scoring - minerkid08
+* | | |   7b1c6d6 - (3 weeks ago) Merge pull request #11 from Reedy-Creek-Robotics/MainTelop - minerkid08
+|\ \ \ \  
+| |_|_|/  
+|/| | |   
+| * | |   e121c2a - (3 weeks ago) Merge branch 'master' into MainTelop - minerkid08
+| |\ \ \  
+| |/ / /  
+|/| | |   
+* | | | 752cccd - (8 weeks ago) Added MainTelop.kt - xander
+| * | | 98a1a13 - (4 weeks ago) added HangingTest and fixed horizontal slides - minerkid08
+| * | | 8846b97 - (5 weeks ago) tweaked claw positions - minerkid08
+| * | | 97048dc - (5 weeks ago) Edited Spin.kt - Crowlex21
+| * | | 6b3acf7 - (5 weeks ago) Edited MainTelop.kt - Crowlex21
+| * | | 1c8075e - (5 weeks ago) Edited Arm.kt Deleted obsolete EncTest.kt, mildly edited HDrive.kt - Crowlex21
+| * | | 832e16b - (5 weeks ago) Added HSlide and Grip in MainTelop.kt - Crowlex21
+| * | | d2b38e8 - (5 weeks ago) Added HSlide (Outtake) - Crowlex21
+| * | | 1be6ee7 - (5 weeks ago) Auto debugging - Crowlex21
+| * | | 5b07a20 - (5 weeks ago) Refactor - Crowlex21
+| * | | 06a27bd - (5 weeks ago) Refactor - Crowlex21
+| * | | dce803a - (6 weeks ago) Moved config files Added WIP ClawF.kt - Crowlex21
+| * | | 535d0e0 - (8 weeks ago) finished v1 MainTelop - minerkid08
+| * | | bb9057b - (8 weeks ago) tweaked mainTelop, fixed GamepadEx, added HardwareTest - Crowlex21
+| * | | 4ee2570 - (8 weeks ago) Test mode for servo issues - Stephan Roorda
+| * | | ebd27f0 - (8 weeks ago) added mainTelop - Crowlex21
+| * | | cda6ce5 - (8 weeks ago) Added MainTelop.kt - xander
+|/ / /  
+* | | 09eff74 - (8 weeks ago) Added @Config - xander
+* | | caf6603 - (8 weeks ago) Added EmSampleTest.kt - xander
+* | |   62e9fd3 - (8 weeks ago) Merge pull request #10 from Reedy-Creek-Robotics/tweaked_jd_s_claw - Crowlex21
+|\ \ \  
+| |/ /  
+|/| |   
+| * | befcba1 - (8 weeks ago) tweaked JD's claw - minerkid08
+|/ /  
+* | 40f84b5 - (8 weeks ago) Added more toggle stuff - xander
+* | 6fa1c4d - (8 weeks ago) Fixed GamepadEx - xander
+* | de63399 - (8 weeks ago) Edited ESampleTest.kt - xander
+|/  
+*   c9f3ff0 - (9 weeks ago) Merge pull request #9 from Reedy-Creek-Robotics/roadrunner_pathing - minerkid08
+|\  
+| * b5d774b - (9 weeks ago) roadrunner pathing - minerkid08
+* |   a6cf97e - (9 weeks ago) Merge pull request #8 from Reedy-Creek-Robotics/mecanism_tests_refactoring - minerkid08
+|\ \  
+| * | f4e11b5 - (9 weeks ago) Simplified FRHDrivetest.kt - xander
+| * | ac87a6b - (9 weeks ago) Added CSampleTest.kt Edited misc params - xander
+| * | a89b0af - (9 weeks ago) Added SampleTest.kt - xander
+| * | ba5cfe7 - (9 weeks ago) mecanism tests refactoring - minerkid08
+| |/  
+* |   cb3c2e6 - (9 weeks ago) Merge pull request #7 from Reedy-Creek-Robotics/10.1-update - Crowlex21
+|\ \  
+| |/  
+|/|   
+| * a2da8a1 - (9 weeks ago) merge with 10.1 - Stephan Roorda
+| * b80c23a - (9 weeks ago) update to 10.1 SDK - Stephan Roorda
+|/| 
+| *   6af9bb6 - (3 months ago) Merge pull request #1074 from FIRST-Tech-Challenge/20240919-122750-release-candidate - Cal Kestis
+| |\  
+| | * 054017d - (3 months ago) FtcRobotController v10.1 - Cal Kestis
+| |/  
+| * 442c867 - (3 months ago) Update README.md - Cal Kestis
+| *   f75e498 - (3 months ago) Merge pull request #1038 from FIRST-Tech-Challenge/20240828-111152-release-candidate - Cal Kestis
+| |\  
+| | * 7158b61 - (3 months ago) FtcRobotController v10.0 - Cal Kestis
+| |/  
+* |   e1aebfa - (9 weeks ago) Merge pull request #3 from Reedy-Creek-Robotics/08-12-mecanium_test_opmodes_and_xdrive_refactor - Crowlex21
+|\ \  
+| * \   eed1aaf - (9 weeks ago) Merge pull request #5 from Reedy-Creek-Robotics/husky_lens - minerkid08
+| |\ \  
+| | * | d75ac29 - (3 months ago) added huskey lens test opmode - minerkid08
+| | * | cf5f9b3 - (3 months ago) husky lens - minerkid08
+| * | |   a5bffb8 - (9 weeks ago) Merge pull request #6 from Reedy-Creek-Robotics/roadrunnertuning_ - Crowlex21
+| |\ \ \  
+| | |/ /  
+| |/| |   
+| | * | b935ff4 - (9 weeks ago) Commit - xander
+| | * | 916d074 - (9 weeks ago) Closing Commit - xander
+| | * | 8ff67e6 - (9 weeks ago) Swapped IMUs - xander
+| | * | 371d70d - (9 weeks ago) Removed troubleshooting - xander
+| | * | 3dbb545 - (9 weeks ago) Gripper problem - xander
+| | * | 0ccb892 - (9 weeks ago) Portability implemented - xander
+| | * | 1d64594 - (10 weeks ago) Rotate rename - xander
+| | * | f049229 - (10 weeks ago) FRHDriveTest.kt edited - Crowlex21
+| | * | 9d492b3 - (10 weeks ago) Misc Test Params implemented - xander
+| | * | a859152 - (10 weeks ago) Feedforward params implemented - xander
+| | * | 57ce72f - (10 weeks ago) Feedforward params implemented - xander
+| | * | 2206218 - (10 weeks ago) Feedforward params implemented - xander
+| | * | 820bf94 - (2 months ago) RR Tuning has progressed; LocalizationTest has passed. - xander
+| | * | a8b5e05 - (2 months ago) continued tuning localization - minerkid08
+| | * | ff4d31e - (2 months ago) roadrunnerTuning: - minerkid08
+| |/ /  
+| * | adfc87b - (3 months ago) tweaked protobot controls - minerkid08
+| * | fe15371 - (3 months ago) fixed formatting issues - minerkid08
+| * | 86caf8e - (3 months ago) added test opmode and module for the external imu - minerkid08
+| * | baaa260 - (4 months ago) renamed XDrive classes to HDrive, changed relative driving - minerkid08
+| * | 17f81f5 - (4 months ago) fixed build system - minerkid08
+|/ /  
+| | * 495c522 - (7 weeks ago) finished non roadrunner rewrite - minerkid08 (origin/lua_rewrite, lua_rewrite)
+| | * dd666c4 - (7 weeks ago) functionBuilder - minerkid08
+| | * 1d28788 - (8 weeks ago) lua rewrite - minerkid08
+| | *   d7cfd78 - (9 weeks ago) Merge pull request #4 from Reedy-Creek-Robotics/08-26-lua_and_lua_roadrunner_seperation - minerkid08 (origin/luaintegration)
+| | |\  
+| | | * 566b566 - (3 months ago) renamed classes to fit the library name - minerkid08
+| | | * 103e275 - (3 months ago) fixed problem with paths that contained a loop - minerkid08
+| | | * 88536aa - (3 months ago) fixed bugs with LuaRoadrunner crashing when an error is thrown - minerkid08
+| | | * d4dd7e9 - (3 months ago) fixed bugs with LuaRoadrunner crashing when an error is thrown - minerkid08
+| | | * 8eb9d99 - (3 months ago) fixed all major issues - minerkid08
+| | | * 91e8447 - (3 months ago) added luaFunctionBuilder for adding functions to lua, removed the LuaFunctions header - minerkid08
+| | | * d5621c6 - (3 months ago) started rewriting lua function system - minerkid08
+| | | * 1fafd4f - (3 months ago) added files that git did not commit - minerkid08
+| | | * 2db5ef6 - (3 months ago) lua and lua roadrunner seperation - minerkid08
+| | |/  
+| | * 668f8cb - (4 months ago) LuaIntegration - minerkid08 (HEAD -> luaintegration)
+| |/  
+|/|   
+* |   32a2ace - (4 months ago) Merge pull request #1 from Reedy-Creek-Robotics/08-06-moved_existing_modules - Crowlex21
+|\ \  
+| |/  
+|/|   
+| * 63a07e9 - (4 months ago) added modules not added to git - minerkid08
+|/  
+*   6ce588f - (5 months ago) Merge pull request #990 from FIRST-Tech-Challenge/20240701-085519-release-candidate - Cal Kestis
+|\  
+| * 48019d0 - (5 months ago) FtcRobotController v9.2 - Cal Kestis
+|/  
+*   1da45a3 - (10 months ago) Merge pull request #941 from FIRST-Tech-Challenge/20240215-115542-release-candidate - Cal Kestis
+|\  
+| * c303962 - (10 months ago) FtcRobotController v9.1 - Cal Kestis
+|/  
+*   f326c0d - (1 year, 2 months ago) Merge pull request #731 from FIRST-Tech-Challenge/20230929-083754-release-candidate - Cal Kestis
+|\  
+| * c023e97 - (1 year, 2 months ago) FtcRobotController v9.0.1 - Cal Kestis
+|/  
+*   f3a5a54 - (1 year, 3 months ago) Merge pull request #674 from FIRST-Tech-Challenge/20230830-154348-release-candidate - Craig MacFarlane
+|\  
+| * 4de7b1e - (1 year, 3 months ago) FtcRobotController v9.0 - Cal Kestis
+|/  
+*   660a2f6 - (1 year, 5 months ago) Merge pull request #654 from FIRST-Tech-Challenge/20230707-131020-release-candidate - Cal Kestis
+|\  
+| * 5c8b4c4 - (1 year, 5 months ago) FtcRobotController v8.2 - Cal Kestis
+|/  
+*   0879b47 - (2 years ago) Merge pull request #506 from FIRST-Tech-Challenge/20221201-150726-release-candidate - Cal Kestis
+|\  
+| * 3383440 - (2 years ago) FtcRobotController v8.1.1 - Cal Kestis
+|/  
+*   501c7c0 - (2 years, 1 month ago) Merge pull request #488 from FIRST-Tech-Challenge/20221121-115119-release-candidate - Cal Kestis
+|\  
+| * 35d4aa7 - (2 years, 1 month ago) FtcRobotController v8.1 - Cal Kestis
+|/  
+*   2390680 - (2 years, 3 months ago) Merge pull request #344 from FIRST-Tech-Challenge/20220907-131644-release-candidate - Cal Kestis
+|\  
+| * e0282fc - (2 years, 3 months ago) FtcRobotController v8.0 - Cal Kestis
+|/  
+*   aba72e5 - (2 years, 5 months ago) Merge pull request #324 from FIRST-Tech-Challenge/20220723-130006-release-candidate - Cal Kestis
+|\  
+| * fe758ed - (2 years, 5 months ago) FtcRobotController v7.2 - Cal Kestis
+|/  
+*   e945da2 - (2 years, 11 months ago) Merge pull request #274 from FIRST-Tech-Challenge/20211223-120805-release-candidate - Cal Kestis
+|\  
+| * 439a5bf - (3 years ago) FtcRobotController v7.1 - Cal Kestis
+|/  
+*   704b694 - (3 years, 3 months ago) Merge pull request #159 from FIRST-Tech-Challenge/20210915-141025-release-candidate - Cal Kestis
+|\  
+| * 724f759 - (3 years, 3 months ago) FtcRobotController v7.0 - Cal Kestis
+|/  
+*   cd037e0 - (3 years, 10 months ago) Merge pull request #105 from FIRST-Tech-Challenge/20210218-074821-release-candidate - Cal Kestis
+|\  
+| * 6e7dfbf - (3 years, 10 months ago) FtcRobotController v6.2 - Cal Kestis
+|/  
+*   5b8d84a - (4 years ago) Merge pull request #68 from FIRST-Tech-Challenge/2020.22.12-fix-javadoc-url - Cal Kestis
+|\  
+| * e11a44a - (4 years ago) Fix broken urls in README - Cal Kestis
+|/  
+*   d010c1b - (4 years ago) Merge pull request #62 from FIRST-Tech-Challenge/20201209-113742-release-candidate - Cal Kestis
+|\  
+| * 0c811a0 - (4 years ago) FtcRobotController v6.1 - Cal Kestis
+|/  
+*   09359bb - (4 years, 2 months ago) Merge pull request #7 from FIRST-Tech-Challenge/missing-gradlew - Cal Kestis
+|\  
+| * 314c650 - (4 years, 2 months ago) Missing gradle wrappers - CalKestis
+|/  
+*   7ab3861 - (4 years, 2 months ago) Merge pull request #1 from FIRST-Tech-Challenge/20200921-085816-release-candidate - Craig MacFarlane
+|\  
+| * 00cbf34 - (4 years, 3 months ago) FtcRobotController v6.0 - Cal Kestis
+|/  
+* 8b8b098 - (4 years, 3 months ago) Update .gitignore - Craig MacFarlane
+* 47c5872 - (4 years, 3 months ago) Update .gitignore - Craig MacFarlane
+* 7682f44 - (4 years, 3 months ago) Update .gitignore - Craig MacFarlane
+* ebb3ce8 - (4 years, 3 months ago) Update .gitignore - Craig MacFarlane
+* e77eeda - (4 years, 3 months ago) Initial commit - Craig MacFarlane
