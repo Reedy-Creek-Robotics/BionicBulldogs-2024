@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.opmode.telop
 
-import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
@@ -39,7 +38,6 @@ class MainTelop: LinearOpMode()
 
 		val drive = HDrive(HDriveConfig(hardwareMap));
 		drive.setLocalizer(SparkfunImuLocalizer(hardwareMap.get(SparkFunOTOS::class.java, "imu2")));
-		drive.setPosEstimate(Pose2d(0.0, 0.0, 0.0));
 
 		val gamepad = GamepadEx(gamepad1);
 

@@ -84,7 +84,7 @@ fun sampleSide(drive: DriveShim): TrajectorySequence
 	builder.lineToConstantHeading(Vector2d(-startX, specimineScoreY));
 	builder.waitSeconds(1.0);
 
-	builder.splineToLinearHeading(pos(-sampleX[0], sampleY, -90), rotation(0));
+	builder.splineToLinearHeading(pos(-sampleX[0], sampleY, -90), Math.toRadians(90.0));
 	builder.waitSeconds(1.0);
 
 	builder.lineToLinearHeading(sampleScorePos);
@@ -99,7 +99,7 @@ fun sampleSide(drive: DriveShim): TrajectorySequence
 		builder.waitSeconds(1.0);
 	}
 
-	builder.lineToLinearHeading(Pose2d(-27.0, -10.0, Math.toRadians(180.0)));
+	builder.lineToLinearHeading(Pose2d(-27.0, -10.0, Math.toRadians(90.0)));
 
 	return builder.build();
 }
