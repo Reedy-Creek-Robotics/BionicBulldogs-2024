@@ -78,13 +78,15 @@ fun speciminSide(drive: DriveShim): TrajectorySequence
 
 fun sampleSide(drive: DriveShim): TrajectorySequence
 {
-	val sampleScorePos = pos(-55.0, -55.0, 45);
+	val sampleScorePos = pos(-55.0, -50.0, 45);
 
 	val builder = drive.trajectorySequenceBuilder(pos(-startX, startY, 180));
 	builder.lineToConstantHeading(Vector2d(-startX, specimineScoreY));
 	builder.waitSeconds(1.0);
 
-	builder.splineToLinearHeading(pos(-sampleX[0], sampleY, -90), Math.toRadians(90.0));
+	//two below lines could replace spline in sample
+	builder.setTangent(-115.0);
+	builder.splineToLinearHeading(pos(-sampleX[0], sampleY, -90), Math.toRadians(115.0));
 	builder.waitSeconds(1.0);
 
 	builder.lineToLinearHeading(sampleScorePos);
