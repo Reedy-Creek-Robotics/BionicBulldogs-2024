@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmode.telop
 
+import com.acmerobotics.dashboard.config.Config
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
@@ -17,9 +18,16 @@ import org.firstinspires.ftc.teamcode.modules.robot.SpecimenOuttake
 import org.firstinspires.ftc.teamcode.modules.robot.SpeciminClaw
 import org.firstinspires.ftc.teamcode.opmode.config.HDriveConfig
 
+@Config
 @TeleOp
 class MainTelop: LinearOpMode()
 {
+  companion object
+  {
+    @JvmField
+    var hangingHeight = -140;
+  }
+
 	override fun runOpMode()
 	{
 		val claw = SpeciminClaw(hardwareMap);
@@ -193,11 +201,11 @@ class MainTelop: LinearOpMode()
 				if(hangingState == 0)
 				{
 					hangingState = 1;
-					slide.gotoPos(-420);
+					slide.gotoPos(-450);
 				}
 				else
 				{
-					slide.gotoPos(0);
+					slide.gotoPos(hangingHeight);
 					hangingState = 0;
 				}
 			}

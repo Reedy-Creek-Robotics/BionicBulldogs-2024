@@ -23,11 +23,11 @@ class SampleAuto: LinearOpMode()
 	companion object
 	{
 		@JvmField
-		var delay = 0.375;
+		var transferDelay = 1.0;
 		@JvmField
-		var delaytoo = 0.5;
+		var intakeDelay = 1.0;
 		@JvmField
-		var delaytree = 1.0;
+		var outtakeDelay = 1.0;
 		@JvmField
 		var slideScore = -900;
 	}
@@ -46,30 +46,44 @@ class SampleAuto: LinearOpMode()
 		val preload = drive.trajectorySequenceBuilder(Pose2d(-6.0, -60.0, Math.toRadians(-90.0)))
 			.lineToConstantHeading(Vector2d(-6.0, -28.0)).build();
 		val samp1 = drive.trajectorySequenceBuilder(preload.end())
-			.splineToLinearHeading(Pose2d(-36.0, -23.0, PI), Math.toRadians(90.0)).build();
+			.lineToLinearHeading(Pose2d(-30.0, -40.0, PI))
+			.lineToLinearHeading(Pose2d(-36.0, -21.5, PI))
+      .build();
 		val toScore = drive.trajectorySequenceBuilder(samp1.end())
-			.lineToLinearHeading(Pose2d(-53.5, -52.0, Math.toRadians(45.0))).build();
+			.lineToLinearHeading(Pose2d(-53.5, -52.0, Math.toRadians(45.0)),
+        velOverride(),
+        accelOverride(maxAccel = 30.0)
+      )
+      .build();
 		val samp2 = drive.trajectorySequenceBuilder(toScore.end())
-			.lineToLinearHeading(Pose2d(-44.0, -23.0, PI)).build();
+			.lineToLinearHeading(Pose2d(-44.0, -21.5, PI))
+      .build();
 		val twoScore = drive.trajectorySequenceBuilder(samp2.end())
-			.lineToLinearHeading(Pose2d(-53.5, -52.0, Math.toRadians(45.0))).build();
+			.lineToLinearHeading(Pose2d(-53.5, -52.0, Math.toRadians(45.0)),
+        velOverride(),
+        accelOverride(maxAccel = 30.0)
+      )
+      .build();
 		val park = drive.trajectorySequenceBuilder(samp2.end())
-			.lineToLinearHeading(Pose2d(-27.0, -10.0, Math.toRadians(90.0))).build();
+			.lineToLinearHeading(Pose2d(-27.0, -10.0, Math.toRadians(90.0)))
+      .build();
 
 		drive.poseEstimate = preload.start();
+
+    val startHeading = drive.poseEstimate.heading;
 
 		outtake.armDown();
 		outtake.bucketDown();
 		claw.close();
 		arm.down();
-		hslide.gotoPos(1.0);
+		hslide.zero();
 
 		waitForStart();
 
-		slide.runToPosition(-1400);
+		slide.gotoPos(-1400);
 		drive.followTrajectorySequence(preload);
 
-		slide.runToPosition(-900, 1.0);
+		slide.gotoPos(-900);
 		while(slide.busy());
 		claw.open();
 		slide.runToPosition(0);
@@ -79,66 +93,66 @@ class SampleAuto: LinearOpMode()
 		intake.forward();
 		hslide.gotoPos(0.65);
 
-		delay(delaytoo);
+		delay(intakeDelay);
 
 		hslide.score();
 		arm.up();
 
-		delay(delay);
+		delay(transferDelay);
 		intake.reverse();
-		delay(delay);
+		delay(transferDelay);
 
 		intake.stop();
 		arm.down();
 		hslide.gotoPos(1.0);
-		slide.runToPosition(-2500, 1.0);
+		slide.gotoPos(-2500);
 
 		drive.followTrajectorySequence(toScore);
 
 		//Arm position to rotate to the opposite side of the bot (sample scoring pos)
 		outtake.arm.position = 0.6;
 
-		delay(delaytree);
+		delay(outtakeDelay);
 
 		outtake.armDown();
 		delay(0.25);
-		slide.runToPosition(0, 1.0);
+		slide.lower();
 
 		drive.followTrajectorySequence(samp2);
 
 		intake.forward();
 		hslide.gotoPos(0.65);
 
-		delay(delaytoo);
+		delay(intakeDelay);
 
 		hslide.score();
 		arm.up();
 
-		delay(delay);
+		delay(transferDelay);
 		intake.reverse();
-		delay(delay);
+		delay(transferDelay);
 
 		intake.stop();
 		arm.down();
-		hslide.gotoPos(1.0);
-		slide.runToPosition(-2500, 1.0);
+		hslide.zero();
+		slide.gotoPos(-2500);
 
-		//Different starting point (samp2 instead of samp1)
+    //Different starting point (samp2 instead of samp1)
 		drive.followTrajectorySequence(twoScore);
 
 		//Arm position to rotate to the opposite side of the bot (sample scoring pos)
 		outtake.arm.position = 0.6;
 
-		delay(delaytree);
+		delay(outtakeDelay);
 
 		//Arm position to stop the bot from clipping anything
 		outtake.armDown();
 		delay(0.25);
-		slide.runToPosition(0, 1.0);
+		slide.lower();
 
 		drive.followTrajectorySequence(park);
 
-		rotPos = drive.localizer.poseEstimate.heading;
+		rotPos = drive.localizer.poseEstimate.heading + startHeading;
 	}
 
 	fun delay(time: Double)

@@ -25,6 +25,6 @@ class SparkfunImuLocalizer(override var poseEstimate: Pose2d, override val poseV
 
 	override fun update()
 	{
-		poseEstimate = Pose2d(0.0, 0.0, imu.position.h + rotPos);
+		poseEstimate = Pose2d(0.0, 0.0, imu.position.h - rotPos);
 	}
 }

@@ -7,6 +7,7 @@ import org.rowlandhall.meepmeep.core.colorscheme.scheme.ColorSchemeBlueDark
 import org.rowlandhall.meepmeep.roadrunner.DefaultBotBuilder
 import org.rowlandhall.meepmeep.roadrunner.DriveShim
 import org.rowlandhall.meepmeep.roadrunner.trajectorysequence.TrajectorySequence
+import kotlin.math.PI
 
 val startX = 10.0;
 val startY = -60.0;
@@ -104,6 +105,18 @@ fun sampleSide(drive: DriveShim): TrajectorySequence
 	return builder.build();
 }
 
+fun e(drive: DriveShim): TrajectorySequence
+{
+	return drive.trajectorySequenceBuilder(Pose2d(-6.0, -60.0, Math.toRadians(-90.0)))
+		.lineToConstantHeading(Vector2d(-6.0, -28.0))
+		.lineToLinearHeading(Pose2d(-30.0, -40.0, PI))
+		.lineToLinearHeading(Pose2d(-36.0, -23.0, PI))
+		.lineToLinearHeading(Pose2d(-53.5, -52.0, Math.toRadians(45.0)))
+		.lineToLinearHeading(Pose2d(-44.0, -23.0, PI))
+		.lineToLinearHeading(Pose2d(-53.5, -52.0, Math.toRadians(45.0)))
+		.lineToLinearHeading(Pose2d(-27.0, -10.0, Math.toRadians(90.0))).build();
+}
+
 fun main()
 {
 	val meepMeep = MeepMeep(800);
@@ -117,7 +130,7 @@ fun main()
 	sampleBotBuilder.setConstraints(60.0, 60.0, Math.toRadians(180.0), Math.toRadians(180.0), 15.0);
 	sampleBotBuilder.setDimensions(15.0, 13.0);
 	sampleBotBuilder.setColorScheme(ColorSchemeBlueDark());
-	val sampleBot = sampleBotBuilder.followTrajectorySequence {drive: DriveShim -> sampleSide(drive)};
+	val sampleBot = sampleBotBuilder.followTrajectorySequence {drive: DriveShim -> e(drive)}
 
 	meepMeep.setBackground(MeepMeep.Background.FIELD_INTOTHEDEEP_JUICE_DARK);
 	meepMeep.setDarkMode(true);
