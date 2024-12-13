@@ -19,7 +19,7 @@ class HSlide(private val hSlide: Servo)
 
 		@JvmField
 		//Was at 0.75 at outreach
-		var score = 0.75
+		var score = 0.76
 	}
 
 	fun score()

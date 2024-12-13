@@ -148,9 +148,10 @@ class MainTelop: LinearOpMode()
 				}
 				else
 				{
-					intake.outtakeForTime(1.5);
+					intake.outtakeForTime(0.75);
 				}
 			}
+      intake.update();
 
 			// Outtake Slides
 			if(gamepad.cross())
@@ -201,7 +202,7 @@ class MainTelop: LinearOpMode()
 				if(hangingState == 0)
 				{
 					hangingState = 1;
-					slide.gotoPos(-450);
+					slide.gotoPos(-500);
 				}
 				else
 				{

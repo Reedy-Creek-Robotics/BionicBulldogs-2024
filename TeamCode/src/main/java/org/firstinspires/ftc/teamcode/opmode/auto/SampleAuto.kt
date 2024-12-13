@@ -12,6 +12,8 @@ import org.firstinspires.ftc.teamcode.modules.robot.HSlide
 import org.firstinspires.ftc.teamcode.modules.robot.Intake
 import org.firstinspires.ftc.teamcode.modules.robot.Outtake
 import org.firstinspires.ftc.teamcode.modules.robot.Slide
+import org.firstinspires.ftc.teamcode.modules.robot.SampleOuttake
+import org.firstinspires.ftc.teamcode.modules.robot.SpecimenOuttake
 import org.firstinspires.ftc.teamcode.modules.robot.SpeciminClaw
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive
 import kotlin.math.PI
@@ -23,7 +25,7 @@ class SampleAuto: LinearOpMode()
 	companion object
 	{
 		@JvmField
-		var transferDelay = 1.0;
+		var transferDelay = 0.5;
 		@JvmField
 		var intakeDelay = 1.0;
 		@JvmField
@@ -37,29 +39,36 @@ class SampleAuto: LinearOpMode()
 		val drive = SampleMecanumDrive(hardwareMap);
 		val hslide = HSlide(hardwareMap.servo.get("hslide"));
 		val outtake = Outtake(hardwareMap);
+		val slide = Slide(hardwareMap);
+		val sampleOuttake = SampleOuttake(slide, outtake);
 		val intake = Intake(hardwareMap.crservo.get("rotator0"), null, null);
 		val claw = SpeciminClaw(hardwareMap);
-		val slide = Slide(hardwareMap);
 		val arm = Arm(hardwareMap.servo.get("arm"));
-
+    val specimenClaw = SpecimenOuttake(claw, slide);
 
 		val preload = drive.trajectorySequenceBuilder(Pose2d(-6.0, -60.0, Math.toRadians(-90.0)))
 			.lineToConstantHeading(Vector2d(-6.0, -28.0)).build();
 		val samp1 = drive.trajectorySequenceBuilder(preload.end())
 			.lineToLinearHeading(Pose2d(-30.0, -40.0, PI))
-			.lineToLinearHeading(Pose2d(-36.0, -21.5, PI))
+			.lineToLinearHeading(Pose2d(-36.0, -21.5, PI),
+        velOverride(),
+        accelOverride(maxAccel = 30.0)
+      )
       .build();
 		val toScore = drive.trajectorySequenceBuilder(samp1.end())
-			.lineToLinearHeading(Pose2d(-53.5, -52.0, Math.toRadians(45.0)),
+			.lineToLinearHeading(Pose2d(-51.5, -51.5, Math.toRadians(45.0)),
         velOverride(),
         accelOverride(maxAccel = 30.0)
       )
       .build();
 		val samp2 = drive.trajectorySequenceBuilder(toScore.end())
-			.lineToLinearHeading(Pose2d(-44.0, -21.5, PI))
+			.lineToLinearHeading(Pose2d(-44.0, -21.5, PI),
+        velOverride(),
+        accelOverride(maxAccel = 30.0)
+      )
       .build();
 		val twoScore = drive.trajectorySequenceBuilder(samp2.end())
-			.lineToLinearHeading(Pose2d(-53.5, -52.0, Math.toRadians(45.0)),
+			.lineToLinearHeading(Pose2d(-51.5, -51.5, Math.toRadians(45.0)),
         velOverride(),
         accelOverride(maxAccel = 30.0)
       )
@@ -72,21 +81,25 @@ class SampleAuto: LinearOpMode()
 
     val startHeading = drive.poseEstimate.heading;
 
+    specimenClaw.init();
+
 		outtake.armDown();
 		outtake.bucketDown();
 		claw.close();
 		arm.down();
 		hslide.zero();
 
+    sampleOuttake.init();
+
 		waitForStart();
 
-		slide.gotoPos(-1400);
+    specimenClaw.collect();
+    specimenClaw.waitUntilIdle();
+
 		drive.followTrajectorySequence(preload);
 
-		slide.gotoPos(-900);
-		while(slide.busy());
-		claw.open();
-		slide.runToPosition(0);
+    specimenClaw.score();
+    specimenClaw.waitUntilIdle();
 
 		drive.followTrajectorySequence(samp1);
 
@@ -105,18 +118,18 @@ class SampleAuto: LinearOpMode()
 		intake.stop();
 		arm.down();
 		hslide.gotoPos(1.0);
-		slide.gotoPos(-2500);
+    sampleOuttake.up();
 
-		drive.followTrajectorySequence(toScore);
+		drive.followTrajectorySequenceAsync(toScore);
 
-		//Arm position to rotate to the opposite side of the bot (sample scoring pos)
-		outtake.arm.position = 0.6;
+    while(drive.isBusy())
+    {
+      drive.update();
+      sampleOuttake.update();
+    }
 
-		delay(outtakeDelay);
-
-		outtake.armDown();
-		delay(0.25);
-		slide.lower();
+    sampleOuttake.score();
+    sampleOuttake.waitUntilIdle();
 
 		drive.followTrajectorySequence(samp2);
 
@@ -135,20 +148,23 @@ class SampleAuto: LinearOpMode()
 		intake.stop();
 		arm.down();
 		hslide.zero();
-		slide.gotoPos(-2500);
+
+    sampleOuttake.up();
 
     //Different starting point (samp2 instead of samp1)
-		drive.followTrajectorySequence(twoScore);
 
 		//Arm position to rotate to the opposite side of the bot (sample scoring pos)
-		outtake.arm.position = 0.6;
+		drive.followTrajectorySequenceAsync(twoScore);
 
-		delay(outtakeDelay);
+    while(drive.isBusy())
+    {
+      drive.update();
+      sampleOuttake.update();
+    }
 
 		//Arm position to stop the bot from clipping anything
-		outtake.armDown();
-		delay(0.25);
-		slide.lower();
+    sampleOuttake.score();
+    sampleOuttake.waitUntilIdle();
 
 		drive.followTrajectorySequence(park);
 

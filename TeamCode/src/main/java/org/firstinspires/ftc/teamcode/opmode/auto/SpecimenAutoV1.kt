@@ -20,12 +20,6 @@ import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive
 @Config
 class SpecimenAutoV1: LinearOpMode()
 {
-
-	companion object {
-		@JvmField
-		var releasePos = -1000;
-	}
-
 	override fun runOpMode()
 	{
 
@@ -40,7 +34,7 @@ class SpecimenAutoV1: LinearOpMode()
 			.lineToConstantHeading(Vector2d(0.0, -28.0)).build();
 		val path2 = drive.trajectorySequenceBuilder(path.end())
 			.lineToLinearHeading(
-        Pose2d(38.0, -55.0, Math.toRadians(90.0)),
+        Pose2d(38.0, -54.0, Math.toRadians(90.0)),
         velOverride(),
         accelOverride(maxAccel = 30.0)
       )
@@ -51,7 +45,6 @@ class SpecimenAutoV1: LinearOpMode()
 			.build();
 		val path4 = drive.trajectorySequenceBuilder(path3.end())
 			.lineToLinearHeading(Pose2d(38.0, -56.0))
-			.lineToLinearHeading(Pose2d(path2.start().x, path2.start().y - 2, path2.start().heading))
 			.build();
 
 		drive.poseEstimate = path.start();
