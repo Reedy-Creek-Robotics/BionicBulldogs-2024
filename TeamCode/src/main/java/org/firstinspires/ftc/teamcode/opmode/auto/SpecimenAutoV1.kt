@@ -22,7 +22,6 @@ class SpecimenAutoV1: LinearOpMode()
 {
 	override fun runOpMode()
 	{
-
 		val drive = SampleMecanumDrive(hardwareMap);
 		val claw = SpeciminClaw(hardwareMap);
 		val slides = Slide(hardwareMap);
@@ -44,12 +43,12 @@ class SpecimenAutoV1: LinearOpMode()
 			.lineToLinearHeading(Pose2d(path.end().x + 2, path.end().y, path.end().heading))
 			.build();
 		val path4 = drive.trajectorySequenceBuilder(path3.end())
-			.lineToLinearHeading(Pose2d(38.0, -56.0))
+			.lineToLinearHeading(Pose2d(38.0, -56.0, 0.0))
 			.build();
 
 		drive.poseEstimate = path.start();
 
-    val startHeading = drive.poseEstimate.heading;
+    val initPos = drive.poseEstimate.heading;
 
 		hslide.zero();
     claw.close();
@@ -77,7 +76,7 @@ class SpecimenAutoV1: LinearOpMode()
 
 		drive.followTrajectorySequence(path4);
 
-		rotPos = drive.localizer.poseEstimate.heading + startHeading;
+		rotPos = drive.poseEstimate.heading - initPos;
 	}
 
 	private fun delay(time: Double)

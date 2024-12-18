@@ -47,6 +47,9 @@ class MainTelop: LinearOpMode()
 		val drive = HDrive(HDriveConfig(hardwareMap));
 		drive.setLocalizer(SparkfunImuLocalizer(hardwareMap.get(SparkFunOTOS::class.java, "imu2")));
 
+    var localHeading = 0.0;
+    var imuHeading = 0.0;
+
 		val gamepad = GamepadEx(gamepad1);
 
 		waitForStart();
@@ -79,6 +82,16 @@ class MainTelop: LinearOpMode()
 
 			//Drive
 			drive.driveFR(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+
+      if(gamepad.share())
+      {
+        val imu = hardwareMap.get(SparkFunOTOS::class.java, "imu2");
+        val localizer = SparkfunImuLocalizer(imu);
+		    drive.setLocalizer(localizer);
+        localizer.update();
+        imuHeading = imu.position.h;
+        localHeading = localizer.poseEstimate.heading;
+      }
 
 			//Horizontal Slides
 			if(gamepad1.right_trigger >= 0.5 && hSlide.pos() >= hSlide.min())
@@ -148,7 +161,7 @@ class MainTelop: LinearOpMode()
 				}
 				else
 				{
-					intake.outtakeForTime(0.75);
+					intake.stopIn(0.75);
 				}
 			}
       intake.update();
@@ -211,6 +224,8 @@ class MainTelop: LinearOpMode()
 				}
 			}
 
+      telemetry.addData("imu heading", imuHeading);
+      telemetry.addData("localizer heading", localHeading);
 			slide.telem(telemetry);
 			drive.telem(telemetry);
 			specimenOuttake.telem(telemetry);
