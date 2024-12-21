@@ -5,6 +5,7 @@ import com.acmerobotics.roadrunner.geometry.Vector2d
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.util.ElapsedTime
+import org.firstinspires.ftc.teamcode.modules.drive.rotPos
 import org.firstinspires.ftc.teamcode.modules.robot.Arm
 import org.firstinspires.ftc.teamcode.modules.robot.HSlide
 import org.firstinspires.ftc.teamcode.modules.robot.Intake
@@ -165,6 +166,8 @@ class SpecimenAutoV2: LinearOpMode()
 		intake.forward();
 
 		hSlide.gotoPos(0.5);
+
+		rotPos = drive.localizer.poseEstimate.heading;
 
 		val elapsedTime = ElapsedTime();
 		elapsedTime.reset();

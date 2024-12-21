@@ -11,19 +11,22 @@ class Outtake(val hardwareMap: HardwareMap)
 	companion object
 	{
 		@JvmField
-		var armUp = 0.5;
+		var armUp = 0.25;
 
 		@JvmField
-		var armDown = 0.03;
+		var armDown = 1.0;
 
 		@JvmField
 		var bucketUp = 0.6;
 
 		@JvmField
-		var bucketDown = 0.9;
+		var bucketDown = 0.85;
 
 		@JvmField
 		var bucketScore = 1.0;
+
+		@JvmField
+		var bucketUpTime = 0.3;
 	}
 
 	enum class State
@@ -58,7 +61,7 @@ class Outtake(val hardwareMap: HardwareMap)
 		{
 			if(state == State.Up)
 			{
-				if(elapsedTime.seconds() > 0.5)
+				if(elapsedTime.seconds() > bucketUpTime)
 				{
 					bucket.position = bucketUp;
 					state = State.Idle;

@@ -20,12 +20,12 @@ import kotlin.math.PI
 
 @Autonomous
 @Config
-class SampleAuto: LinearOpMode()
+class SampleAutoV3: LinearOpMode()
 {
 	companion object
 	{
 		@JvmField
-		var transferDelay = 0.5;
+		var transferDelay = 0.7;
 		@JvmField
 		var intakeDelay = 1.0;
 		@JvmField
@@ -47,29 +47,33 @@ class SampleAuto: LinearOpMode()
     val specimenClaw = SpecimenOuttake(claw, slide);
 
 		val preload = drive.trajectorySequenceBuilder(Pose2d(-30.0, -60.0, Math.toRadians(-90.0)))
-			.lineToConstantHeading(Vector2d(-6.0, -28.0)).build();
+			.lineToConstantHeading(Vector2d(-45.0, -51.0))
+			.lineToLinearHeading(Pose2d(-51.5, -51.5, Math.toRadians(45.0)),
+        velOverride(),
+        accelOverride(maxAccel = 30.0)
+      ).build();
 		val samp1 = drive.trajectorySequenceBuilder(preload.end())
 			.lineToLinearHeading(Pose2d(-30.0, -40.0, PI))
-			.lineToLinearHeading(Pose2d(-36.0, -22.0, PI),
+			.lineToLinearHeading(Pose2d(-36.0, -24.0, PI),
         velOverride(),
         accelOverride(maxAccel = 30.0)
       )
       .build();
 		val toScore = drive.trajectorySequenceBuilder(samp1.end())
 			.lineToLinearHeading(Pose2d(-51.5, -51.5, Math.toRadians(45.0)),
-        velOverride(),
+        velOverride(maxVel = 30.0),
         accelOverride(maxAccel = 30.0)
       )
       .build();
 		val samp2 = drive.trajectorySequenceBuilder(toScore.end())
-			.lineToLinearHeading(Pose2d(-44.0, -22.0, PI),
+			.lineToLinearHeading(Pose2d(-44.0, -24.0, PI),
         velOverride(),
         accelOverride(maxAccel = 30.0)
       )
       .build();
 		val twoScore = drive.trajectorySequenceBuilder(samp2.end())
 			.lineToLinearHeading(Pose2d(-51.5, -51.5, Math.toRadians(45.0)),
-        velOverride(),
+        velOverride(maxVel = 30.0),
         accelOverride(maxAccel = 30.0)
       )
       .build();
@@ -93,13 +97,17 @@ class SampleAuto: LinearOpMode()
 
 		waitForStart();
 
-    specimenClaw.collect();
-    specimenClaw.waitUntilIdle();
+    sampleOuttake.up();
+		drive.followTrajectorySequenceAsync(preload);
 
-		drive.followTrajectorySequence(preload);
+    while(drive.isBusy())
+    {
+      drive.update();
+      sampleOuttake.update();
+    }
 
-    specimenClaw.score();
-    specimenClaw.waitUntilIdle();
+    sampleOuttake.score();
+    sampleOuttake.waitUntilIdle();
 
 		drive.followTrajectorySequence(samp1);
 

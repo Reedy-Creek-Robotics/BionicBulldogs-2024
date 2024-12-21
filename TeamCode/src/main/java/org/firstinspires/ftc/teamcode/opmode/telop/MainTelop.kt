@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmode.telop
 
-import com.acmerobotics.roadrunner.geometry.Pose2d
+import com.acmerobotics.dashboard.config.Config
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
@@ -18,9 +18,16 @@ import org.firstinspires.ftc.teamcode.modules.robot.SpecimenOuttake
 import org.firstinspires.ftc.teamcode.modules.robot.SpeciminClaw
 import org.firstinspires.ftc.teamcode.opmode.config.HDriveConfig
 
+@Config
 @TeleOp
 class MainTelop: LinearOpMode()
 {
+  companion object
+  {
+    @JvmField
+    var hangingHeight = -140;
+  }
+
 	override fun runOpMode()
 	{
 		val claw = SpeciminClaw(hardwareMap);
@@ -39,7 +46,9 @@ class MainTelop: LinearOpMode()
 
 		val drive = HDrive(HDriveConfig(hardwareMap));
 		drive.setLocalizer(SparkfunImuLocalizer(hardwareMap.get(SparkFunOTOS::class.java, "imu2")));
-		drive.setPosEstimate(Pose2d(0.0, 0.0, 0.0));
+
+    var localHeading = 0.0;
+    var imuHeading = 0.0;
 
 		val gamepad = GamepadEx(gamepad1);
 
@@ -73,6 +82,16 @@ class MainTelop: LinearOpMode()
 
 			//Drive
 			drive.driveFR(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+
+      if(gamepad.share())
+      {
+        val imu = hardwareMap.get(SparkFunOTOS::class.java, "imu2");
+        val localizer = SparkfunImuLocalizer(imu);
+		    drive.setLocalizer(localizer);
+        localizer.update();
+        imuHeading = imu.position.h;
+        localHeading = localizer.poseEstimate.heading;
+      }
 
 			//Horizontal Slides
 			if(gamepad1.right_trigger >= 0.5 && hSlide.pos() >= hSlide.min())
@@ -142,9 +161,10 @@ class MainTelop: LinearOpMode()
 				}
 				else
 				{
-					intake.outtakeForTime(1.5);
+					intake.stopIn(0.75);
 				}
 			}
+      intake.update();
 
 			// Outtake Slides
 			if(gamepad.cross())
@@ -195,15 +215,17 @@ class MainTelop: LinearOpMode()
 				if(hangingState == 0)
 				{
 					hangingState = 1;
-					slide.gotoPos(-420);
+					slide.gotoPos(-500);
 				}
 				else
 				{
-					slide.gotoPos(0);
+					slide.gotoPos(hangingHeight);
 					hangingState = 0;
 				}
 			}
 
+      telemetry.addData("imu heading", imuHeading);
+      telemetry.addData("localizer heading", localHeading);
 			slide.telem(telemetry);
 			drive.telem(telemetry);
 			specimenOuttake.telem(telemetry);

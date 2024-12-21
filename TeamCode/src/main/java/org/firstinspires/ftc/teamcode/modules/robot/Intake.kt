@@ -62,7 +62,7 @@ class Intake(private val spin0: CRServo, private val spin1: CRServo?, private va
 	/**
 	 * @param time seconds
 	 */
-	fun outtakeForTime(time: Double)
+	fun stopIn(time: Double)
 	{
 		elapsedTime.reset();
 		targetTime = time;
@@ -75,7 +75,7 @@ class Intake(private val spin0: CRServo, private val spin1: CRServo?, private va
 		{
 			if(targetTime < elapsedTime.seconds())
 			{
-				forward();
+				stop();
 				targetTime = -1.0;
 			}
 		}
