@@ -30,10 +30,10 @@ class SpecimenAutoV1: LinearOpMode()
     val specimenOuttake = SpecimenOuttake(claw, slides);
 
 		val path = drive.trajectorySequenceBuilder(Pose2d(0.0, -60.0, Math.toRadians(-90.0)))
-			.lineToConstantHeading(Vector2d(0.0, -28.0)).build();
+			.lineToConstantHeading(Vector2d(0.0, -30.0)).build();
 		val path2 = drive.trajectorySequenceBuilder(path.end())
 			.lineToLinearHeading(
-        Pose2d(38.0, -54.0, Math.toRadians(90.0)),
+        Pose2d(38.0, -53.0, Math.toRadians(90.0)),
         velOverride(),
         accelOverride(maxAccel = 30.0)
       )

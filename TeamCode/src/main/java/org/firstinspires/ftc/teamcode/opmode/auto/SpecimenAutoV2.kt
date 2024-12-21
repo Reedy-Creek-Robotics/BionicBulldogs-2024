@@ -24,10 +24,14 @@ class SpecimenAutoV2: LinearOpMode()
 	val startX = 10.0;
 	val startY = -60.0;
 
-	val sampleX = arrayOf(38.0, 46.0, 56.0);
-	val sampleY = -23.0;
+	val sampleX = arrayOf(35.0, 46.0, 56.0);
+	val sampleY = -23.2;
 
-	val specimineScoreY = -29.0;
+	val wallX = 48.0;
+	val wallY = -54.0;
+
+	val specimineScoreY = -30.0;
+	val sampleScoreY = -35.1;
 
 	val noPartner = true;
 
@@ -46,15 +50,14 @@ class SpecimenAutoV2: LinearOpMode()
 	fun gotoChamber(builder: TrajectorySequenceBuilder)
 	{
 		builder.lineToLinearHeading(pos(startX, specimineScoreY - 4, 180));
-		builder.lineToConstantHeading(Vector2d(startX + scoreCount, specimineScoreY));
+		builder.lineToConstantHeading(
+			Vector2d(startX + scoreCount, specimineScoreY), velOverride(), accelOverride(maxAccel = 30.0)
+		);
 		scoreCount++;
 	}
 
 	fun getPaths(drive: SampleMecanumDrive): List<TrajectorySequence>
 	{
-		val scoreY = -40.0;
-		val collectY = -55.0;
-
 		val paths = ArrayList<TrajectorySequence>();
 
 		var builder = drive.trajectorySequenceBuilder(pos(startX, startY, -180));
@@ -66,7 +69,10 @@ class SpecimenAutoV2: LinearOpMode()
 		if(noPartner)
 		{
 			builder = drive.trajectorySequenceBuilder(paths[paths.size - 1].end());
-			builder.lineToLinearHeading(pos(sampleX[0], collectY, 0));
+			builder.lineToLinearHeading(pos(wallX, wallY + 3, 0));
+			builder.lineToLinearHeading(
+				pos(wallX, wallY, 0), velOverride(), accelOverride(maxAccel = 30.0)
+			);
 			paths.add(builder.build());
 
 			builder = drive.trajectorySequenceBuilder(paths[paths.size - 1].end());
@@ -78,13 +84,29 @@ class SpecimenAutoV2: LinearOpMode()
 		builder.setTangent(rotation(180));
 		builder.splineToLinearHeading(pos((startX + sampleX[0]) / 2, -36.0, -225), rotation(90))
 		builder.setTangent(rotation(90));
-		builder.splineToLinearHeading(pos(sampleX[0], sampleY, 90), rotation(0));
+		builder.splineToLinearHeading(
+			pos(sampleX[0], sampleY, 88), rotation(0), velOverride(), accelOverride(maxAccel = 30.0)
+		);
 		//TODO(Add below line, remove top 4 lines)
 		//builder.splineToLinearHeading(pos(sampleX[0], sampleY, -270), rotation(0))
 		paths.add(builder.build());
 
 		builder = drive.trajectorySequenceBuilder(paths[paths.size - 1].end());
-		builder.lineToLinearHeading(pos(sampleX[0], scoreY, 180));
+		builder.lineToLinearHeading(pos(sampleX[0] + 5, sampleScoreY, 165));
+		paths.add(builder.build());
+
+		builder = drive.trajectorySequenceBuilder(paths[paths.size - 1].end());
+		builder.lineToLinearHeading(pos(wallX, wallY + 3, 0));
+		builder.lineToLinearHeading(
+			pos(wallX, wallY - 3, 0), velOverride(), accelOverride(maxAccel = 30.0)
+		);
+		paths.add(builder.build());
+
+		builder = drive.trajectorySequenceBuilder(paths[paths.size - 1].end());
+		builder.lineToLinearHeading(pos(startX - 2, specimineScoreY - 12, 180));
+		builder.lineToConstantHeading(
+			Vector2d(startX - 2, specimineScoreY - 5), velOverride(), accelOverride(maxAccel = 30.0)
+		);
 		paths.add(builder.build());
 
 		return paths;
@@ -94,18 +116,18 @@ class SpecimenAutoV2: LinearOpMode()
 			builder.lineToLinearHeading(pos(sampleX[i], sampleY, 90));
 			builder.waitSeconds(1.0);
 
-			builder.lineToLinearHeading(pos(sampleX[i], scoreY, 180));
+			builder.lineToLinearHeading(pos(sampleX[i], specimineScoreY, 180));
 			builder.waitSeconds(1.0);
 		}
 
-		builder.lineToLinearHeading(pos(sampleX[0], collectY, 0));
+		builder.lineToLinearHeading(pos(sampleX[0], wallY, 0));
 		builder.waitSeconds(1.0);
 
 		for(i in 0 .. 2)
 		{
 			gotoChamber(builder);
 			builder.waitSeconds(1.0);
-			builder.lineToLinearHeading(pos(sampleX[0], collectY, 0));
+			builder.lineToLinearHeading(pos(sampleX[0], wallY, 0));
 			builder.waitSeconds(1.0);
 		}
 
@@ -176,6 +198,40 @@ class SpecimenAutoV2: LinearOpMode()
 
 		hSlide.zero();
 		intake.stop();
+
+		elapsedTime.reset();
+		while(elapsedTime.seconds() < 1.0);
+
+		drive.followTrajectorySequence(path[4]);
+
+		hSlide.gotoPos(HSlide.min);
+
+		elapsedTime.reset();
+		while(elapsedTime.seconds() < 1.0);
+
+		intake.reverse();
+
+		elapsedTime.reset();
+		while(elapsedTime.seconds() < 0.25);
+
+		arm.up();
+
+		elapsedTime.reset();
+		while(elapsedTime.seconds() < 1.0);
+
+		intake.stop();
+		hSlide.zero();
+		arm.down();
+
+		drive.followTrajectorySequence(path[5]);
+
+		specimenOuttake.collect();
+		specimenOuttake.waitUntilIdle();
+
+		drive.followTrajectorySequence(path[6]);
+
+		specimenOuttake.score();
+		specimenOuttake.waitUntilIdle();
 
 		elapsedTime.reset();
 		while(elapsedTime.seconds() < 1.0);
