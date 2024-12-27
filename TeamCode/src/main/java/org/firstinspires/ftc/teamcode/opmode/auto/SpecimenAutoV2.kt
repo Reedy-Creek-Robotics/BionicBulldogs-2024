@@ -17,6 +17,8 @@ import org.firstinspires.ftc.teamcode.modules.robot.SpeciminClaw
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequenceBuilder
+import org.firstinspires.ftc.teamcode.opmode.auto.rotation
+import org.firstinspires.ftc.teamcode.opmode.auto.pos
 
 @Autonomous
 class SpecimenAutoV2: LinearOpMode()
@@ -39,15 +41,6 @@ class SpecimenAutoV2: LinearOpMode()
 
 	var scoreCount = 0;
 
-	fun rotation(angle: Int): Double
-	{
-		return Math.toRadians(-(angle.toDouble() - 90))
-	}
-
-	fun pos(x: Double, y: Double, angle: Int): Pose2d
-	{
-		return Pose2d(x, y, rotation(angle));
-	}
 
 	fun gotoChamber(builder: TrajectorySequenceBuilder, yOffset: Double = 0.0)
 	{
