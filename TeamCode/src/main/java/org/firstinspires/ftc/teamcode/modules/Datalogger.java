@@ -1,26 +1,3 @@
-/*
-This Datalogger class is provided for FTC OnBot Java (OBJ) programmers.
-
-Most users will not need to edit this class; its methods are called
-from a user's OpMode such as ConceptDatalogger.java or a revised version.
-That OpMode specifies and collects data to be logged in a CSV file,
-ready for download and charting.
-
-For instructions, see the tutorial at the FTC Wiki:
-https://github.com/FIRST-Tech-Challenge/FtcRobotController/wiki/Datalogging
-
-
-Android Studio programmers can change the destination filepath at Line 295,
-From: "/sdcard/FIRST/java/src/Datalogs/%s.txt"
-To:   "/sdcard/FIRST/Datalogs/%s.csv"
-This change presumes OnBot Java will not be used to preview or download datalogs;
-they will instead be manually transferred from the RC device.
-
-Credit to @Windwoes (https://github.com/Windwoes).
-
-*/
-
-
 package org.firstinspires.ftc.teamcode.modules;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;

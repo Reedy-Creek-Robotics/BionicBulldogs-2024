@@ -1,13 +1,11 @@
 package org.firstinspires.ftc.teamcode.modules
 
-import kotlin.text.String
-
 class Logging
 {
   lateinit var logger: Datalogger;
-  val posX = Datalogger.GenericField("posX");
-  val posY = Datalogger.GenericField("posY");
-  val posH = Datalogger.GenericField("posH");
+  var posX = Datalogger.GenericField("posX");
+  var posY = Datalogger.GenericField("posY");
+  var posH = Datalogger.GenericField("posH");
 
   fun init()
   {
