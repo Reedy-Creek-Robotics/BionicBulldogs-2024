@@ -68,11 +68,18 @@ public class GamepadEx {
     public float leftStickY(){
         return gamepad.left_stick_y;
     }
+    public boolean leftStick(){
+        return gamepad.left_stick_button && !prevGamepad.left_stick_button;
+    }
+
     public float rightStickX(){
         return gamepad.right_stick_x;
     }
     public float rightStickY(){
         return gamepad.right_stick_y;
+    }
+    public boolean rightStick(){
+        return gamepad.right_stick_button && !prevGamepad.right_stick_button;
     }
 
     //triggers

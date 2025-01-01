@@ -43,9 +43,7 @@ class SpecimenCycling: LinearOpMode()
 		sampleOuttake = SampleOuttake(slide, outtake);
 
 		arm = Arm(hardwareMap.servo.get("arm"));
-		intake = Intake(
-			hardwareMap.crservo.get("rotator0"), null, null
-		);
+		intake = Intake(hardwareMap);
 
 		hSlide = HSlide(hardwareMap.servo.get("hslide"));
 
@@ -74,6 +72,8 @@ class SpecimenCycling: LinearOpMode()
 		specimenOuttake.init();
 		sampleOuttake.init();
 		claw.close();
+    
+    intake.zeroRotator();
 
 		waitForStart();
 

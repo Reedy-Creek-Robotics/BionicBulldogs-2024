@@ -42,7 +42,7 @@ class SampleAutoV3: LinearOpMode()
   val scoreY = -57.5;
 
   val sampleX = arrayOf(-38.5, -46.0, -56.0);
-  val sampleY = -30.0;
+  val sampleY = -30.5;
 
 	fun rotation(angle: Int): Double
 	{
@@ -61,7 +61,7 @@ class SampleAutoV3: LinearOpMode()
 		val outtake = Outtake(hardwareMap);
 		val slide = Slide(hardwareMap);
 		val sampleOuttake = SampleOuttake(slide, outtake);
-		val intake = Intake(hardwareMap.crservo.get("rotator0"), null, null);
+		val intake = Intake(hardwareMap);
 		val claw = SpeciminClaw(hardwareMap);
 		val arm = Arm(hardwareMap.servo.get("arm"));
     val specimenClaw = SpecimenOuttake(claw, slide);
@@ -71,7 +71,10 @@ class SampleAutoV3: LinearOpMode()
       .build();
 
 		val samp1 = drive.trajectorySequenceBuilder(preload.end())
-			.lineToLinearHeading(pos(sampleX[0], sampleY, -96))
+			.lineToLinearHeading(pos(sampleX[0], sampleY, -96),
+        velOverride(maxVel = DriveConstants.MAX_VEL * 0.8),
+        accelOverride(maxAccel = 30.0)
+      )
       .build();
 
 		val toScore = drive.trajectorySequenceBuilder(samp1.end())
@@ -106,6 +109,8 @@ class SampleAutoV3: LinearOpMode()
 		hslide.zero();
 
     sampleOuttake.init();
+
+    intake.zeroRotator();
 
 		waitForStart();
 

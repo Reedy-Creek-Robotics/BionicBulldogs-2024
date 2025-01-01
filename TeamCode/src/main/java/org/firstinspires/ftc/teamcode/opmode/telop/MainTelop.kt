@@ -25,7 +25,9 @@ class MainTelop: LinearOpMode()
   companion object
   {
     @JvmField
-    var hangingHeight = -140;
+    var hangingHeightDown = 0;
+    @JvmField
+    var hangingHeightUp = -600;
   }
 
 	override fun runOpMode()
@@ -34,9 +36,7 @@ class MainTelop: LinearOpMode()
 		val slide = Slide(hardwareMap);
 		val specimenOuttake = SpecimenOuttake(claw, slide);
 		val arm = Arm(hardwareMap.servo.get("arm"));
-		val intake = Intake(
-			hardwareMap.crservo.get("rotator0"), null, null
-		);
+		val intake = Intake(hardwareMap);
 
 		val outtake = Outtake(hardwareMap);
 
@@ -59,6 +59,8 @@ class MainTelop: LinearOpMode()
 
 		hSlide.zero();
 		arm.down();
+
+    intake.zeroRotator();
 
 		//Controls:
 		//Triggers retract/extend HSlides
@@ -106,6 +108,7 @@ class MainTelop: LinearOpMode()
 			{
 				hSlide.score();
 				arm.up();
+        intake.zeroRotator();
 			}
 
 			// Outtake
@@ -164,6 +167,17 @@ class MainTelop: LinearOpMode()
 					intake.stopIn(0.75);
 				}
 			}
+
+      if(gamepad.leftStick())
+      {
+        intake.rotatorLeft();
+      }
+
+      if(gamepad.rightStick())
+      {
+        intake.rotatorRight();
+      }
+
       intake.update();
 
 			// Outtake Slides
@@ -215,11 +229,11 @@ class MainTelop: LinearOpMode()
 				if(hangingState == 0)
 				{
 					hangingState = 1;
-					slide.gotoPos(-500);
+					slide.gotoPos(hangingHeightUp);
 				}
 				else
 				{
-					slide.gotoPos(hangingHeight);
+					slide.gotoPos(hangingHeightDown);
 					hangingState = 0;
 				}
 			}

@@ -142,9 +142,7 @@ class SpecimenAutoV2: LinearOpMode()
 		val sampleOuttake = SampleOuttake(slide, outtake);
 
 		val arm = Arm(hardwareMap.servo.get("arm"));
-		val intake = Intake(
-			hardwareMap.crservo.get("rotator0"), null, null
-		);
+		val intake = Intake(hardwareMap);
 
 		val hSlide = HSlide(hardwareMap.servo.get("hslide"));
 
@@ -158,6 +156,8 @@ class SpecimenAutoV2: LinearOpMode()
 		specimenOuttake.init();
 		sampleOuttake.init();
 		claw.close();
+
+    intake.zeroRotator();
 
     var i = 0;
 
