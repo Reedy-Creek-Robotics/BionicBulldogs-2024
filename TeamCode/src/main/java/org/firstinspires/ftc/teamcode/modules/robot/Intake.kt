@@ -46,12 +46,12 @@ class Intake(private val map: HardwareMap)
 
   fun rotatorLeft()
   {
-    intakeRotator.position += rotatorIncrement;
+    intakeRotator.position -= rotatorIncrement;
   }
 
   fun rotatorRight()
   {
-    intakeRotator.position -= rotatorIncrement;
+    intakeRotator.position += rotatorIncrement;
   }
 
   fun zeroRotator()
