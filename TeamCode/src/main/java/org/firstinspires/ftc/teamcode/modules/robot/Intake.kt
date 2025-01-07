@@ -2,15 +2,14 @@ package org.firstinspires.ftc.teamcode.modules.robot
 
 import com.acmerobotics.dashboard.config.Config
 import com.qualcomm.robotcore.hardware.CRServo
+import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorSimple
+import com.qualcomm.robotcore.hardware.HardwareMap
 import com.qualcomm.robotcore.util.ElapsedTime
 
 @Config
-class Intake(private val spin0: CRServo, private val spin1: CRServo?, private val spin2: CRServo?)
+class Intake(private val map: HardwareMap)
 {
-
-	//spin0 = rotator0 = frontrot = port2
-	//spin1 = rotator1 = backrot = port3
 
 	enum class State
 	{
@@ -22,6 +21,9 @@ class Intake(private val spin0: CRServo, private val spin1: CRServo?, private va
 	private val elapsedTime = ElapsedTime();
 	private var targetTime = -1.0;
 
+	private var intake = map.crservo.get("rotator0");
+	private var intakeRotator = map.servo.get("intakeRotator");
+
 	companion object
 	{
 		@JvmField
@@ -29,33 +31,49 @@ class Intake(private val spin0: CRServo, private val spin1: CRServo?, private va
 
 		@JvmField
 		var spinStop = 0.0;
+
+		@JvmField
+    var rotatorCenter = 0.51;
+
+		@JvmField
+    var rotatorIncrement = 0.25;
 	}
 
-	init{
-		spin2?.direction = DcMotorSimple.Direction.REVERSE;
-	}
+  fun setRotatorPos(pos: Double)
+  {
+    intakeRotator.position = pos;
+  }
+
+  fun rotatorLeft()
+  {
+    intakeRotator.position -= rotatorIncrement;
+  }
+
+  fun rotatorRight()
+  {
+    intakeRotator.position += rotatorIncrement;
+  }
+
+  fun zeroRotator()
+  {
+    intakeRotator.position = rotatorCenter;
+  }
 
 	fun forward()
 	{
-		spin0.power = -spinPower;
-		spin1?.power = spinPower;
-		spin2?.power = spinPower;
+		intake.power = -spinPower;
 		state = State.Forward;
 	}
 
 	fun reverse()
 	{
-		spin0.power = spinPower;
-		spin1?.power = -spinPower;
-		spin2?.power = -spinPower;
+		intake.power = spinPower;
 		state = State.Reverse;
 	}
 
 	fun stop()
 	{
-		spin0.power = spinStop;
-		spin1?.power = spinStop;
-		spin2?.power = spinStop;
+		intake.power = spinStop;
 		state = State.Stop;
 	}
 

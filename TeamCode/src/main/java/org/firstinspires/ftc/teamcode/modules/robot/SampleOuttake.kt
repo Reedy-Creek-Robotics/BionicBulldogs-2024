@@ -10,7 +10,7 @@ class SampleOuttake(private val slide: Slide, private val outtake: Outtake)
 
 	fun up()
 	{
-		slide.gotoPos(-2500);
+		slide.gotoPos(-2450);
 		outtake.up();
 	}
 
@@ -29,9 +29,14 @@ class SampleOuttake(private val slide: Slide, private val outtake: Outtake)
 
 	fun waitUntilIdle()
 	{
-		while(outtake.state != Outtake.State.Idle)
+		while(isBusy())
 		{
 			update();
 		}
+	}
+
+	fun isBusy(): Boolean
+	{
+		return outtake.state != Outtake.State.Idle;
 	}
 }

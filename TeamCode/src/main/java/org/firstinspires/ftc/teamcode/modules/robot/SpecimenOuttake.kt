@@ -64,11 +64,17 @@ class SpecimenOuttake(private val claw: SpeciminClaw, private val slide: Slide)
 
 	fun waitUntilIdle()
 	{
-		while(state == State.Raising || state == State.Lowering)
+		while(isBusy())
 		{
 			update();
 		}
 	}
+
+	fun isBusy(): Boolean
+	{
+		return state == State.Raising || state == State.Lowering;
+	}
+
 	fun telem(t: Telemetry)
 	{
 		t.addData("SpecimenOuttake: state", state);

@@ -567,7 +567,7 @@ public class TrajectorySequenceBuilder {
         for (SequenceSegment segment : sequenceSegments) {
             while (markerIndex < markers.size()) {
                 TrajectoryMarker marker = markers.get(markerIndex);
-                if (marker.getTime() >= timeOffset + segment.getDuration()) {
+                if (marker.getTime() > timeOffset + segment.getDuration()) {
                     break;
                 }
 

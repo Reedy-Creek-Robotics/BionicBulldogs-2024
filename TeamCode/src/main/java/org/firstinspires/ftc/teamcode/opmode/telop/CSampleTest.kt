@@ -19,7 +19,7 @@ class CSampleTest: LinearOpMode()
 
 		val arm = Arm(hardwareMap.servo.get("arm"));
 		val gripper = Gripper(hardwareMap.servo.get("gripper"));
-		val spin = Intake(hardwareMap.crservo.get("rotator0"), hardwareMap.crservo.get("rotator1"), null);
+		val spin = Intake(hardwareMap);
 		val drive = HDrive(HDriveConfig(hardwareMap));
 		drive.setLocalizer(SparkfunImuLocalizer(hardwareMap.get(SparkFunOTOS::class.java, "imu2")));
 

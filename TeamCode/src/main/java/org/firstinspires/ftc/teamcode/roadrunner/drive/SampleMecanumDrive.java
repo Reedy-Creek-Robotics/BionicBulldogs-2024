@@ -29,6 +29,7 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.modules.Logging;
 import org.firstinspires.ftc.teamcode.modules.hardware.ImuEx;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequenceBuilder;
@@ -154,6 +155,13 @@ public class SampleMecanumDrive extends MecanumDrive
                 lastEncPositions, lastEncVels, lastTrackingEncPositions, lastTrackingEncVels
         );
         setLocalizer(new TwoWheelTrackingLocalizer(hardwareMap, this));
+    }
+
+    public void log(Logging log)
+    {
+        log.getPosH().set(getLocalizer().getPoseEstimate().getHeading());
+        log.getPosX().set(getLocalizer().getPoseEstimate().getX());
+        log.getPosY().set(getLocalizer().getPoseEstimate().getY());
     }
 
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose)

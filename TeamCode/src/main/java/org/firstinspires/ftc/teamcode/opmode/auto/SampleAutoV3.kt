@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.modules.robot.SampleOuttake
 import org.firstinspires.ftc.teamcode.modules.robot.SpecimenOuttake
 import org.firstinspires.ftc.teamcode.modules.robot.SpeciminClaw
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive
+import org.firstinspires.ftc.teamcode.roadrunner.drive.DriveConstants
 import kotlin.math.PI
 
 @Autonomous
@@ -34,6 +35,25 @@ class SampleAutoV3: LinearOpMode()
 		var slideScore = -900;
 	}
 
+  val startX = -42.0;
+  val startY = -64.5;
+
+  val scoreX = -57.5;
+  val scoreY = -57.5;
+
+  val sampleX = arrayOf(-38.5, -46.0, -56.0);
+  val sampleY = -30.5;
+
+	fun rotation(angle: Int): Double
+	{
+		return Math.toRadians(-(angle.toDouble() - 90))
+	}
+
+	fun pos(x: Double, y: Double, angle: Int): Pose2d
+	{
+		return Pose2d(x, y, rotation(angle));
+	}
+
 	override fun runOpMode()
 	{
 		val drive = SampleMecanumDrive(hardwareMap);
@@ -41,39 +61,34 @@ class SampleAutoV3: LinearOpMode()
 		val outtake = Outtake(hardwareMap);
 		val slide = Slide(hardwareMap);
 		val sampleOuttake = SampleOuttake(slide, outtake);
-		val intake = Intake(hardwareMap.crservo.get("rotator0"), null, null);
+		val intake = Intake(hardwareMap);
 		val claw = SpeciminClaw(hardwareMap);
 		val arm = Arm(hardwareMap.servo.get("arm"));
     val specimenClaw = SpecimenOuttake(claw, slide);
 
-		val preload = drive.trajectorySequenceBuilder(Pose2d(-30.0, -60.0, Math.toRadians(-90.0)))
-			.lineToConstantHeading(Vector2d(-45.0, -51.0))
-			.lineToLinearHeading(Pose2d(-51.5, -51.5, Math.toRadians(45.0)),
-        velOverride(),
-        accelOverride(maxAccel = 30.0)
-      ).build();
+		val preload = drive.trajectorySequenceBuilder(Pose2d(startX, startY, rotation(90)))
+			.lineToLinearHeading(pos(scoreX, scoreY, 45))
+      .build();
+
 		val samp1 = drive.trajectorySequenceBuilder(preload.end())
-			.lineToLinearHeading(Pose2d(-30.0, -40.0, PI))
-			.lineToLinearHeading(Pose2d(-36.0, -24.0, PI),
-        velOverride(),
+			.lineToLinearHeading(pos(sampleX[0], sampleY, -96),
+        velOverride(maxVel = DriveConstants.MAX_VEL * 0.8),
         accelOverride(maxAccel = 30.0)
       )
       .build();
+
 		val toScore = drive.trajectorySequenceBuilder(samp1.end())
-			.lineToLinearHeading(Pose2d(-51.5, -51.5, Math.toRadians(45.0)),
-        velOverride(maxVel = 30.0),
-        accelOverride(maxAccel = 30.0)
-      )
+			.lineToLinearHeading(pos(scoreX, scoreY, 45))
       .build();
+
 		val samp2 = drive.trajectorySequenceBuilder(toScore.end())
-			.lineToLinearHeading(Pose2d(-44.0, -24.0, PI),
-        velOverride(),
-        accelOverride(maxAccel = 30.0)
-      )
+			.lineToLinearHeading(pos(sampleX[1], sampleY - 3, -96),
+        velOverride(maxVel = DriveConstants.MAX_VEL * 0.8),
+        accelOverride(maxAccel = 30.0))
       .build();
 		val twoScore = drive.trajectorySequenceBuilder(samp2.end())
-			.lineToLinearHeading(Pose2d(-51.5, -51.5, Math.toRadians(45.0)),
-        velOverride(maxVel = 30.0),
+			.lineToLinearHeading(pos(scoreX, scoreY, 45),
+        velOverride(maxVel = DriveConstants.MAX_VEL * 0.8),
         accelOverride(maxAccel = 30.0)
       )
       .build();
@@ -89,11 +104,13 @@ class SampleAutoV3: LinearOpMode()
 
 		outtake.armDown();
 		outtake.bucketDown();
-		claw.close();
+		claw.open();
 		arm.down();
 		hslide.zero();
 
     sampleOuttake.init();
+
+    intake.zeroRotator();
 
 		waitForStart();
 
@@ -112,7 +129,7 @@ class SampleAutoV3: LinearOpMode()
 		drive.followTrajectorySequence(samp1);
 
 		intake.forward();
-		hslide.gotoPos(0.65);
+		hslide.gotoPos(0.4);
 
 		delay(intakeDelay);
 
@@ -126,6 +143,7 @@ class SampleAutoV3: LinearOpMode()
 		intake.stop();
 		arm.down();
 		hslide.gotoPos(1.0);
+
     sampleOuttake.up();
 
 		drive.followTrajectorySequenceAsync(toScore);
@@ -142,7 +160,7 @@ class SampleAutoV3: LinearOpMode()
 		drive.followTrajectorySequence(samp2);
 
 		intake.forward();
-		hslide.gotoPos(0.65);
+		hslide.gotoPos(0.4);
 
 		delay(intakeDelay);
 
@@ -174,7 +192,7 @@ class SampleAutoV3: LinearOpMode()
     sampleOuttake.score();
     sampleOuttake.waitUntilIdle();
 
-		drive.followTrajectorySequence(park);
+		// drive.followTrajectorySequence(park);
 
 		rotPos = drive.localizer.poseEstimate.heading + startHeading;
 	}

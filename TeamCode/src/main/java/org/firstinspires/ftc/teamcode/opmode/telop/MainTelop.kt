@@ -22,11 +22,14 @@ import org.firstinspires.ftc.teamcode.opmode.config.HDriveConfig
 @TeleOp
 class MainTelop: LinearOpMode()
 {
-  companion object
-  {
-    @JvmField
-    var hangingHeight = -140;
-  }
+	companion object
+	{
+		@JvmField
+		var hangingHeightDown = 0;
+
+		@JvmField
+		var hangingHeightUp = -600;
+	}
 
 	override fun runOpMode()
 	{
@@ -34,9 +37,7 @@ class MainTelop: LinearOpMode()
 		val slide = Slide(hardwareMap);
 		val specimenOuttake = SpecimenOuttake(claw, slide);
 		val arm = Arm(hardwareMap.servo.get("arm"));
-		val intake = Intake(
-			hardwareMap.crservo.get("rotator0"), null, null
-		);
+		val intake = Intake(hardwareMap);
 
 		val outtake = Outtake(hardwareMap);
 
@@ -47,8 +48,8 @@ class MainTelop: LinearOpMode()
 		val drive = HDrive(HDriveConfig(hardwareMap));
 		drive.setLocalizer(SparkfunImuLocalizer(hardwareMap.get(SparkFunOTOS::class.java, "imu2")));
 
-    var localHeading = 0.0;
-    var imuHeading = 0.0;
+		var localHeading = 0.0;
+		var imuHeading = 0.0;
 
 		val gamepad = GamepadEx(gamepad1);
 
@@ -59,6 +60,8 @@ class MainTelop: LinearOpMode()
 
 		hSlide.zero();
 		arm.down();
+
+		intake.zeroRotator();
 
 		//Controls:
 		//Triggers retract/extend HSlides
@@ -83,15 +86,15 @@ class MainTelop: LinearOpMode()
 			//Drive
 			drive.driveFR(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
 
-      if(gamepad.share())
-      {
-        val imu = hardwareMap.get(SparkFunOTOS::class.java, "imu2");
-        val localizer = SparkfunImuLocalizer(imu);
-		    drive.setLocalizer(localizer);
-        localizer.update();
-        imuHeading = imu.position.h;
-        localHeading = localizer.poseEstimate.heading;
-      }
+			if(gamepad.share())
+			{
+				val imu = hardwareMap.get(SparkFunOTOS::class.java, "imu2");
+				val localizer = SparkfunImuLocalizer(imu);
+				drive.setLocalizer(localizer);
+				localizer.update();
+				imuHeading = imu.position.h;
+				localHeading = localizer.poseEstimate.heading;
+			}
 
 			//Horizontal Slides
 			if(gamepad1.right_trigger >= 0.5 && hSlide.pos() >= hSlide.min())
@@ -106,6 +109,7 @@ class MainTelop: LinearOpMode()
 			{
 				hSlide.score();
 				arm.up();
+				intake.zeroRotator();
 			}
 
 			// Outtake
@@ -164,7 +168,18 @@ class MainTelop: LinearOpMode()
 					intake.stopIn(0.75);
 				}
 			}
-      intake.update();
+
+			if(gamepad.leftStick())
+			{
+				intake.rotatorLeft();
+			}
+
+			if(gamepad.rightStick())
+			{
+				intake.rotatorRight();
+			}
+
+			intake.update();
 
 			// Outtake Slides
 			if(gamepad.cross())
@@ -183,7 +198,7 @@ class MainTelop: LinearOpMode()
 			slide.update();
 
 			// Specimen Outtake
-      
+
 			if(gamepad.touchpad())
 			{
 				if(specimenOuttake.state == SpecimenOuttake.State.Down)
@@ -215,17 +230,17 @@ class MainTelop: LinearOpMode()
 				if(hangingState == 0)
 				{
 					hangingState = 1;
-					slide.gotoPos(-500);
+					slide.gotoPos(hangingHeightUp);
 				}
 				else
 				{
-					slide.gotoPos(hangingHeight);
+					slide.gotoPos(hangingHeightDown);
 					hangingState = 0;
 				}
 			}
 
-      telemetry.addData("imu heading", imuHeading);
-      telemetry.addData("localizer heading", localHeading);
+			telemetry.addData("imu heading", imuHeading);
+			telemetry.addData("localizer heading", localHeading);
 			slide.telem(telemetry);
 			drive.telem(telemetry);
 			specimenOuttake.telem(telemetry);
