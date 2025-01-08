@@ -132,7 +132,10 @@ fun main()
 	sampleBotBuilder.setConstraints(60.0, 60.0, Math.toRadians(180.0), Math.toRadians(180.0), 15.0);
 	sampleBotBuilder.setDimensions(15.0, 13.0);
 	sampleBotBuilder.setColorScheme(ColorSchemeBlueDark());
-	val sampleBot = sampleBotBuilder.followTrajectorySequence {drive: DriveShim -> e(drive)}
+	val sampleBot = sampleBotBuilder.followTrajectorySequence {drive: DriveShim -> drive.trajectorySequenceBuilder(pos(8.0, -32.0, 180))
+		.setTangent(rotation(-180))
+		.splineToLinearHeading(pos(30.0, -40.0, 45), rotation(45)).build()
+	}
 
 	meepMeep.setBackground(MeepMeep.Background.FIELD_INTOTHEDEEP_JUICE_DARK);
 	meepMeep.setDarkMode(true);
