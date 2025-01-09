@@ -31,6 +31,7 @@ import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigu
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.modules.Logging;
 import org.firstinspires.ftc.teamcode.modules.hardware.ImuEx;
+import org.firstinspires.ftc.teamcode.opmode.auto.AutoUtilsKt;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequenceRunner;
@@ -159,7 +160,7 @@ public class SampleMecanumDrive extends MecanumDrive
 
     public void log(Logging log)
     {
-        log.getPosH().set(getLocalizer().getPoseEstimate().getHeading());
+        log.getPosH().set(AutoUtilsKt.invRotation(getLocalizer().getPoseEstimate().getHeading()));
         log.getPosX().set(getLocalizer().getPoseEstimate().getX());
         log.getPosY().set(getLocalizer().getPoseEstimate().getY());
     }
