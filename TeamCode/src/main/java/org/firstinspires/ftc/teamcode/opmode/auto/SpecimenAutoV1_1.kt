@@ -60,7 +60,11 @@ class SpecimenAutoV1_1: LinearOpMode()
 				}
 				log.state.set("toWall");
 			})
-			.lineToLinearHeading(Pose2d(wallPose.x, wallPose.y + 4, wallPose.heading), velOverride(), accelOverride(maxAccel = 0.6))
+			.lineToLinearHeading(
+				Pose2d(wallPose.x, wallPose.y + 4, wallPose.heading),
+				velOverride(),
+				accelOverride(maxAccel = 0.6)
+			)
 			.lineToLinearHeading(wallPose, velOverride(), accelOverride(maxAccel = 0.6))
 			.addDisplacementMarker(fun()
 			{
@@ -86,31 +90,55 @@ class SpecimenAutoV1_1: LinearOpMode()
 				velOverride(),
 				accelOverride(maxAccel = 0.6)
 			)
-			.addDisplacementMarker(fun()
+			.addTemporalMarker(fun()
 			{
 				//drive.setDriveSignal(DriveSignal());
 				specimenOuttake.score();
 				specimenOuttake.waitUntilIdle();
 				log.state.set("toSamples");
 			})
+			.waitSeconds(0.5)
 			.setTangent(rotation(-180))
-			.splineToLinearHeading(pos(33.0, -33.0, 45), rotation(55))
+			.splineToLinearHeading(pos(33.0, -33.0, 55), rotation(45))
 			.addTemporalMarker(fun()
 			{
 				log.state.set("collect");
 				hslide.gotoPos(HSlide.min);
 
 				intake.forward();
+				intake.setRotatorPos(0.6);
 			})
-			/*.waitSeconds(0.5)
+			.waitSeconds(0.5)
 			.lineToLinearHeading(pos(36.0, -48.0, 135))
 			.addTemporalMarker(fun()
 			{
 				intake.reverse();
-				arm.up();
 				delay(0.5);
-			})*/
-
+				hslide.gotoPos(0.6);
+				intake.setRotatorPos(0.5);
+				arm.up();
+			})
+			.UNSTABLE_addTemporalMarkerOffset(0.5, fun()
+			{
+				intake.setRotatorPos(0.63);
+				intake.forward();
+				arm.down();
+			})
+			.lineToLinearHeading(pos(40.0, -33.0, 55))
+			.addTemporalMarker(fun()
+			{
+				log.state.set("collect");
+				hslide.gotoPos(HSlide.min);
+			})
+			.waitSeconds(0.5)
+			.lineToLinearHeading(pos(40.0, -48.0, 135))
+			.addTemporalMarker(fun()
+			{
+				intake.reverse();
+				arm.up();
+				intake.setRotatorPos(0.5);
+				delay(0.5);
+			})
 			.build();
 
 		drive.poseEstimate = path.start();
