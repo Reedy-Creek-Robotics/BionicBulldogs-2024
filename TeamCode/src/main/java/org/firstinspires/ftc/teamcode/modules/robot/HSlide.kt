@@ -12,13 +12,13 @@ class HSlide(private val hSlide: Servo)
 		var increment = 0.04;
 
 		@JvmField
-		var max = 0.95;
+		var max = 0.25;
 
 		@JvmField
-		var min = 0.3;
+		var min = 0.95;
 
 		@JvmField
-		var score = 0.76;
+		var score = 0.25;
 	}
 
 	fun score()
@@ -53,7 +53,7 @@ class HSlide(private val hSlide: Servo)
 
 	fun zero()
 	{
-		hSlide.position = 0.95;
+		hSlide.position = max;
 	}
 
 	fun gotoPos(pos: Double)

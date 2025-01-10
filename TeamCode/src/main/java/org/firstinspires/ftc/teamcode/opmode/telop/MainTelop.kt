@@ -59,7 +59,7 @@ class MainTelop: LinearOpMode()
 		sampleOuttake.init();
 
 		hSlide.zero();
-		arm.down();
+		arm.up();
 
 		intake.zeroRotator();
 
@@ -97,13 +97,13 @@ class MainTelop: LinearOpMode()
 			}
 
 			//Horizontal Slides
-			if(gamepad1.right_trigger >= 0.5 && hSlide.pos() >= hSlide.min())
-			{
-				hSlide.decrement();
-			}
-			else if(gamepad1.left_trigger >= 0.5 && hSlide.pos() <= hSlide.max())
+			if(gamepad1.right_trigger >= 0.5 && hSlide.pos() <= hSlide.min())
 			{
 				hSlide.increment();
+			}
+			else if(gamepad1.left_trigger >= 0.5 && hSlide.pos() >= hSlide.max())
+			{
+				hSlide.decrement();
 			}
 			else if(gamepad.triangle())
 			{
