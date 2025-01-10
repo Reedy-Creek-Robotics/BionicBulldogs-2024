@@ -8,9 +8,15 @@ import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.DecimalFormat;
+import java.time.LocalDateTime;
 
 public class Datalogger
 {
@@ -269,7 +275,7 @@ public class Datalogger
 
             try
             {
-                BufferedCsvWriter bufferedCsvWriter = new BufferedCsvWriter(String.format("/sdcard/FIRST/java/src/Datalogs/%s.txt", filename));
+                BufferedCsvWriter bufferedCsvWriter = new BufferedCsvWriter();
                 return new Datalogger(bufferedCsvWriter, fields);
             }
             catch (IOException e)
@@ -285,15 +291,30 @@ public class Datalogger
         private FileWriter fileWriter;
         private BufferedWriter bufferedWriter;
 
-        public BufferedCsvWriter(String filepath) throws IOException
+        public BufferedCsvWriter() throws IOException
         {
-            File tmp = new File(filepath);
+            String path = "/sdcard/ftcLogs/latest.txt";
+
+            String timePath = "/sdcard/ftcLogs/time.txt";
+            File timeFile = new File(timePath);
+            if(timeFile.exists())
+            {
+                byte[] encoded = Files.readAllBytes(Paths.get(timePath));
+                String str = new String(encoded, StandardCharsets.UTF_8);
+                Files.move(Paths.get(path), Paths.get(String.format("/sdcard/ftcLogs/%s.txt", str)));
+            }
+
+            File tmp = new File(path);
             if (!tmp.exists())
             {
                 tmp.getParentFile().mkdirs();
             }
 
-            fileWriter = new FileWriter(filepath, false);
+            FileWriter writer = new FileWriter(timePath, false);
+            writer.write(LocalDateTime.now().toString());
+            writer.close();
+
+            fileWriter = new FileWriter(path, false);
             bufferedWriter = new BufferedWriter(fileWriter);
         }
 
