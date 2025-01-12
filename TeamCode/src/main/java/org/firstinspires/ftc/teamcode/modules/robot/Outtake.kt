@@ -11,13 +11,13 @@ class Outtake(val hardwareMap: HardwareMap)
 	companion object
 	{
 		@JvmField
-		var armUp = 0.25;
+		var armUp = 0.0;
 
 		@JvmField
-		var armDown = 1.0;
+		var armDown = 0.95;
 
 		@JvmField
-		var bucketUp = 0.6;
+		var bucketUp = 0.45;
 
 		@JvmField
 		var bucketDown = 0.85;
