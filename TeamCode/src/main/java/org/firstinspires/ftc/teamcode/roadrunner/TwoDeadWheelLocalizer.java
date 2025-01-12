@@ -27,9 +27,10 @@ import org.firstinspires.ftc.teamcode.roadrunner.messages.TwoDeadWheelInputsMess
 @Config
 public final class TwoDeadWheelLocalizer implements Localizer
 {
-    public static class Params {
-        public double parYTicks = 1273714.4708966345; // y position of the parallel encoder (in tick units)
-        public double perpXTicks = -1856992.536496808; // x position of the perpendicular encoder (in tick units)
+    public static class Params
+    {
+        public double parYTicks = -225.54455380888652; // y position of the parallel encoder (in tick units)
+        public double perpXTicks = 624.9748403619525; // x position of the perpendicular encoder (in tick units)
     }
 
     public static Params PARAMS = new Params();
@@ -46,7 +47,8 @@ public final class TwoDeadWheelLocalizer implements Localizer
     private boolean initialized;
     private Pose2d pose;
 
-    public TwoDeadWheelLocalizer(HardwareMap hardwareMap, IMU imu, double inPerTick, Pose2d pose) {
+    public TwoDeadWheelLocalizer(HardwareMap hardwareMap, IMU imu, double inPerTick, Pose2d pose)
+    {
         // TODO: make sure your config has **motors** with these names (or change them)
         //   the encoders should be plugged into the slot matching the named motor
         //   see https://ftc-docs.firstinspires.org/en/latest/hardware_and_software_configuration/configuring/index.html
@@ -66,17 +68,20 @@ public final class TwoDeadWheelLocalizer implements Localizer
     }
 
     @Override
-    public void setPose(Pose2d pose) {
+    public void setPose(Pose2d pose)
+    {
         this.pose = pose;
     }
 
     @Override
-    public Pose2d getPose() {
+    public Pose2d getPose()
+    {
         return pose;
     }
 
     @Override
-    public PoseVelocity2d update() {
+    public PoseVelocity2d update()
+    {
         PositionVelocityPair parPosVel = par.getPositionAndVelocity();
         PositionVelocityPair perpPosVel = perp.getPositionAndVelocity();
 
@@ -97,13 +102,15 @@ public final class TwoDeadWheelLocalizer implements Localizer
 
         // see https://github.com/FIRST-Tech-Challenge/FtcRobotController/issues/617
         double rawHeadingVel = angularVelocity.zRotationRate;
-        if (Math.abs(rawHeadingVel - lastRawHeadingVel) > Math.PI) {
+        if (Math.abs(rawHeadingVel - lastRawHeadingVel) > Math.PI)
+        {
             headingVelOffset -= Math.signum(rawHeadingVel) * 2 * Math.PI;
         }
         lastRawHeadingVel = rawHeadingVel;
         double headingVel = headingVelOffset + rawHeadingVel;
 
-        if (!initialized) {
+        if (!initialized)
+        {
             initialized = true;
 
             lastParPos = parPosVel.position;
@@ -119,16 +126,16 @@ public final class TwoDeadWheelLocalizer implements Localizer
 
         Twist2dDual<Time> twist = new Twist2dDual<>(
                 new Vector2dDual<>(
-                        new DualNum<Time>(new double[] {
+                        new DualNum<Time>(new double[]{
                                 parPosDelta - PARAMS.parYTicks * headingDelta,
                                 parPosVel.velocity - PARAMS.parYTicks * headingVel,
                         }).times(inPerTick),
-                        new DualNum<Time>(new double[] {
+                        new DualNum<Time>(new double[]{
                                 perpPosDelta - PARAMS.perpXTicks * headingDelta,
                                 perpPosVel.velocity - PARAMS.perpXTicks * headingVel,
                         }).times(inPerTick)
                 ),
-                new DualNum<>(new double[] {
+                new DualNum<>(new double[]{
                         headingDelta,
                         headingVel,
                 })
