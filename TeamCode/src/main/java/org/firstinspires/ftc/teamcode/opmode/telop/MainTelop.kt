@@ -28,7 +28,7 @@ class MainTelop: LinearOpMode()
 		var hangingHeightDown = 0;
 
 		@JvmField
-		var hangingHeightUp = -600;
+		var hangingHeightUp = -1200;
 	}
 
 	override fun runOpMode()

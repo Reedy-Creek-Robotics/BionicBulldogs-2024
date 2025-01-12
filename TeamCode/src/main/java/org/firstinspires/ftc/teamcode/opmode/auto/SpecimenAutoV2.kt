@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.opmode.auto
 
-import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.acmerobotics.roadrunner.geometry.Vector2d
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
@@ -17,8 +16,6 @@ import org.firstinspires.ftc.teamcode.modules.robot.SpeciminClaw
 import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequenceBuilder
-import org.firstinspires.ftc.teamcode.opmode.auto.rotation
-import org.firstinspires.ftc.teamcode.opmode.auto.pos
 
 @Autonomous
 class SpecimenAutoV2: LinearOpMode()
@@ -70,7 +67,6 @@ class SpecimenAutoV2: LinearOpMode()
 		builder.splineToLinearHeading(
 			pos(sampleX[0], sampleY, 88), rotation(0), velOverride(), accelOverride(maxAccel = 30.0)
 		);
-		//TODO(Add below line, remove top 4 lines)
 		//builder.splineToLinearHeading(pos(sampleX[0], sampleY, -270), rotation(0))
 		paths.add(builder.build());
 
