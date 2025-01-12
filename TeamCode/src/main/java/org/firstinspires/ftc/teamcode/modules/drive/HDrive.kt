@@ -1,8 +1,7 @@
 package org.firstinspires.ftc.teamcode.modules.drive
 
 import com.acmerobotics.dashboard.config.Config
-import com.acmerobotics.roadrunner.geometry.Pose2d
-import com.acmerobotics.roadrunner.localization.Localizer
+import com.acmerobotics.roadrunner.Pose2d
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.DcMotorSimple
@@ -82,7 +81,7 @@ class HDrive(config: HDriveConfig)
 	{
 		if(localizer == null) throw RuntimeException("localizer cannot be null when calling driveFR");
 		localizer!!.update();
-		drive(forward, strafe, rotate, localizer!!.poseEstimate.heading.toFloat());
+		drive(forward, strafe, rotate, localizer!!.poseEstimate.heading.toDouble().toFloat());
 	}
 
 	/**
@@ -163,7 +162,7 @@ class HDrive(config: HDriveConfig)
 	{
 		if(localizer != null)
 		{
-			var ang = Math.toDegrees(localizer!!.poseEstimate.heading).toFloat();
+			var ang = Math.toDegrees(localizer!!.poseEstimate.heading.toDouble()).toFloat();
 			if(ang > 180)
 			{
 				ang -= 360f;
