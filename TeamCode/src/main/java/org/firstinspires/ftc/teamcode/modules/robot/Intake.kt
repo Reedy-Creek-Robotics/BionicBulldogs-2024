@@ -33,7 +33,7 @@ class Intake(private val map: HardwareMap)
 		var spinStop = 0.0;
 
 		@JvmField
-    var rotatorCenter = 0.51;
+    var rotatorCenter = 0.1;
 
 		@JvmField
     var rotatorIncrement = 0.25;
