@@ -107,6 +107,50 @@ fun sampleSide(drive: DriveShim): TrajectorySequence
 	return builder.build();
 }
 
+fun SpecimenAutoV1_1(drive:DriveShim): TrajectorySequence
+{
+
+	val startPose = pos(-8.0, 64.25, 0);
+	val scorePos = pos(-8.0, 32.5, 0);
+	val wallPose = pos(-42.5, 58.5, 180);
+
+	return drive.trajectorySequenceBuilder(startPose)
+		.lineToLinearHeading(scorePos)
+		.lineToLinearHeading(wallPose)
+		.lineToLinearHeading(Pose2d(scorePos.x, scorePos.y + 6, scorePos.heading))
+		.lineToLinearHeading(Pose2d(scorePos.x, scorePos.y + 1, scorePos.heading))
+		.build();
+}
+
+fun SampleAutoV4(drive:DriveShim): TrajectorySequence
+{
+
+	val startPos = pos(42.0, 64.5, 180);
+	val scorePos = pos(57.5, 57.5, 225);
+	val samplePos = pos(44.0, 47.0, 180);
+	val samplePos2 = pos(52.0, 47.0, 180);
+	val samplePos3 = pos(54.0, 47.0, 180);
+	val samplePos4 = pos(63.0, 47.0, 180);
+	val samplePos5 = pos(53.0, 30.0, 90);
+	val parkPos = pos(27.0, 10.0, 180);
+
+	return drive.trajectorySequenceBuilder(startPos)
+		.lineToLinearHeading(scorePos)
+		.lineToLinearHeading(Pose2d(samplePos.x, samplePos.y + 0.5, samplePos.heading))
+		.lineToLinearHeading(samplePos2)
+		.waitSeconds(1.0)
+		.lineToLinearHeading(scorePos)
+		.lineToLinearHeading(samplePos3)
+		.lineToLinearHeading(samplePos4)
+		.waitSeconds(1.0)
+		.lineToLinearHeading(Pose2d(scorePos.x - 0.5, scorePos.y - 0.5, scorePos.heading))
+		.lineToLinearHeading(samplePos5)
+		.waitSeconds(1.0)
+		.lineToLinearHeading(Pose2d(scorePos.x - 1, scorePos.y - 1, scorePos.heading))
+		//.lineToLinearHeading(parkPos)
+		.build();
+}
+
 fun e(drive: DriveShim): TrajectorySequence
 {
 	return drive.trajectorySequenceBuilder(Pose2d(-6.0, -60.0, Math.toRadians(-90.0)))
@@ -126,13 +170,13 @@ fun main()
 	val specimineBotBuilder = DefaultBotBuilder(meepMeep);
 	specimineBotBuilder.setConstraints(60.0, 60.0, Math.toRadians(180.0), Math.toRadians(180.0), 15.0);
 	specimineBotBuilder.setDimensions(15.0, 13.0);
-	val specimineBot = specimineBotBuilder.followTrajectorySequence {drive: DriveShim -> speciminSide(drive)};
+	val specimineBot = specimineBotBuilder.followTrajectorySequence {drive: DriveShim -> SpecimenAutoV1_1(drive) };
 
 	val sampleBotBuilder = DefaultBotBuilder(meepMeep);
 	sampleBotBuilder.setConstraints(60.0, 60.0, Math.toRadians(180.0), Math.toRadians(180.0), 15.0);
 	sampleBotBuilder.setDimensions(15.0, 13.0);
 	sampleBotBuilder.setColorScheme(ColorSchemeBlueDark());
-	val sampleBot = sampleBotBuilder.followTrajectorySequence {drive: DriveShim -> e(drive)}
+	val sampleBot = sampleBotBuilder.followTrajectorySequence {drive: DriveShim -> SampleAutoV4(drive) }
 
 	meepMeep.setBackground(MeepMeep.Background.FIELD_INTOTHEDEEP_JUICE_DARK);
 	meepMeep.setDarkMode(true);
