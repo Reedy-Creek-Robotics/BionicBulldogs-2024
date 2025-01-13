@@ -1,17 +1,18 @@
 package org.firstinspires.ftc.teamcode.modules.robot
 
 import com.acmerobotics.dashboard.config.Config
+import com.qualcomm.robotcore.hardware.HardwareMap
 import com.qualcomm.robotcore.hardware.Servo
 
 @Config
-class Arm(private val arm: Servo)
+class Arm(hardwareMap: HardwareMap)
 {
-
 	enum class State
 	{
 		Down, Up
 	}
 
+	private val arm = hardwareMap.servo.get("arm");
 	var state: State = State.Up
 
 	companion object

@@ -33,6 +33,5 @@ class SparkfunImuLocalizer():
 
 	override fun update()
 	{
-		poseEstimate = Pose2d(0.0, 0.0, imu.position.h - rotPos);
 	}
 }

@@ -36,14 +36,14 @@ class MainTelop: LinearOpMode()
 		val claw = SpeciminClaw(hardwareMap);
 		val slide = Slide(hardwareMap);
 		val specimenOuttake = SpecimenOuttake(claw, slide);
-		val arm = Arm(hardwareMap.servo.get("arm"));
+		val arm = Arm(hardwareMap);
 		val intake = Intake(hardwareMap);
 
 		val outtake = Outtake(hardwareMap);
 
 		val sampleOuttake = SampleOuttake(slide, outtake);
 
-		val hSlide = HSlide(hardwareMap.servo.get("hslide"));
+		val hSlide = HSlide(hardwareMap);
 
 		val drive = HDrive(HDriveConfig(hardwareMap));
 		drive.setLocalizer(SparkfunImuLocalizer(hardwareMap.get(SparkFunOTOS::class.java, "imu2")));

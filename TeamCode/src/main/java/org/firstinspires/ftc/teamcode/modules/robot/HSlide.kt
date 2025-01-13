@@ -1,10 +1,10 @@
 package org.firstinspires.ftc.teamcode.modules.robot
 
 import com.acmerobotics.dashboard.config.Config
-import com.qualcomm.robotcore.hardware.Servo
+import com.qualcomm.robotcore.hardware.HardwareMap
 
 @Config
-class HSlide(private val hSlide: Servo)
+class HSlide(hardwareMap: HardwareMap)
 {
 	companion object
 	{
@@ -20,6 +20,8 @@ class HSlide(private val hSlide: Servo)
 		@JvmField
 		var score = 0.32;
 	}
+
+	private val hSlide = hardwareMap.servo.get("hslide");
 
 	fun score()
 	{

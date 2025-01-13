@@ -27,6 +27,5 @@ class IMULocalizer(): Localizer
 
 	override fun update()
 	{
-		poseEstimate = Pose2d(0.0, 0.0, imu.getHeading(AngleUnit.RADIANS).toDouble());
 	}
 }
