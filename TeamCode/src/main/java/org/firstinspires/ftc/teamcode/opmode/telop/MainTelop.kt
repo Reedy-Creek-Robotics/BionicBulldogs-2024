@@ -93,7 +93,7 @@ class MainTelop: LinearOpMode()
 				drive.setLocalizer(localizer);
 				localizer.update();
 				imuHeading = imu.position.h;
-				localHeading = localizer.poseEstimate.heading;
+				localHeading = localizer.poseEstimate.heading.toDouble();
 			}
 
 			//Horizontal Slides

@@ -33,7 +33,6 @@ import android.util.Log;
 import android.util.Size;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -44,7 +43,6 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
 import org.firstinspires.ftc.teamcode.modules.drive.HDrive;
-import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
@@ -185,77 +183,7 @@ public class DriveToAprilTag
             return false;
         }
     }
-    public boolean roadRunnerDriveToTag(int id, SampleMecanumDrive rrDrive, Vector2d offset){
-        return roadRunnerDriveToTag(id, rrDrive, offset, new Vector2d());
-    }
-    public boolean roadRunnerDriveToTag(int id, SampleMecanumDrive rrDrive, Vector2d offset, Vector2d multipliers){
-        Vector2d targetPos;
-        // Step through the list of detected tags and look for a matching tag
-        targetFound = false;    // Set to true when an AprilTag target is detected
-        List<Vector2d> aprilTagPositions = new ArrayList<>();
-        for(int i = 0; i < 3; i++) {
-            AprilTagDetection tag = null;
-            List<AprilTagDetection> currentDetections = aprilTag.getDetections();
-            for (AprilTagDetection detection : currentDetections) {
-                // Look to see if we have size info on this tag.
-                if (detection.metadata != null) {
-                    //  Check to see if we want to track towards this tag.
-                    if (id == detection.id) {
-                        // Yes, we want to use this tag.
-                        targetFound = true;
-                        tag = detection;
-                        break;  // don't look any further.
-                    }
-                }
-            }
-            if (tag != null) {
-                Vector2d pos = new Vector2d(tag.ftcPose.y, -tag.ftcPose.x);
-                aprilTagPositions.add(pos);
-            }
-        }
 
-        if(aprilTagPositions.size() == 0){
-            return false;
-        }
-
-        double avgX = 0.0;
-        double avgY = 0.0;
-        for(Vector2d pos : aprilTagPositions){
-            avgX += pos.getX();
-            avgY += pos.getY();
-        }
-        avgX /= (double)aprilTagPositions.size();
-        avgY /= (double)aprilTagPositions.size();
-        avgX *= multipliers.getX();
-        avgY *= multipliers.getY();
-
-        targetPos = new Vector2d(
-                avgX + rrDrive.getPoseEstimate().getX() + offset.getX(),
-                 offset.getY()
-        );
-        Vector2d startPos = rrDrive.getPoseEstimate().vec();
-        Log.d("AprilTag" , "Drive To Tag: Estimate pos" + startPos);
-        Log.d("AprilTag" , "Tag X" + avgX + ", " + avgY);
-
-
-        rrDrive.followTrajectorySequence(
-                rrDrive.trajectorySequenceBuilder(rrDrive.getPoseEstimate())
-                        .lineToConstantHeading(targetPos)
-                        .build()
-        );
-
-        Vector2d actualPosition = rrDrive.getPoseEstimate().vec();
-        Vector2d error = new Vector2d(targetPos.getX() - actualPosition.getX(), targetPos.getY() - actualPosition.getY());
-        Log.d("AprilTag",
-                "Drive To Tag: Expected pos: " +
-                        targetPos.getX() + ", " + targetPos.getY() +
-                        " | actual position: " +
-                        actualPosition.getX() + ", " + actualPosition.getY() +
-                        " | error: " +
-                        error.getX() + ", " + error.getY()
-                        );
-        return true;
-    }
     public void telemetry() {
         if(desiredTag != null) {
             telemetry.addData("found tag", desiredTag.id);
