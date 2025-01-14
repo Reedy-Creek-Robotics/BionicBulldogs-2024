@@ -37,6 +37,9 @@ class Intake(private val map: HardwareMap)
 
 		@JvmField
     var rotatorIncrement = 0.25;
+
+		@JvmField
+		var autoRotatorIncrement = 0.29;
 	}
 
   fun setRotatorPos(pos: Double)

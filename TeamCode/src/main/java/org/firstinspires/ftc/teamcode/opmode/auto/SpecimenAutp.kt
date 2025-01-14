@@ -15,13 +15,8 @@ import org.firstinspires.ftc.teamcode.modules.actions.initComponents
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive
 
 @Autonomous
-class AutoTEst: LinearOpMode()
+class SpecimenAutp: LinearOpMode()
 {
-	fun pos(x: Double, y: Double, h: Int): Pose2d
-	{
-		return Pose2d(x, y, Math.toRadians(-(h - 90).toDouble()));
-	}
-
 	override fun runOpMode()
 	{
 		initComponents(hardwareMap);
@@ -63,7 +58,7 @@ class AutoTEst: LinearOpMode()
 					.splineToConstantHeading(Vector2d(56.0, -56.0), Math.toRadians(-90.0))
 					.setTangent(Math.toRadians(180.0))
 					.lineToX(20.0)
-					.build()
+					.build(),
 			)
 		);
 
