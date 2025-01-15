@@ -33,7 +33,7 @@ class Intake(private val map: HardwareMap)
 		var spinStop = 0.0;
 
 		@JvmField
-    var rotatorCenter = 0.1;
+    var rotatorCenter = 0.25;
 
 		@JvmField
     var rotatorIncrement = 0.25;
@@ -49,12 +49,12 @@ class Intake(private val map: HardwareMap)
 
   fun rotatorLeft()
   {
-    intakeRotator.position -= rotatorIncrement;
+    intakeRotator.position += rotatorIncrement;
   }
 
   fun rotatorRight()
   {
-    intakeRotator.position += rotatorIncrement;
+    intakeRotator.position -= rotatorIncrement;
   }
 
   fun zeroRotator()

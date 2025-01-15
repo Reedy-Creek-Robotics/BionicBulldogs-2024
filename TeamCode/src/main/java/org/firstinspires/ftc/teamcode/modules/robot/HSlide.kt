@@ -12,13 +12,13 @@ class HSlide(hardwareMap: HardwareMap)
 		var increment = 0.05;
 
 		@JvmField
-		var max = 0.32;
+		var max = 0.37;
 
 		@JvmField
 		var min = 0.95;
 
 		@JvmField
-		var score = 0.32;
+		var score = 0.37;
 	}
 
 	private val hSlide = hardwareMap.servo.get("hslide");

@@ -1,16 +1,20 @@
 package org.firstinspires.ftc.teamcode.opmode.auto
 
 import com.acmerobotics.dashboard.FtcDashboard
+import com.acmerobotics.dashboard.canvas.Canvas
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket
 import com.acmerobotics.roadrunner.Pose2d
 import com.acmerobotics.roadrunner.SequentialAction
 import com.acmerobotics.roadrunner.SleepAction
 import com.acmerobotics.roadrunner.Vector2d
+import com.acmerobotics.roadrunner.VelConstraint
 import com.acmerobotics.roadrunner.ftc.runBlocking
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.teamcode.modules.actions.SpecimenOuttakeAction_Grab
 import org.firstinspires.ftc.teamcode.modules.actions.SpecimenOuttakeAction_Score
+import org.firstinspires.ftc.teamcode.modules.actions.arm
 import org.firstinspires.ftc.teamcode.modules.actions.initComponents
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive
 
@@ -48,22 +52,42 @@ class SpecimenAutp: LinearOpMode()
 				SpecimenOuttakeAction_Score(),
 				SleepAction(0.2),
 				drive.actionBuilder(Pose2d(35.5, -6.5, Math.toRadians(180.0)))
-					.setTangent(Math.toRadians(-90.0))
-					.lineToY(-36.0)
+					.setTangent(Math.toRadians(-180.0))
+					.splineToConstantHeading(Vector2d(34.0, -36.0), Math.toRadians(-90.0))
 					.setTangent(Math.toRadians(0.0))
-					.splineToConstantHeading(Vector2d(56.0, -46.0), Math.toRadians(-90.0))
-					.setTangent(Math.toRadians(180.0))
-					.lineToX(20.0)
+					.splineToConstantHeading(
+						Vector2d(56.0, -46.0), Math.toRadians(-90.0),
+						velOverrideRaw(100.0),
+						accelOverrideRaw(maxAccel = 100.0)
+					)
+					.setTangent(
+						Math.toRadians(180.0),
+					)
+					.lineToX(
+						20.0,
+						velOverrideRaw(100.0),
+						accelOverrideRaw(maxAccel = 100.0)
+					)
 					.setTangent(Math.toRadians(0.0))
-					.splineToConstantHeading(Vector2d(56.0, -56.0), Math.toRadians(-90.0))
-					.setTangent(Math.toRadians(180.0))
-					.lineToX(20.0)
+					.splineToConstantHeading(
+						Vector2d(56.0, -56.0),
+						Math.toRadians(-90.0),
+						velOverrideRaw(100.0),
+						accelOverrideRaw(maxAccel = 100.0)
+					)
+					.setTangent(
+						Math.toRadians(180.0)
+					)
+					.lineToX(
+						20.0,
+						velOverrideRaw(100.0),
+						accelOverrideRaw(maxAccel = 100.0),
+					)
 					.build(),
 			)
 		);
 
 		waitForStart()
-
 		runBlocking(action);
 	}
 }
