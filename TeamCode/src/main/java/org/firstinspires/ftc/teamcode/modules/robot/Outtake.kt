@@ -27,6 +27,9 @@ class Outtake(val hardwareMap: HardwareMap)
 
 		@JvmField
 		var bucketUpTime = 0.3;
+
+		@JvmField
+		var parkPos = 0.1;
 	}
 
 	enum class State
@@ -104,5 +107,10 @@ class Outtake(val hardwareMap: HardwareMap)
 	fun bucketScore()
 	{
 		bucket.position = bucketScore;
+	}
+
+	fun park()
+	{
+		arm.position = parkPos;
 	}
 }

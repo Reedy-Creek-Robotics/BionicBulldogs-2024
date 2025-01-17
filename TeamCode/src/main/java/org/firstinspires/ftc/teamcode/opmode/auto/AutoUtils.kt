@@ -1,14 +1,17 @@
 package org.firstinspires.ftc.teamcode.opmode.auto
 
-import com.acmerobotics.roadrunner.AccelConstraint
-import com.acmerobotics.roadrunner.ProfileAccelConstraint
-import com.acmerobotics.roadrunner.TranslationalVelConstraint
-import com.acmerobotics.roadrunner.VelConstraint
+import com.acmerobotics.roadrunner.*
+import org.firstinspires.ftc.teamcode.modules.actions.drive
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive
 
-fun velOverrideRaw(maxVelocity: Double): VelConstraint
+fun velOverrideRaw(maxVelocity: Double = 0.0, maxAngVel: Double = 0.0): VelConstraint
 {
-	return TranslationalVelConstraint(maxVelocity);
+	return MinVelConstraint(
+		listOf(
+			drive.kinematics.WheelVelConstraint(if(maxVelocity != 0.0) maxVelocity else MecanumDrive.PARAMS.maxWheelVel),
+			AngularVelConstraint(if(maxAngVel != 0.0) maxAngVel else MecanumDrive.PARAMS.maxAngVel)
+		)
+	);
 }
 
 fun accelOverrideRaw(

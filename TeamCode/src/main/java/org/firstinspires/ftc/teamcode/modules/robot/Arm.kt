@@ -35,4 +35,9 @@ class Arm(hardwareMap: HardwareMap)
 		arm.position = armUp;
 		state = State.Up;
 	}
+
+	fun gotoPos(pos: Double)
+	{
+		arm.position = pos;
+	}
 }

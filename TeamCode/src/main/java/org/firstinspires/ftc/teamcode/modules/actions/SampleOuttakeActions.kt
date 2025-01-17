@@ -32,3 +32,12 @@ class SampleOuttakeAction_Score: Action
 		return sampleOuttake.isBusy();
 	}
 }
+
+class SampleOuttakeAction_Park: Action
+{
+	override fun run(p: TelemetryPacket): Boolean
+	{
+		outtake.park();
+		return false;
+	}
+}
