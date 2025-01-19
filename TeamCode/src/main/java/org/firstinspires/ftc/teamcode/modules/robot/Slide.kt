@@ -38,7 +38,7 @@ class Slide(hardwareMap: HardwareMap)
 		var relesePos = -800;
 
 		@JvmField
-		var specimenPos = 1400;
+		var specimenPos = 1300;
 
 		@JvmField
 		var stallDifference = 1;
