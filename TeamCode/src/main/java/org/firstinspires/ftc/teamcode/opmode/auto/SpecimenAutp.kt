@@ -37,6 +37,7 @@ class SpecimenAutp: LinearOpMode()
 					.lineToX(36.0)
 					.build(),
 				SpecimenOuttakeAction_Score(),
+				SleepAction(0.5),
 				drive.actionBuilder(Pose2d(36.0, -7.5, Math.toRadians(180.0)))
 					.setTangent(Math.toRadians(-180.0))
 					.lineToX(32.0)
@@ -48,7 +49,7 @@ class SpecimenAutp: LinearOpMode()
 				SpecimenOuttakeAction_Grab(),
 				drive.actionBuilder(Pose2d(8.5, -40.5, 0.0))
 					.setTangent(Math.toRadians(45.0))
-					.splineToLinearHeading(Pose2d(32.0, -6.5, Math.toRadians(180.0)), Math.toRadians(45.0))
+					.splineToLinearHeading(Pose2d(32.0, -5.5, Math.toRadians(180.0)), Math.toRadians(45.0))
 					.setTangent(0.0)
 					.lineToX(36.0)
 					.build(),
@@ -87,9 +88,9 @@ class SpecimenAutp: LinearOpMode()
 				SpecimenOuttakeAction_Grab(),
 				drive.actionBuilder(Pose2d(8.5, -40.5, 0.0))
 					.setTangent(Math.toRadians(45.0))
-					.splineToLinearHeading(Pose2d(32.0, -2.5, Math.toRadians(180.0)), Math.toRadians(45.0))
+					.splineToLinearHeading(Pose2d(32.0, -1.5, Math.toRadians(180.0)), Math.toRadians(45.0))
 					.setTangent(0.0)
-					.lineToX(36.0)
+					.lineToX(35.5)
 					.build(),
 				SpecimenOuttakeAction_Score(),
 				SleepAction(0.2),
