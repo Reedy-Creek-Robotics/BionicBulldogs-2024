@@ -1,39 +1,27 @@
----@meta
----@param msg string
-function print(msg) end
-
----@param time number
-function delay(time) end
-
-function checkRunning() end
-
-function stop() end
-
-telem = {}
-
----@param lbl string
----@param msg string
-function telem.addData(lbl, msg) end
-
-function telem.update() end
-
 ---@class Opmode
 ---@field name string
----@field path string?
+---@field init function?
 ---@field start function?
 ---@field update function?
----@field markers any[function]?
 
----@class Time
----@field delta number
----@field elapsed number
+---@class opmode Opmode
+function addOpmode(opmode) end
 
-slides = {}
----@param pos number
-function slides.runToPosition2(pos) end
----@return boolean
-function slides.isBusy() end
+---@class Action
 
-claw = {}
-function claw.open() end
-function claw.close() end
+---@class LuaTrajectoryBuilder
+---@field setTangent fun(self: table, tangent: number)
+---@field lineToX fun(self: table, x: number)
+---@field lineToY fun(self: table, y: number)
+---@field splineToLinearHeading fun(self: table, x: number, y: number, h: number, t: number)
+---@field splineToConstantHeading fun(self: table, x: number, y: number, t: number)
+---@field build fun(): Action
+
+---@return LuaTrajectoryBuilder
+---@param x number
+---@param y number
+---@param h number
+function trajectoryAction(x, y, h) end
+
+---@param action Action
+function run(action) end
