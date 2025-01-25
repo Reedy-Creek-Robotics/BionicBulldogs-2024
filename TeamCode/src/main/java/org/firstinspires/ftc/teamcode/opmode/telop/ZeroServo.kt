@@ -24,7 +24,7 @@ class ZeroServo: LinearOpMode()
 			{
 				posB += 0.05;
 			}
-			if(gamepad.dpadUp())
+			if(gamepad.dpadDown())
 			{
 				posB -= 0.05;
 			}
