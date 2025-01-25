@@ -85,7 +85,21 @@ class LuaAction
 	
 	fun run(action: Action)
 	{
-		runBlocking(action);
+		if(action is SequentialAction)
+		{
+			for(a in action.initialActions)
+			{
+				Log.d("running action", a.javaClass.simpleName);
+				if(a is SequentialAction)
+				{
+					for(a2 in action.initialActions)
+					{
+						Log.d("running action2", a2.javaClass.simpleName);
+					}
+				}
+			}
+		}
+		//runBlocking(action);
 	}
 	
 	fun print(str: String)
