@@ -54,7 +54,7 @@ class LuaTrajectoryBuilder(private val builder: TrajectoryActionBuilder)
 	
 	fun setTangent(tangent: Double)
 	{
-		builder.setTangent(tangent);
+		builder.setTangent(Math.toRadians(tangent));
 	}
 	
 	fun lineToX(x: Double)
@@ -69,12 +69,12 @@ class LuaTrajectoryBuilder(private val builder: TrajectoryActionBuilder)
 	
 	fun splineToLinearHeading(x: Double, y: Double, h: Double, t: Double)
 	{
-		builder.splineToLinearHeading(Pose2d(x, y, h), t);
+		builder.splineToLinearHeading(Pose2d(x, y, Math.toRadians(h)), Math.toRadians(t));
 	}
 	
 	fun splineToConstantHeading(x: Double, y: Double, t: Double)
 	{
-		builder.splineToConstantHeading(Vector2d(x, y), t);
+		builder.splineToConstantHeading(Vector2d(x, y), Math.toRadians(t));
 	}
 	
 	fun build(): Action

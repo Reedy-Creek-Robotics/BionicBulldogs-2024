@@ -28,6 +28,12 @@ class LuaAction
 			);
 			
 			builder.objectAddFun(
+				"setPosEstimate", LuaType.Void(), listOf(
+					LuaType.Double(), LuaType.Double(), LuaType.Double()
+				)
+			);
+			
+			builder.objectAddFun(
 				"sequentalAction", LuaType.Object(LuaSequentalAction::class.java)
 			);
 			
@@ -47,9 +53,14 @@ class LuaAction
 		}
 	}
 	
+	fun setPosEstimate(x: Double, y: Double, h: Double)
+	{
+		drive.localizer.pose = Pose2d(x, y, Math.toRadians(h));
+	}
+	
 	fun trajectoryAction(x: Double, y: Double, h: Double): LuaTrajectoryBuilder
 	{
-		return LuaTrajectoryBuilder(drive.actionBuilder(Pose2d(x, y, h)));
+		return LuaTrajectoryBuilder(drive.actionBuilder(Pose2d(x, y, Math.toRadians(h))));
 	}
 	
 	fun sequentalAction(): LuaSequentalAction
