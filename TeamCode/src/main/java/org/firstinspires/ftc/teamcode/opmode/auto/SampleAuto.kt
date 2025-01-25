@@ -48,9 +48,9 @@ class SampleAuto: LinearOpMode()
 					),
 					drive.actionBuilder(Pose2d(15.5, 56.0, Math.toRadians(-45.0)))
 						.setTangent(Math.toRadians(-45.0))
-						.splineToLinearHeading(Pose2d(24.5, 42.0, Math.toRadians(0.0)), Math.toRadians(0.0))
+						.splineToLinearHeading(Pose2d(24.5, 40.0, Math.toRadians(0.0)), Math.toRadians(0.0))
 						.setTangent(Math.toRadians(90.0))
-						.lineToY(46.0)
+						.lineToY(46.0, velOverrideRaw(40.0), drive.defaultAccelConstraint)
 						.build(),
 				),
 				IntakeAction_ZeroRotator(),
