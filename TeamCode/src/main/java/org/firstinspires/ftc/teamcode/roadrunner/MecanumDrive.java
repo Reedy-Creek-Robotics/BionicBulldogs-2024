@@ -533,4 +533,21 @@ public final class MecanumDrive
                 defaultVelConstraint, defaultAccelConstraint
         );
     }
+
+    public TrajectoryActionBuilder actionBuilder(Pose2d beginPose, VelConstraint velConstraint, AccelConstraint accelConstraint)
+    {
+        return new TrajectoryActionBuilder(
+                TurnAction::new,
+                FollowTrajectoryAction::new,
+                new TrajectoryBuilderParams(
+                        1e-6,
+                        new ProfileParams(
+                                0.25, 0.1, 1e-2
+                        )
+                ),
+                beginPose, 0.0,
+                defaultTurnConstraints,
+                velConstraint, accelConstraint
+        );
+    }
 }

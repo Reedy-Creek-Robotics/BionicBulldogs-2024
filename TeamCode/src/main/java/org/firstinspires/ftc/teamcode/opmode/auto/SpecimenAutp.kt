@@ -16,14 +16,18 @@ import org.firstinspires.ftc.teamcode.modules.actions.initComponents
 import org.firstinspires.ftc.teamcode.modules.drive.rotPos
 import org.firstinspires.ftc.teamcode.modules.robot.HSlide
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive
+import kotlin.math.PI
 
 @Autonomous
 class SpecimenAutp: LinearOpMode()
 {
 	override fun runOpMode()
 	{
-		//MecanumDrive.PARAMS.maxWheelVel = 75.0;
-		//MecanumDrive.PARAMS.maxProfileAccel = 85.0;
+		MecanumDrive.PARAMS.maxWheelVel = 80.0;
+		MecanumDrive.PARAMS.maxProfileAccel = 60.0;
+		MecanumDrive.PARAMS.maxAngVel = PI * 4.0;
+		MecanumDrive.PARAMS.maxAngAccel = PI * 4.0;
+
 		initComponents(hardwareMap);
 		telemetry = MultipleTelemetry(telemetry, FtcDashboard.getInstance().telemetry);
 
@@ -55,7 +59,7 @@ class SpecimenAutp: LinearOpMode()
 					.build(),
 				SpecimenOuttakeAction_Score(),
 				SleepAction(0.2),
-				drive.actionBuilder(Pose2d(36.0, -6.5, Math.toRadians(180.0)))
+				drive.actionBuilder(Pose2d(36.0, -6.5, Math.toRadians(180.0)), velOverrideRaw(100.0), accelOverrideRaw(minAccel = -75.0, maxAccel = 75.0))
 					.setTangent(Math.toRadians(-180.0))
 					.splineToConstantHeading(Vector2d(32.0, -36.0), Math.toRadians(-90.0))
 					.setTangent(Math.toRadians(0.0))
@@ -70,7 +74,7 @@ class SpecimenAutp: LinearOpMode()
 					)
 					.setTangent(Math.toRadians(0.0))
 					.splineToConstantHeading(
-						Vector2d(56.0, -56.0), Math.toRadians(-90.0)
+						Vector2d(56.0, -54.0), Math.toRadians(-90.0)
 					)
 					.setTangent(
 						Math.toRadians(180.0)
@@ -89,6 +93,23 @@ class SpecimenAutp: LinearOpMode()
 				drive.actionBuilder(Pose2d(8.5, -40.5, 0.0))
 					.setTangent(Math.toRadians(45.0))
 					.splineToLinearHeading(Pose2d(32.0, -1.5, Math.toRadians(180.0)), Math.toRadians(45.0))
+					.setTangent(0.0)
+					.lineToX(35.5)
+					.build(),
+				SpecimenOuttakeAction_Score(),
+				SleepAction(0.2),
+				drive.actionBuilder(Pose2d(35.0, -1.5, Math.toRadians(180.0)))
+					.setTangent(Math.toRadians(-180.0))
+					.lineToX(32.0)
+					.setTangent(Math.toRadians(-135.0))
+					.splineToLinearHeading(Pose2d(14.5, -40.5, 0.0), Math.toRadians(-135.0))
+					.setTangent(0.0)
+					.lineToX(8.0)
+					.build(),
+				SpecimenOuttakeAction_Grab(),
+				drive.actionBuilder(Pose2d(8.5, -40.5, 0.0))
+					.setTangent(Math.toRadians(45.0))
+					.splineToLinearHeading(Pose2d(32.0, 1.5, Math.toRadians(180.0)), Math.toRadians(45.0))
 					.setTangent(0.0)
 					.lineToX(35.5)
 					.build(),
