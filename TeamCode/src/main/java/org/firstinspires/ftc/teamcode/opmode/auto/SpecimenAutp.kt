@@ -38,11 +38,11 @@ class SpecimenAutp: LinearOpMode()
 		val action = SequentialAction(
 			listOf(
 				SpecimenOuttakeAction_Grab(),
-				drive.actionBuilder(beginPose)
-					.lineToX(36.0)
+				drive.actionBuilder(beginPose, drive.defaultVelConstraint, accelOverrideRaw(minAccel = -20.0))
+					.lineToX(36.125)
 					.build(),
 				SpecimenOuttakeAction_Score(),
-				SleepAction(0.5),
+				SleepAction(0.2),
 				drive.actionBuilder(Pose2d(36.0, -7.5, Math.toRadians(180.0)))
 					.setTangent(Math.toRadians(-180.0))
 					.lineToX(32.0)
@@ -68,7 +68,7 @@ class SpecimenAutp: LinearOpMode()
 					.setTangent(Math.toRadians(-180.0))
 					.splineToConstantHeading(Vector2d(32.0, -36.0), Math.toRadians(-90.0))
 					.setTangent(Math.toRadians(0.0))
-					.splineToConstantHeading(Vector2d(56.0, -46.0), Math.toRadians(-90.0))
+					.splineToConstantHeading(Vector2d(56.0, -47.0), Math.toRadians(-90.0))
 					.setTangent(Math.toRadians(180.0))
 					.lineToX(17.0)
 					.setTangent(Math.toRadians(0.0))
@@ -109,7 +109,7 @@ class SpecimenAutp: LinearOpMode()
 				SpecimenOuttakeAction_Score(),
 				SleepAction(0.2),
 				HSlideAction_GotoPos(HSlide.min),
-				drive.actionBuilder(Pose2d(36.0, -2.5, Math.toRadians(180.0)))
+				drive.actionBuilder(Pose2d(36.0, -2.5, Math.toRadians(180.0)), velOverrideRaw(100.0), accelOverrideRaw(-75.0, 75.0))
 					.setTangent(Math.toRadians(-135.0))
 					.splineToLinearHeading(
 						Pose2d(22.0, -30.0, Math.toRadians(-135.0)),
