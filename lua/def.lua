@@ -49,3 +49,8 @@ function specimenScore() end
 
 ---@param action Action
 function run(action) end
+
+---@param x number
+---@param y number
+---@param h number
+function setPosEstimate(x, y, h) end

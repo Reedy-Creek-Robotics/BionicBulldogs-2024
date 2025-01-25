@@ -3,6 +3,7 @@ local action = {}
 addOpmode({
 	name = "testOpmode",
 	init = function ()
+		setPosEstimate(7, -7.5, 180);
 		local builder = sequentalAction();
 
 		builder:add(specimenGrab());
