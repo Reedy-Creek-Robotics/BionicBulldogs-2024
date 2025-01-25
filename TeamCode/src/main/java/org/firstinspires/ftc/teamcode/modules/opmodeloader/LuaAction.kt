@@ -38,7 +38,7 @@ class LuaAction
 			);
 			
 			builder.objectAddFun(
-				"parallelAction", LuaType.Object(LuaTrajectoryBuilder::class.java)
+				"parallelAction", LuaType.Object(LuaParallelAction::class.java)
 			);
 			
 			builder.objectAddFun(
@@ -48,8 +48,13 @@ class LuaAction
 			);
 			
 			builder.createClass("Action");
-			
+			builder.createClass("SequentialAction");
+			builder.createClass("ParallelAction");
+			builder.createClass("SleepAction");
+
 			LuaTrajectoryBuilder.init(builder);
+			LuaSequentalAction.init(builder);
+			LuaParallelAction.init(builder);
 		}
 	}
 	

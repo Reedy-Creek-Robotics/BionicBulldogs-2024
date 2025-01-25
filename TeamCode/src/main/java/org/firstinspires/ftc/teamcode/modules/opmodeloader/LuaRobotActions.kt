@@ -15,6 +15,8 @@ class LuaRobotActions
 			builder.setCurrentObject(LuaRobotActions());
 			builder.objectAddFun("specimenGrab", LuaType.Object(Action::class.java));
 			builder.objectAddFun("specimenScore", LuaType.Object(Action::class.java));
+			builder.createClass("SpecimenOuttakeAction_Grab");
+			builder.createClass("SpecimenOuttakeAction_Score");
 		}
 	}
 	
