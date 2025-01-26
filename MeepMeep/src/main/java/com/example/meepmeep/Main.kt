@@ -1,5 +1,6 @@
 package com.example.meepmeep
 
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket
 import com.acmerobotics.roadrunner.SequentialAction
 import com.minerkid08.dynamicopmodeloader.OpmodeLoader
 import com.noahbres.meepmeep.MeepMeep
@@ -10,7 +11,7 @@ fun printActionTree(action: SequentialAction, level: Int = 0, lines: Int = 0): S
 {
 	var out = "";
 	if(level == 0) out += action.javaClass.simpleName + '\n';
-
+	
 	for((i, a) in action.initialActions.withIndex())
 	{
 		for(i2 in 0 until level)
@@ -20,9 +21,9 @@ fun printActionTree(action: SequentialAction, level: Int = 0, lines: Int = 0): S
 		}
 		out += if(i == action.initialActions.size - 1) "└─";
 		else "├─";
-
+		
 		out += a.javaClass.simpleName + '\n';
-
+		
 		if(a is SequentialAction)
 		{
 			var lines2 = lines;
@@ -37,24 +38,22 @@ fun printActionTree(action: SequentialAction, level: Int = 0, lines: Int = 0): S
 fun main()
 {
 	val meepMeep = MeepMeep(800);
-
+	
 	val myBot: RoadRunnerBotEntity = DefaultBotBuilder(meepMeep).setConstraints(
 		60.0, 60.0, Math.toRadians(180.0), Math.toRadians(180.0), 15.0
 	)
 		.build();
-
+	
 	drive = myBot.drive;
-
+	
 	val e = OpmodeLoader();
 	e.init();
 	LuaAction.init(e.getFunctionBuilder());
-	e.loadOpmode("testOpmode");
+	e.loadOpmode("other");
 	e.start();
-
-	println(printActionTree(action!! as SequentialAction));
-
+	
 	myBot.runAction(action!!);
-
+	
 	meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_JUICE_DARK)
 		.setDarkMode(true)
 		.setBackgroundAlpha(0.95f)

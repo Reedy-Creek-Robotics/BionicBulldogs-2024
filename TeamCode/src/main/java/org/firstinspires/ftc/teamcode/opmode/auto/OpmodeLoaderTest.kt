@@ -22,8 +22,14 @@ class OpmodeLoaderTest: LinearOpMode()
 
 		opmodeloader.loadOpmode("testOpmode");
 
+		telemetry.addLine("initalised");
+		telemetry.update();
+		
 		waitForStart();
 
+		telemetry.clearAll();
+		telemetry.update();
+		
 		opmodeloader.start();
 	}
 }

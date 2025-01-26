@@ -6,6 +6,7 @@ import com.acmerobotics.roadrunner.TrajectoryActionBuilder
 import com.acmerobotics.roadrunner.Vector2d
 import com.minerkid08.dynamicopmodeloader.FunctionBuilder
 import com.minerkid08.dynamicopmodeloader.LuaType
+import com.noahbres.meepmeep.roadrunner.entity.TrajectoryActionStub
 
 class LuaTrajectoryBuilder(private var builder: TrajectoryActionBuilder)
 {
@@ -13,38 +14,38 @@ class LuaTrajectoryBuilder(private var builder: TrajectoryActionBuilder)
 	{
 		fun init(builder: FunctionBuilder)
 		{
-			builder.classAddFun(
+			builder.addClassFunction(
 				LuaTrajectoryBuilder::class.java,
 				"setTangent",
-				LuaType.Void(),
-				listOf(LuaType.Double())
+				LuaType.Void,
+				listOf(LuaType.Double)
 			);
-			builder.classAddFun(
+			builder.addClassFunction(
 				LuaTrajectoryBuilder::class.java,
 				"lineToX",
-				LuaType.Void(),
-				listOf(LuaType.Double())
+				LuaType.Void,
+				listOf(LuaType.Double)
 			);
-			builder.classAddFun(
+			builder.addClassFunction(
 				LuaTrajectoryBuilder::class.java,
 				"lineToY",
-				LuaType.Void(),
-				listOf(LuaType.Double())
+				LuaType.Void,
+				listOf(LuaType.Double)
 			);
-			builder.classAddFun(
+			builder.addClassFunction(
 				LuaTrajectoryBuilder::class.java,
 				"splineToLinearHeading",
-				LuaType.Void(),
-				listOf(LuaType.Double(), LuaType.Double(), LuaType.Double(), LuaType.Double())
+				LuaType.Void,
+				listOf(LuaType.Double, LuaType.Double, LuaType.Double, LuaType.Double)
 			);
-			builder.classAddFun(
+			builder.addClassFunction(
 				LuaTrajectoryBuilder::class.java,
 				"splineToConstantHeading",
-				LuaType.Void(),
-				listOf(LuaType.Double(), LuaType.Double(), LuaType.Double())
+				LuaType.Void,
+				listOf(LuaType.Double, LuaType.Double, LuaType.Double)
 			);
 
-			builder.classAddFun(
+			builder.addClassFunction(
 				LuaTrajectoryBuilder::class.java,
 				"build",
 				LuaType.Object(Action::class.java)
@@ -59,7 +60,6 @@ class LuaTrajectoryBuilder(private var builder: TrajectoryActionBuilder)
 
 	fun lineToX(x: Double)
 	{
-		println("line to x $x");
 		builder = builder.lineToX(x);
 	}
 
@@ -80,7 +80,6 @@ class LuaTrajectoryBuilder(private var builder: TrajectoryActionBuilder)
 
 	fun build(): Action
 	{
-		println("building");
 		return builder.build();
 	}
 }

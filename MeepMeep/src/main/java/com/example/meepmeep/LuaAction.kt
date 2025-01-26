@@ -1,5 +1,6 @@
 package com.example.meepmeep
 
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket
 import com.acmerobotics.roadrunner.Action
 import com.acmerobotics.roadrunner.ParallelAction
 import com.acmerobotics.roadrunner.Pose2d
@@ -16,41 +17,42 @@ class LuaAction
 		{
 			builder.setCurrentObject(LuaAction());
 
-			builder.objectAddFun("run", LuaType.Void(), listOf(LuaType.Object(Action::class.java)));
-			builder.objectAddFun("print", LuaType.Void(), listOf(LuaType.String()));
-			builder.objectAddFun(
+			builder.addObjectFunction("run", LuaType.Void, listOf(LuaType.Object(Action::class.java)));
+			builder.addObjectFunction("runTimer", LuaType.Void, listOf(LuaType.Object(Action::class.java)));
+			builder.addObjectFunction("print", LuaType.Void, listOf(LuaType.String));
+			builder.addObjectFunction(
 				"trajectoryAction", LuaType.Object(LuaTrajectoryBuilder::class.java), listOf(
-					LuaType.Double(), LuaType.Double(), LuaType.Double()
+					LuaType.Double, LuaType.Double, LuaType.Double
 				)
 			);
 
-			builder.objectAddFun(
+			builder.addObjectFunction(
 				"trajectoryActionX", LuaType.Object(LuaTrajectoryBuilder::class.java), listOf(
-					LuaType.Double(),
-					LuaType.Double(),
-					LuaType.Double(),
-					LuaType.Double(),
-					LuaType.Double(),
-					LuaType.Double()
+					LuaType.Double,
+					LuaType.Double,
+					LuaType.Double,
+					LuaType.Double,
+					LuaType.Double,
+					LuaType.Double
 				)
 			);
 
-			builder.objectAddFun(
-				"setPosEstimate", LuaType.Void(), listOf(
-					LuaType.Double(), LuaType.Double(), LuaType.Double()
+			builder.addObjectFunction(
+				"setPosEstimate", LuaType.Void, listOf(
+					LuaType.Double, LuaType.Double, LuaType.Double
 				)
 			);
 
-			builder.objectAddFun(
+			builder.addObjectFunction(
 				"sequentalAction", LuaType.Object(LuaSequentalAction::class.java)
 			);
 
-			builder.objectAddFun(
+			builder.addObjectFunction(
 				"parallelAction", LuaType.Object(LuaParallelAction::class.java)
 			);
 
-			builder.objectAddFun(
-				"sleepAction", LuaType.Object(Action::class.java), listOf(LuaType.Double())
+			builder.addObjectFunction(
+				"sleepAction", LuaType.Object(Action::class.java), listOf(LuaType.Double)
 			);
 
 			builder.createClass("Action");
@@ -98,28 +100,20 @@ class LuaAction
 	fun run(a3: Action)
 	{
 		action = a3;
-		action.let {action ->
-
-			if(action is SequentialAction)
-			{
-				for(a in action.initialActions)
-				{
-					println("running action ${a.javaClass.simpleName}");
-					if(a is SequentialAction)
-					{
-						for(a2 in a.initialActions)
-						{
-							println("running action2 ${a2.javaClass.simpleName}");
-						}
-					}
-				}
-			}
-		}
+	}
+	
+	fun runTimer(a3: Action)
+	{
+		action = a3;
+		val a2 = toTimerAction(a3 as SequentialAction);
+		val p = TelemetryPacket();
+		while(a2.run(p));
+		kotlin.io.print(a2.profileString());
 	}
 
 	fun print(str: String)
 	{
-		println("lua: ${str}");
+		println("lua: $str");
 	}
 }
 
@@ -129,13 +123,13 @@ class LuaSequentalAction
 	{
 		fun init(builder: FunctionBuilder)
 		{
-			builder.classAddFun(
+			builder.addClassFunction(
 				LuaSequentalAction::class.java,
 				"add",
-				LuaType.Void(),
+				LuaType.Void,
 				listOf(LuaType.Object(Action::class.java))
 			);
-			builder.classAddFun(
+			builder.addClassFunction(
 				LuaSequentalAction::class.java, "build", LuaType.Object(Action::class.java)
 			);
 		}
@@ -160,13 +154,13 @@ class LuaParallelAction
 	{
 		fun init(builder: FunctionBuilder)
 		{
-			builder.classAddFun(
+			builder.addClassFunction(
 				LuaParallelAction::class.java,
 				"add",
-				LuaType.Void(),
+				LuaType.Void,
 				listOf(LuaType.Object(Action::class.java))
 			);
-			builder.classAddFun(
+			builder.addClassFunction(
 				LuaParallelAction::class.java, "build", LuaType.Object(Action::class.java)
 			);
 		}

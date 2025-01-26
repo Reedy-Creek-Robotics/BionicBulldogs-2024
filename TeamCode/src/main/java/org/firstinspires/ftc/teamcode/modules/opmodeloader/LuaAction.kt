@@ -6,9 +6,15 @@ import com.acmerobotics.roadrunner.ParallelAction
 import com.acmerobotics.roadrunner.Pose2d
 import com.acmerobotics.roadrunner.SequentialAction
 import com.acmerobotics.roadrunner.SleepAction
+import com.acmerobotics.roadrunner.ftc.runBlocking
 import com.minerkid08.dynamicopmodeloader.FunctionBuilder
 import com.minerkid08.dynamicopmodeloader.LuaType
 import org.firstinspires.ftc.teamcode.modules.actions.drive
+import org.firstinspires.ftc.teamcode.modules.toTimerAction
+import org.firstinspires.ftc.teamcode.opmode.auto.accelOverrideRaw
+import org.firstinspires.ftc.teamcode.opmode.auto.velOverrideRaw
+import java.io.File
+import java.io.FileWriter
 
 class LuaAction
 {
@@ -18,39 +24,47 @@ class LuaAction
 		{
 			builder.setCurrentObject(LuaAction());
 			
-			builder.objectAddFun("run", LuaType.Void(), listOf(LuaType.Object(Action::class.java)));
-			builder.objectAddFun("print", LuaType.Void(), listOf(LuaType.String()));
-			builder.objectAddFun(
+			builder.addObjectFunction("run", LuaType.Void, listOf(LuaType.Object(Action::class.java)));
+			builder.addObjectFunction("runTimer", LuaType.Void, listOf(LuaType.Object(Action::class.java)));
+			builder.addObjectFunction("print", LuaType.Void, listOf(LuaType.String));
+			builder.addObjectFunction(
 				"trajectoryAction", LuaType.Object(LuaTrajectoryBuilder::class.java), listOf(
-					LuaType.Double(), LuaType.Double(), LuaType.Double()
+					LuaType.Double, LuaType.Double, LuaType.Double
 				)
 			);
 			
-			builder.objectAddFun(
-				"setPosEstimate", LuaType.Void(), listOf(
-					LuaType.Double(), LuaType.Double(), LuaType.Double()
+			builder.addObjectFunction(
+				"trajectoryActionX", LuaType.Object(LuaTrajectoryBuilder::class.java), listOf(
+					LuaType.Double, LuaType.Double, LuaType.Double,
+					LuaType.Double, LuaType.Double, LuaType.Double
 				)
 			);
 			
-			builder.objectAddFun(
+			builder.addObjectFunction(
+				"setPosEstimate", LuaType.Void, listOf(
+					LuaType.Double, LuaType.Double, LuaType.Double
+				)
+			);
+			
+			builder.addObjectFunction(
 				"sequentalAction", LuaType.Object(LuaSequentalAction::class.java)
 			);
 			
-			builder.objectAddFun(
+			builder.addObjectFunction(
 				"parallelAction", LuaType.Object(LuaParallelAction::class.java)
 			);
 			
-			builder.objectAddFun(
+			builder.addObjectFunction(
 				"sleepAction",
 				LuaType.Object(Action::class.java),
-				listOf(LuaType.Double())
+				listOf(LuaType.Double)
 			);
 			
 			builder.createClass("Action");
 			builder.createClass("SequentialAction");
 			builder.createClass("ParallelAction");
 			builder.createClass("SleepAction");
-
+			
 			LuaTrajectoryBuilder.init(builder);
 			LuaSequentalAction.init(builder);
 			LuaParallelAction.init(builder);
@@ -65,6 +79,19 @@ class LuaAction
 	fun trajectoryAction(x: Double, y: Double, h: Double): LuaTrajectoryBuilder
 	{
 		return LuaTrajectoryBuilder(drive.actionBuilder(Pose2d(x, y, Math.toRadians(h))));
+	}
+	
+	fun trajectoryActionX(
+		x: Double, y: Double, h: Double, vel: Double, minAccel: Double, maxAccel: Double
+	): LuaTrajectoryBuilder
+	{
+		return LuaTrajectoryBuilder(
+			drive.actionBuilder(
+				Pose2d(x, y, Math.toRadians(h)),
+				velOverrideRaw(vel),
+				accelOverrideRaw(minAccel, maxAccel)
+			)
+		);
 	}
 	
 	fun sequentalAction(): LuaSequentalAction
@@ -82,23 +109,21 @@ class LuaAction
 		return SleepAction(time);
 	}
 	
+	fun runTimer(action: Action)
+	{
+		val a2 = toTimerAction(action as SequentialAction);
+		runBlocking(a2);
+		val file = File("/sdcard/opmodeTimer.txt");
+		if(!file.exists())
+			file.createNewFile();
+		val writer = FileWriter(file);
+		writer.write(a2.profileString());
+		writer.close();
+	}
+	
 	fun run(action: Action)
 	{
-		if(action is SequentialAction)
-		{
-			for(a in action.initialActions)
-			{
-				Log.d("running action", a.javaClass.simpleName);
-				if(a is SequentialAction)
-				{
-					for(a2 in action.initialActions)
-					{
-						Log.d("running action2", a2.javaClass.simpleName);
-					}
-				}
-			}
-		}
-		//runBlocking(action);
+		runBlocking(action);
 	}
 	
 	fun print(str: String)
@@ -113,13 +138,13 @@ class LuaSequentalAction
 	{
 		fun init(builder: FunctionBuilder)
 		{
-			builder.classAddFun(
+			builder.addClassFunction(
 				LuaSequentalAction::class.java,
 				"add",
-				LuaType.Void(),
+				LuaType.Void,
 				listOf(LuaType.Object(Action::class.java))
 			);
-			builder.classAddFun(
+			builder.addClassFunction(
 				LuaSequentalAction::class.java, "build", LuaType.Object(Action::class.java)
 			);
 		}
@@ -144,13 +169,13 @@ class LuaParallelAction
 	{
 		fun init(builder: FunctionBuilder)
 		{
-			builder.classAddFun(
+			builder.addClassFunction(
 				LuaParallelAction::class.java,
 				"add",
-				LuaType.Void(),
+				LuaType.Void,
 				listOf(LuaType.Object(Action::class.java))
 			);
-			builder.classAddFun(
+			builder.addClassFunction(
 				LuaParallelAction::class.java, "build", LuaType.Object(Action::class.java)
 			);
 		}
