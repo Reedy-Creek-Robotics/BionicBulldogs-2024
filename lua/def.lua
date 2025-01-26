@@ -31,6 +31,15 @@ function addOpmode(opmode) end
 ---@param h number
 function trajectoryAction(x, y, h) end
 
+---@return LuaTrajectoryBuilder
+---@param x number
+---@param y number
+---@param h number
+---@param vel number
+---@param minAccel number
+---@param maxAccel number
+function trajectoryActionX(x, y, h, vel, minAccel, maxAccel) end
+
 ---@return LuaSequentalAction
 function sequentalAction() end
 
