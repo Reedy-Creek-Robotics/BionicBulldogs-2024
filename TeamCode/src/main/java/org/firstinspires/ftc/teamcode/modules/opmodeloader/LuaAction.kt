@@ -10,7 +10,7 @@ import com.acmerobotics.roadrunner.ftc.runBlocking
 import com.minerkid08.dynamicopmodeloader.FunctionBuilder
 import com.minerkid08.dynamicopmodeloader.LuaType
 import org.firstinspires.ftc.teamcode.modules.actions.drive
-import org.firstinspires.ftc.teamcode.modules.toTimerAction
+import org.firstinspires.ftc.teamcode.modules.actions.toTimerAction
 import org.firstinspires.ftc.teamcode.opmode.auto.accelOverrideRaw
 import org.firstinspires.ftc.teamcode.opmode.auto.velOverrideRaw
 import java.io.File

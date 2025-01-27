@@ -1,12 +1,13 @@
-package org.firstinspires.ftc.teamcode.modules
+package org.firstinspires.ftc.teamcode.modules.actions
 
 import com.acmerobotics.dashboard.canvas.Canvas
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket
 import com.acmerobotics.roadrunner.Action
 import com.acmerobotics.roadrunner.ParallelAction
 import com.acmerobotics.roadrunner.SequentialAction
+import org.firstinspires.ftc.teamcode.modules.format
 
-data class TimeSequentialAction(
+data class TimerSequentialAction(
 	val initialActions: List<Action>
 ) : Action
 {
@@ -15,14 +16,14 @@ data class TimeSequentialAction(
 	private val times = ArrayList<Long>();
 	private var startTime: Long = 0L;
 	private var startTime2: Long = 0L;
-	private var endTime: Long = 0L;
+	private var elapsedTime: Long = 0L;
 	
 	constructor(vararg actions: Action) : this(actions.asList());
 	
 	fun profileString(level: Int = 0, lines: Int = 0): String
 	{
 		var out = "";
-		if(level == 0) out += "${javaClass.simpleName} - ${endTime.toDouble() / 1000}\n";
+		if(level == 0) out += "${javaClass.simpleName} - ${elapsedTime.toDouble() / 1000}\n";
 		
 		for((i, a) in initialActions.withIndex())
 		{
@@ -34,9 +35,9 @@ data class TimeSequentialAction(
 			out += if(i == initialActions.size - 1) "└─";
 			else "├─";
 			
-			out += "${a.javaClass.simpleName} - ${times[i].toDouble() / 1000}\n";
+			out += "${a.javaClass.simpleName} - ${times[i].toDouble() / 1000} - %${(times[i].toDouble() / elapsedTime.toDouble() * 100).format(1)}\n";
 			
-			if(a is TimeSequentialAction)
+			if(a is TimerSequentialAction)
 			{
 				var lines2 = lines;
 				if(i != initialActions.size - 1) lines2 = lines2 or (1 shl level);
@@ -58,7 +59,7 @@ data class TimeSequentialAction(
 		if(startTime2 == 0L) startTime2 = System.currentTimeMillis();
 		if(actions.isEmpty())
 		{
-			endTime = System.currentTimeMillis() - startTime2;
+			elapsedTime = System.currentTimeMillis() - startTime2;
 			return false
 		}
 		
@@ -114,7 +115,7 @@ data class TimerParallelAction(
 			
 			out += "${a.javaClass.simpleName} - ${times[i].toDouble() / 1000}\n";
 			
-			if(a is TimeSequentialAction)
+			if(a is TimerSequentialAction)
 			{
 				var lines2 = lines;
 				if(i != initialActions.size - 1) lines2 = lines2 or (1 shl level);
@@ -159,7 +160,7 @@ data class TimerParallelAction(
 	}
 }
 
-fun toTimerAction(action: SequentialAction): TimeSequentialAction
+fun toTimerAction(action: SequentialAction): TimerSequentialAction
 {
 	val actions = ArrayList<Action>();
 	for(a in action.initialActions)
@@ -171,7 +172,7 @@ fun toTimerAction(action: SequentialAction): TimeSequentialAction
 			else -> actions.add(a)
 		};
 	}
-	return TimeSequentialAction(actions);
+	return TimerSequentialAction(actions);
 }
 
 fun toTimerAction(action: ParallelAction): TimerParallelAction
