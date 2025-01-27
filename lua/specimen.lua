@@ -3,7 +3,7 @@ require("utils");
 local action = {}
 
 addOpmode({
-	name = "testOpmode",
+	name = "specimen",
 	init = function ()
 		setPosEstimate(7, -7.5, 180);
 		local actionBuilder = sequentalAction();

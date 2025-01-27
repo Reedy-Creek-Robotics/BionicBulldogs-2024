@@ -1,6 +1,5 @@
 package com.example.meepmeep
 
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket
 import com.acmerobotics.roadrunner.SequentialAction
 import com.minerkid08.dynamicopmodeloader.OpmodeLoader
 import com.noahbres.meepmeep.MeepMeep

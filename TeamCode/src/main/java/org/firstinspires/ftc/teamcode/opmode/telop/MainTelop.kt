@@ -10,19 +10,16 @@ import org.firstinspires.ftc.teamcode.modules.drive.HDrive
 import org.firstinspires.ftc.teamcode.modules.drive.SparkfunImuLocalizer
 import org.firstinspires.ftc.teamcode.modules.drive.rotPos
 import org.firstinspires.ftc.teamcode.modules.hardware.GamepadEx
-import org.firstinspires.ftc.teamcode.modules.robot.Arm
-import org.firstinspires.ftc.teamcode.modules.robot.HSlide
-import org.firstinspires.ftc.teamcode.modules.robot.Intake
-import org.firstinspires.ftc.teamcode.modules.robot.Outtake
-import org.firstinspires.ftc.teamcode.modules.robot.SampleOuttake
-import org.firstinspires.ftc.teamcode.modules.robot.Slide
-import org.firstinspires.ftc.teamcode.modules.robot.SpecimenOuttake
-import org.firstinspires.ftc.teamcode.modules.robot.SpeciminClaw
+import org.firstinspires.ftc.teamcode.modules.robot.*
 import org.firstinspires.ftc.teamcode.opmode.config.HDriveConfig
 
+@TeleOp(group = "a")
+class MainTelopRed: MainTelop(ColorSensor.Blue);
+@TeleOp(group = "a")
+class MainTelopBlue: MainTelop(ColorSensor.Red);
+
 @Config
-@TeleOp
-class MainTelop: LinearOpMode()
+open class MainTelop(private val colorSensorBad: Int): LinearOpMode()
 {
 	companion object
 	{
@@ -46,6 +43,8 @@ class MainTelop: LinearOpMode()
 		val sampleOuttake = SampleOuttake(slide, outtake);
 
 		val hSlide = HSlide(hardwareMap);
+
+		val colorSensor = ColorSensor(hardwareMap, gamepad1, colorSensorBad);
 
 		val drive = HDrive(HDriveConfig(hardwareMap));
 		drive.setLocalizer(SparkfunImuLocalizer(hardwareMap.get(SparkFunOTOS::class.java, "imu2")));
@@ -117,17 +116,9 @@ class MainTelop: LinearOpMode()
 			}
 
 			// Outtake
-			if(gamepad.dpadLeft())
+			if(gamepad.circle())
 			{
-				outtake.bucketScore();
-			}
-			if(gamepad.dpadUp())
-			{
-				outtake.bucketDown();
-			}
-			if(gamepad.dpadRight())
-			{
-				outtake.bucketUp();
+				outtake.score2();
 			}
 
 			if(gamepad.dpadDown())
@@ -142,7 +133,7 @@ class MainTelop: LinearOpMode()
 			}
 
 			//Specimine Claw
-			if(gamepad.circle())
+			if(gamepad.dpadRight())
 			{
 				if(claw.state == SpeciminClaw.State.Closed)
 				{
@@ -249,6 +240,7 @@ class MainTelop: LinearOpMode()
 				}
 			}
 
+			colorSensor.update();
 			telemetry.addData("imu heading", imuHeading);
 			telemetry.addData("localizer heading", localHeading);
 			slide.telem(telemetry);

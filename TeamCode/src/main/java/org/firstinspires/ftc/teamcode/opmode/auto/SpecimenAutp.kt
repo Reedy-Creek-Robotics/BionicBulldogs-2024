@@ -1,3 +1,4 @@
+
 package org.firstinspires.ftc.teamcode.opmode.auto
 
 import com.acmerobotics.dashboard.FtcDashboard
@@ -5,16 +6,16 @@ import com.acmerobotics.dashboard.canvas.Canvas
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket
 import com.acmerobotics.roadrunner.*
+import com.acmerobotics.roadrunner.ftc.runBlocking
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.teamcode.modules.Logging
-import org.firstinspires.ftc.teamcode.modules.actions.HSlideAction_GotoPos
-import org.firstinspires.ftc.teamcode.modules.actions.SpecimenOuttakeAction_Grab
-import org.firstinspires.ftc.teamcode.modules.actions.SpecimenOuttakeAction_Score
-import org.firstinspires.ftc.teamcode.modules.actions.initComponents
+import org.firstinspires.ftc.teamcode.modules.actions.*
 import org.firstinspires.ftc.teamcode.modules.drive.rotPos
 import org.firstinspires.ftc.teamcode.modules.robot.HSlide
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive
+import java.io.File
+import java.io.FileWriter
 import kotlin.math.PI
 
 @Autonomous
@@ -38,11 +39,11 @@ class SpecimenAutp: LinearOpMode()
 		val action = SequentialAction(
 			listOf(
 				SpecimenOuttakeAction_Grab(),
-				drive.actionBuilder(beginPose)
-					.lineToX(36.0)
+				drive.actionBuilder(beginPose, drive.defaultVelConstraint, accelOverrideRaw(minAccel = -20.0))
+					.lineToX(36.125)
 					.build(),
 				SpecimenOuttakeAction_Score(),
-				SleepAction(0.5),
+				SleepAction(0.1),
 				drive.actionBuilder(Pose2d(36.0, -7.5, Math.toRadians(180.0)))
 					.setTangent(Math.toRadians(-180.0))
 					.lineToX(32.0)
@@ -59,7 +60,7 @@ class SpecimenAutp: LinearOpMode()
 					.lineToX(36.0)
 					.build(),
 				SpecimenOuttakeAction_Score(),
-				SleepAction(0.2),
+				SleepAction(0.1),
 				drive.actionBuilder(
 					Pose2d(36.0, -6.5, Math.toRadians(180.0)),
 					velOverrideRaw(100.0),
@@ -68,11 +69,11 @@ class SpecimenAutp: LinearOpMode()
 					.setTangent(Math.toRadians(-180.0))
 					.splineToConstantHeading(Vector2d(32.0, -36.0), Math.toRadians(-90.0))
 					.setTangent(Math.toRadians(0.0))
-					.splineToConstantHeading(Vector2d(56.0, -46.0), Math.toRadians(-90.0))
+					.splineToConstantHeading(Vector2d(55.0, -47.0), Math.toRadians(-90.0))
 					.setTangent(Math.toRadians(180.0))
 					.lineToX(17.0)
 					.setTangent(Math.toRadians(0.0))
-					.splineToConstantHeading(Vector2d(56.0, -54.0), Math.toRadians(-90.0))
+					.splineToConstantHeading(Vector2d(56.0, -55.0), Math.toRadians(-90.0))
 					.setTangent(Math.toRadians(180.0))
 					.lineToX(17.0)
 					.build(),
@@ -80,7 +81,7 @@ class SpecimenAutp: LinearOpMode()
 					.setTangent(Math.toRadians(90.0))
 					.splineToLinearHeading(Pose2d(14.5, -40.5, 0.0), Math.toRadians(-135.0))
 					.setTangent(0.0)
-					.lineToX(8.0)
+					.lineToX(7.75)
 					.build(),
 				SpecimenOuttakeAction_Grab(),
 				drive.actionBuilder(Pose2d(8.5, -40.5, 0.0))
@@ -90,14 +91,14 @@ class SpecimenAutp: LinearOpMode()
 					.lineToX(35.5)
 					.build(),
 				SpecimenOuttakeAction_Score(),
-				SleepAction(0.2),
+				SleepAction(0.1),
 				drive.actionBuilder(Pose2d(35.0, -1.5, Math.toRadians(180.0)))
 					.setTangent(Math.toRadians(-180.0))
 					.lineToX(32.0)
 					.setTangent(Math.toRadians(-135.0))
 					.splineToLinearHeading(Pose2d(14.5, -40.5, 0.0), Math.toRadians(-135.0))
 					.setTangent(0.0)
-					.lineToX(8.0)
+					.lineToX(7.75)
 					.build(),
 				SpecimenOuttakeAction_Grab(),
 				drive.actionBuilder(Pose2d(8.5, -40.5, 0.0))
@@ -107,9 +108,9 @@ class SpecimenAutp: LinearOpMode()
 					.lineToX(35.5)
 					.build(),
 				SpecimenOuttakeAction_Score(),
-				SleepAction(0.2),
+				SleepAction(0.1),
 				HSlideAction_GotoPos(HSlide.min),
-				drive.actionBuilder(Pose2d(36.0, -2.5, Math.toRadians(180.0)))
+				drive.actionBuilder(Pose2d(36.0, -2.5, Math.toRadians(180.0)), velOverrideRaw(100.0), accelOverrideRaw(-75.0, 75.0))
 					.setTangent(Math.toRadians(-135.0))
 					.splineToLinearHeading(
 						Pose2d(22.0, -30.0, Math.toRadians(-135.0)),
@@ -121,26 +122,14 @@ class SpecimenAutp: LinearOpMode()
 
 		waitForStart();
 
-		val dash = FtcDashboard.getInstance();
-		val c = Canvas();
-		action.preview(c);
-
-		var b = true;
-		while(b && !Thread.currentThread().isInterrupted)
-		{
-			val p = TelemetryPacket();
-			p.fieldOverlay().operations.addAll(c.operations);
-
-			b = action.run(p);
-
-			dash.sendTelemetryPacket(p);
-
-			logger.posX.set(drive.localizer.pose.position.x);
-			logger.posY.set(drive.localizer.pose.position.y);
-			logger.posH.set(drive.localizer.pose.heading.toDouble());
-			logger.state.set(action::class.java.simpleName);
-			logger.update();
-		}
+		val timerAction = toTimerAction(action);
+		runBlocking(timerAction);
+		val file = File("/sdcard/opmodeTimer.txt");
+		if(!file.exists())
+			file.createNewFile();
+		val writer = FileWriter(file);
+		writer.write(timerAction.timerString());
+		writer.close();
 
 		rotPos = drive.localizer.pose.heading.toDouble();
 	}

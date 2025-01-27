@@ -108,7 +108,7 @@ class LuaAction
 		val a2 = toTimerAction(a3 as SequentialAction);
 		val p = TelemetryPacket();
 		while(a2.run(p));
-		kotlin.io.print(a2.profileString());
+		kotlin.io.print(a2.timerString());
 	}
 
 	fun print(str: String)

@@ -15,6 +15,8 @@ import org.firstinspires.ftc.teamcode.modules.robot.Arm
 import org.firstinspires.ftc.teamcode.modules.robot.HSlide
 import org.firstinspires.ftc.teamcode.modules.robot.Intake
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive
+import java.io.File
+import java.io.FileWriter
 
 @Autonomous
 class SampleAuto: LinearOpMode()
@@ -48,9 +50,9 @@ class SampleAuto: LinearOpMode()
 					),
 					drive.actionBuilder(Pose2d(15.5, 56.0, Math.toRadians(-45.0)))
 						.setTangent(Math.toRadians(-45.0))
-						.splineToLinearHeading(Pose2d(24.5, 42.0, Math.toRadians(0.0)), Math.toRadians(0.0))
+						.splineToLinearHeading(Pose2d(24.5, 40.0, Math.toRadians(0.0)), Math.toRadians(0.0))
 						.setTangent(Math.toRadians(90.0))
-						.lineToY(46.0)
+						.lineToY(46.0, velOverrideRaw(40.0), drive.defaultAccelConstraint)
 						.build(),
 				),
 				IntakeAction_ZeroRotator(),
@@ -158,7 +160,14 @@ class SampleAuto: LinearOpMode()
 
 		waitForStart()
 
-		runBlocking(action);
+		val timerAction = toTimerAction(action);
+		runBlocking(timerAction);
+		val file = File("/sdcard/opmodeTimer.txt");
+		if(!file.exists())
+			file.createNewFile();
+		val writer = FileWriter(file);
+		writer.write(timerAction.timerString());
+		writer.close();
 
 		rotPos = drive.localizer.pose.heading.toDouble();
 	}

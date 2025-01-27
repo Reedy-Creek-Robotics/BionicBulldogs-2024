@@ -21,7 +21,7 @@ data class TimerSequentialAction(
 	
 	constructor(vararg actions: Action) : this(actions.asList());
 	
-	fun profileString(level: Int = 0, lines: Int = 0): String
+	fun timerString(level: Int = 0, lines: Int = 0): String
 	{
 		var out = "";
 		if(level == 0) out += "${javaClass.simpleName} - ${elapsedTime.toDouble() / 1000}\n";
@@ -42,7 +42,7 @@ data class TimerSequentialAction(
 			{
 				var lines2 = lines;
 				if(i != initialActions.size - 1) lines2 = lines2 or (1 shl level);
-				out += a.profileString(level + 1, lines2);
+				out += a.timerString(level + 1, lines2);
 			}
 			if(a is TimerParallelAction)
 			{
@@ -120,7 +120,7 @@ data class TimerParallelAction(
 			{
 				var lines2 = lines;
 				if(i != initialActions.size - 1) lines2 = lines2 or (1 shl level);
-				out += a.profileString(level + 1, lines2);
+				out += a.timerString(level + 1, lines2);
 			}
 			
 			if(a is TimerParallelAction)

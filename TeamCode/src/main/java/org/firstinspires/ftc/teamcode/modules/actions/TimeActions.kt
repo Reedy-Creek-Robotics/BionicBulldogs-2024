@@ -9,22 +9,26 @@ import org.firstinspires.ftc.teamcode.modules.format
 
 data class TimerSequentialAction(
 	val initialActions: List<Action>
-) : Action
+): Action
 {
 	private var actions = initialActions;
-	
+
 	private val times = ArrayList<Long>();
 	private var startTime: Long = 0L;
 	private var startTime2: Long = 0L;
 	private var elapsedTime: Long = 0L;
-	
-	constructor(vararg actions: Action) : this(actions.asList());
-	
-	fun profileString(level: Int = 0, lines: Int = 0): String
+
+	constructor(vararg actions: Action): this(actions.asList());
+
+	fun timerString(level: Int = 0, lines: Int = 0): String
 	{
 		var out = "";
+		if(times.size != initialActions.size && level == 0)
+			out += "Timing is not complete, some information is not available\n";
+		if(elapsedTime == 0L)
+			elapsedTime = 1L;
 		if(level == 0) out += "${javaClass.simpleName} - ${elapsedTime.toDouble() / 1000}\n";
-		
+
 		for((i, a) in initialActions.withIndex())
 		{
 			for(i2 in 0 until level)
@@ -34,14 +38,26 @@ data class TimerSequentialAction(
 			}
 			out += if(i == initialActions.size - 1) "└─";
 			else "├─";
-			
-			out += "${a.javaClass.simpleName} - ${times[i].toDouble() / 1000} - %${(times[i].toDouble() / elapsedTime.toDouble() * 100).format(1)}\n";
-			
+
+			if(times.size != initialActions.size)
+			{
+				if(i >= times.size)
+					out += "${a.javaClass.simpleName} - ? - %?\n";
+				else
+					out += "${a.javaClass.simpleName} - ${times[i].toDouble() / 1000} - %?\n";
+			}
+			else
+				out += "${a.javaClass.simpleName} - ${times[i].toDouble() / 1000} - %${
+					(times[i].toDouble() / elapsedTime.toDouble() * 100).format(
+						1
+					)
+				}\n";
+
 			if(a is TimerSequentialAction)
 			{
 				var lines2 = lines;
 				if(i != initialActions.size - 1) lines2 = lines2 or (1 shl level);
-				out += a.profileString(level + 1, lines2);
+				out += a.timerString(level + 1, lines2);
 			}
 			if(a is TimerParallelAction)
 			{
@@ -52,7 +68,7 @@ data class TimerSequentialAction(
 		}
 		return out;
 	}
-	
+
 	override tailrec fun run(p: TelemetryPacket): Boolean
 	{
 		if(startTime == 0L) startTime = System.currentTimeMillis();
@@ -62,8 +78,10 @@ data class TimerSequentialAction(
 			elapsedTime = System.currentTimeMillis() - startTime2;
 			return false
 		}
-		
-		return if(actions.first().run(p))
+
+		return if(actions.first()
+				.run(p)
+		)
 		{
 			true
 		}
@@ -75,7 +93,7 @@ data class TimerSequentialAction(
 			run(p)
 		}
 	}
-	
+
 	override fun preview(fieldOverlay: Canvas)
 	{
 		for(a in initialActions)
@@ -87,22 +105,24 @@ data class TimerSequentialAction(
 
 data class TimerParallelAction(
 	val initialActions: List<Action>
-) : Action
+): Action
 {
 	private var actions = initialActions
-	
-	private val times = Array(initialActions.size) { _ -> 0L };
-	
+
+	private val times = Array(initialActions.size) {_ -> 0L};
+
 	private var startTime = 0L;
 	private var endTime = 0L;
-	
-	constructor(vararg actions: Action) : this(actions.asList())
-	
+
+	constructor(vararg actions: Action): this(actions.asList())
+
 	fun profileString(level: Int = 0, lines: Int = 0): String
 	{
 		var out = "";
+		if(times.size != initialActions.size && level == 0)
+			out += "Timing is not complete, some information is not available\n";
 		if(level == 0) out += "${javaClass.simpleName} - ${endTime.toDouble() / 1000}\n";
-		
+
 		for((i, a) in initialActions.withIndex())
 		{
 			for(i2 in 0 until level)
@@ -112,16 +132,19 @@ data class TimerParallelAction(
 			}
 			out += if(i == initialActions.size - 1) "└─";
 			else "├─";
-			
-			out += "${a.javaClass.simpleName} - ${times[i].toDouble() / 1000}\n";
-			
+
+			if(i >= times.size)
+				out += "${a.javaClass.simpleName} - ?\n";
+			else
+				out += "${a.javaClass.simpleName} - ${times[i].toDouble() / 1000}\n";
+
 			if(a is TimerSequentialAction)
 			{
 				var lines2 = lines;
 				if(i != initialActions.size - 1) lines2 = lines2 or (1 shl level);
-				out += a.profileString(level + 1, lines2);
+				out += a.timerString(level + 1, lines2);
 			}
-			
+
 			if(a is TimerParallelAction)
 			{
 				var lines2 = lines;
@@ -131,7 +154,7 @@ data class TimerParallelAction(
 		}
 		return out;
 	}
-	
+
 	override fun run(p: TelemetryPacket): Boolean
 	{
 		if(startTime == 0L) startTime = System.currentTimeMillis();
@@ -145,12 +168,12 @@ data class TimerParallelAction(
 				}
 			}
 		}
-		val run = times.count { elem -> elem == 0L } > 0;
+		val run = times.count {elem -> elem == 0L} > 0;
 		if(!run)
 			endTime = System.currentTimeMillis() - startTime;
 		return run;
 	}
-	
+
 	override fun preview(fieldOverlay: Canvas)
 	{
 		for(a in initialActions)
@@ -168,8 +191,8 @@ fun toTimerAction(action: SequentialAction): TimerSequentialAction
 		when(a)
 		{
 			is SequentialAction -> actions.add(toTimerAction(a))
-			is ParallelAction -> actions.add(toTimerAction(a))
-			else -> actions.add(a)
+			is ParallelAction   -> actions.add(toTimerAction(a))
+			else                -> actions.add(a)
 		};
 	}
 	return TimerSequentialAction(actions);
@@ -183,8 +206,8 @@ fun toTimerAction(action: ParallelAction): TimerParallelAction
 		when(a)
 		{
 			is SequentialAction -> actions.add(toTimerAction(a))
-			is ParallelAction -> actions.add(toTimerAction(a))
-			else -> actions.add(a)
+			is ParallelAction   -> actions.add(toTimerAction(a))
+			else                -> actions.add(a)
 		};
 	}
 	return TimerParallelAction(actions);
