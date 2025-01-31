@@ -14,9 +14,9 @@ import org.firstinspires.ftc.teamcode.modules.robot.*
 import org.firstinspires.ftc.teamcode.opmode.config.HDriveConfig
 
 @TeleOp(group = "a")
-class MainTelopRed: MainTelop(ColorSensor.Blue);
+class MainTelopRed: MainTelop(ColorSensor.BLUE);
 @TeleOp(group = "a")
-class MainTelopBlue: MainTelop(ColorSensor.Red);
+class MainTelopBlue: MainTelop(ColorSensor.RED);
 
 @Config
 open class MainTelop(private val colorSensorBad: Int): LinearOpMode()
@@ -219,6 +219,11 @@ open class MainTelop(private val colorSensorBad: Int): LinearOpMode()
 				if(arm.state == Arm.State.Up)
 				{
 					arm.down();
+					if(colorSensor.col != ColorSensor.NONE)
+					{
+						intake.reverse();
+						intake.stopIn(0.75);
+					}
 				}
 				else if(arm.state == Arm.State.Down)
 				{

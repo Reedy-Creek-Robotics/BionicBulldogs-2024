@@ -2,14 +2,11 @@
 package org.firstinspires.ftc.teamcode.opmode.auto
 
 import com.acmerobotics.dashboard.FtcDashboard
-import com.acmerobotics.dashboard.canvas.Canvas
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket
 import com.acmerobotics.roadrunner.*
 import com.acmerobotics.roadrunner.ftc.runBlocking
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
-import org.firstinspires.ftc.teamcode.modules.Logging
 import org.firstinspires.ftc.teamcode.modules.actions.*
 import org.firstinspires.ftc.teamcode.modules.drive.rotPos
 import org.firstinspires.ftc.teamcode.modules.robot.HSlide
@@ -23,8 +20,6 @@ class SpecimenAutp: LinearOpMode()
 {
 	override fun runOpMode()
 	{
-		val logger = Logging();
-
 		MecanumDrive.PARAMS.maxWheelVel = 80.0;
 		MecanumDrive.PARAMS.maxProfileAccel = 60.0;
 		MecanumDrive.PARAMS.maxAngVel = PI * 4.0;
@@ -124,7 +119,7 @@ class SpecimenAutp: LinearOpMode()
 
 		val timerAction = toTimerAction(action);
 		runBlocking(timerAction);
-		val file = File("/sdcard/opmodeTimer.txt");
+		val file = File("/sdcard/opmodeTimerSpecimen.txt");
 		if(!file.exists())
 			file.createNewFile();
 		val writer = FileWriter(file);

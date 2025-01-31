@@ -11,7 +11,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.teamcode.modules.actions.*
 import org.firstinspires.ftc.teamcode.modules.drive.rotPos
-import org.firstinspires.ftc.teamcode.modules.robot.Arm
 import org.firstinspires.ftc.teamcode.modules.robot.HSlide
 import org.firstinspires.ftc.teamcode.modules.robot.Intake
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive
@@ -55,14 +54,16 @@ class SampleAuto: LinearOpMode()
 						.lineToY(46.0, velOverrideRaw(40.0), drive.defaultAccelConstraint)
 						.build(),
 				),
-				IntakeAction_ZeroRotator(),
-				SleepAction(0.25),
-				ArmAction_Up(),
-				HSlideAction_Score(),
-				SleepAction(0.5),
-				IntakeAction_Outtake(),
-				SleepAction(0.6),
-				IntakeAction_Stop(),
+				SequentialAction(
+					IntakeAction_ZeroRotator(),
+					SleepAction(0.25),
+					ArmAction_Up(),
+					HSlideAction_Score(),
+					SleepAction(0.5),
+					IntakeAction_Outtake(),
+					SleepAction(0.6),
+					IntakeAction_Stop()
+				),
 				ParallelAction(
 					SampleOuttakeAction_Grab(),
 					SequentialAction(
@@ -92,14 +93,16 @@ class SampleAuto: LinearOpMode()
 						.lineToY(53.0)
 						.build(),
 				),
-				IntakeAction_ZeroRotator(),
-				SleepAction(0.25),
-				ArmAction_Up(),
-				HSlideAction_Score(),
-				SleepAction(0.5),
-				IntakeAction_Outtake(),
-				SleepAction(0.6),
-				IntakeAction_Stop(),
+				SequentialAction(
+					IntakeAction_ZeroRotator(),
+					SleepAction(0.25),
+					ArmAction_Up(),
+					HSlideAction_Score(),
+					SleepAction(0.5),
+					IntakeAction_Outtake(),
+					SleepAction(0.6),
+					IntakeAction_Stop()
+				),
 				ParallelAction(
 					SampleOuttakeAction_Grab(),
 					SequentialAction(
@@ -125,16 +128,18 @@ class SampleAuto: LinearOpMode()
 						.splineToLinearHeading(Pose2d(45.75, 49.0, Math.toRadians(90.0)), Math.toRadians(0.0))
 						.build(),
 				),
-				HSlideAction_GotoPos(HSlide.min),
-				SleepAction(1.0),
-				IntakeAction_ZeroRotator(),
-				SleepAction(0.25),
-				ArmAction_Up(),
-				HSlideAction_Score(),
-				SleepAction(0.5),
-				IntakeAction_Outtake(),
-				SleepAction(0.6),
-				IntakeAction_Stop(),
+				SequentialAction(
+					HSlideAction_GotoPos(HSlide.min),
+					SleepAction(1.0),
+					IntakeAction_ZeroRotator(),
+					SleepAction(0.25),
+					ArmAction_Up(),
+					HSlideAction_Score(),
+					SleepAction(0.5),
+					IntakeAction_Outtake(),
+					SleepAction(0.6),
+					IntakeAction_Stop()
+				),
 				ParallelAction(
 					SampleOuttakeAction_Grab(),
 					SequentialAction(
@@ -162,7 +167,7 @@ class SampleAuto: LinearOpMode()
 
 		val timerAction = toTimerAction(action);
 		runBlocking(timerAction);
-		val file = File("/sdcard/opmodeTimer.txt");
+		val file = File("/sdcard/opmodeTimerSample.txt");
 		if(!file.exists())
 			file.createNewFile();
 		val writer = FileWriter(file);

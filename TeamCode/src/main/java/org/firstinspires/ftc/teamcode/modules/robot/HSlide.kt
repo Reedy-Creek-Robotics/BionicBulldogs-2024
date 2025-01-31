@@ -18,7 +18,7 @@ class HSlide(hardwareMap: HardwareMap)
 		var min = 0.95;
 
 		@JvmField
-		var score = 0.4;
+		var score = 0.38;
 	}
 
 	private val hSlide = hardwareMap.servo.get("hslide");

@@ -3,19 +3,20 @@ package org.firstinspires.ftc.teamcode.modules.robot
 import com.qualcomm.hardware.rev.RevColorSensorV3
 import com.qualcomm.robotcore.hardware.Gamepad
 import com.qualcomm.robotcore.hardware.HardwareMap
+import org.firstinspires.ftc.robotcore.external.Telemetry
 
 class ColorSensor(hardwareMap: HardwareMap, private val gamepad: Gamepad, private val badColor: Int)
 {
 	companion object
 	{
-		val Red = 1;
-		val Blue = 2;
-		val Yellow = 3;
-		val None = 4;
+		const val RED = 1;
+		const val BLUE = 2;
+		const val YELLOW = 3;
+		const val NONE = 4;
 	}
 
 	private val sensor = hardwareMap.get(RevColorSensorV3::class.java, "colorSensor");
-	private var col = Red;
+	var col = RED;
 
 	init
 	{
@@ -28,33 +29,41 @@ class ColorSensor(hardwareMap: HardwareMap, private val gamepad: Gamepad, privat
 		val g = sensor.green();
 		val b = sensor.blue();
 
-		if(r > 500 && g < 500 && b < 500)
+		if(r > 800 && g < 800)
 		{
-			if(col == None && badColor != Red)
+			if(col == NONE && badColor != RED)
 				gamepad.rumble(0.5, 0.0, 500);
-			col = Red;
+			col = RED;
 		}
-		else if(r < 500 && g < 500 && b > 500)
+		else if(b > 800)
 		{
-			if(col == None && badColor != Blue)
+			if(col == NONE && badColor != BLUE)
 				gamepad.rumble(0.5, 0.0, 500);
-			col = Blue;
+			col = BLUE;
 		}
-		else if(r > 500 && g > 500 && b < 500)
+		else if(r > 800 && g > 800)
 		{
-			if(col == None && badColor != Yellow)
+			if(col == NONE && badColor != YELLOW)
 				gamepad.rumble(0.0, 0.5, 500);
-			col = Yellow;
+			col = YELLOW;
 		}
 		else
 		{
 			if(col == badColor)
 				gamepad.stopRumble();
-			col = None;
+			col = NONE;
 		}
 		if(col == badColor)
 		{
 			gamepad.rumble(1.0, 1.0, 50);
 		}
+	}
+
+	fun telem(telemetry: Telemetry)
+	{
+		telemetry.addData("r", sensor.red());
+		telemetry.addData("g", sensor.green());
+		telemetry.addData("b", sensor.blue());
+		telemetry.addData("color", col);
 	}
 }
