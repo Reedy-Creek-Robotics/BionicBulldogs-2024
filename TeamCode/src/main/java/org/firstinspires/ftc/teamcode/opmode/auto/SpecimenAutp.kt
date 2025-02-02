@@ -52,7 +52,7 @@ class SpecimenAutp: LinearOpMode()
 					.setTangent(Math.toRadians(45.0))
 					.splineToLinearHeading(Pose2d(32.0, -5.5, Math.toRadians(180.0)), Math.toRadians(45.0))
 					.setTangent(0.0)
-					.lineToX(36.0)
+					.lineToX(36.25)
 					.build(),
 				SpecimenOuttakeAction_Score(),
 				SleepAction(0.1),
@@ -83,8 +83,9 @@ class SpecimenAutp: LinearOpMode()
 					.setTangent(Math.toRadians(45.0))
 					.splineToLinearHeading(Pose2d(32.0, -1.5, Math.toRadians(180.0)), Math.toRadians(45.0))
 					.setTangent(0.0)
-					.lineToX(35.5)
+					.lineToX(36.25)
 					.build(),
+				SleepAction(0.05),
 				SpecimenOuttakeAction_Score(),
 				SleepAction(0.1),
 				drive.actionBuilder(Pose2d(35.0, -1.5, Math.toRadians(180.0)))
@@ -100,18 +101,19 @@ class SpecimenAutp: LinearOpMode()
 					.setTangent(Math.toRadians(45.0))
 					.splineToLinearHeading(Pose2d(32.0, 1.5, Math.toRadians(180.0)), Math.toRadians(45.0))
 					.setTangent(0.0)
-					.lineToX(35.5)
+					.lineToX(36.00)
 					.build(),
-				SpecimenOuttakeAction_Score(),
 				SleepAction(0.1),
-				HSlideAction_GotoPos(HSlide.min),
-				drive.actionBuilder(Pose2d(36.0, -2.5, Math.toRadians(180.0)), velOverrideRaw(100.0), accelOverrideRaw(-75.0, 75.0))
+				SpecimenOuttakeAction_Score(),
+				SleepAction(0.6),
+				//HSlideAction_GotoPos(HSlide.min),
+				/*drive.actionBuilder(Pose2d(36.0, -2.5, Math.toRadians(180.0)), velOverrideRaw(100.0), accelOverrideRaw(-75.0, 75.0))
 					.setTangent(Math.toRadians(-135.0))
 					.splineToLinearHeading(
 						Pose2d(22.0, -30.0, Math.toRadians(-135.0)),
 						Math.toRadians(-135.0)
 					)
-					.build()
+					.build()*/
 			)
 		);
 
@@ -119,6 +121,8 @@ class SpecimenAutp: LinearOpMode()
 
 		val timerAction = toTimerAction(action);
 		runBlocking(timerAction);
+		rotPos = drive.localizer.pose.heading.toDouble();
+
 		val file = File("/sdcard/opmodeTimerSpecimen.txt");
 		if(!file.exists())
 			file.createNewFile();
@@ -126,6 +130,6 @@ class SpecimenAutp: LinearOpMode()
 		writer.write(timerAction.timerString());
 		writer.close();
 
-		rotPos = drive.localizer.pose.heading.toDouble();
+
 	}
 }
