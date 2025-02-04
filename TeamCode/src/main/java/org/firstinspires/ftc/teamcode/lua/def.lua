@@ -60,7 +60,8 @@ function specimenScore() end
 function run(action) end
 
 ---@param action Action
-function runTimer(action) end
+---@param filename string
+function runTimer(action, filename) end
 
 ---@param x number
 ---@param y number

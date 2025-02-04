@@ -28,7 +28,7 @@ class LuaAction
 			builder.addObjectFunction(
 				"runTimer",
 				LuaType.Void,
-				listOf(LuaType.Object(Action::class.java))
+				listOf(LuaType.Object(Action::class.java), LuaType.String)
 			);
 			builder.addObjectFunction("print", LuaType.Void, listOf(LuaType.String));
 			builder.addObjectFunction(
@@ -113,11 +113,11 @@ class LuaAction
 		return SleepAction(time);
 	}
 
-	fun runTimer(action: Action)
+	fun runTimer(action: Action, filename: String)
 	{
 		val a2 = toTimerAction(action as SequentialAction);
 		runBlocking(a2);
-		val file = File("/sdcard/opmodeTimer.txt");
+		val file = File("/sdcard/$filename");
 		if(!file.exists())
 			file.createNewFile();
 		val writer = FileWriter(file);

@@ -1,4 +1,3 @@
-
 package org.firstinspires.ftc.teamcode.opmode.auto
 
 import com.acmerobotics.dashboard.FtcDashboard
@@ -34,7 +33,11 @@ class SpecimenAutp: LinearOpMode()
 		val action = SequentialAction(
 			listOf(
 				SpecimenOuttakeAction_Grab(),
-				drive.actionBuilder(beginPose, drive.defaultVelConstraint, accelOverrideRaw(minAccel = -20.0))
+				drive.actionBuilder(
+					beginPose,
+					drive.defaultVelConstraint,
+					accelOverrideRaw(minAccel = -20.0)
+				)
 					.lineToX(36.125)
 					.build(),
 				SpecimenOuttakeAction_Score(),
@@ -129,7 +132,5 @@ class SpecimenAutp: LinearOpMode()
 		val writer = FileWriter(file);
 		writer.write(timerAction.timerString());
 		writer.close();
-
-
 	}
 }
