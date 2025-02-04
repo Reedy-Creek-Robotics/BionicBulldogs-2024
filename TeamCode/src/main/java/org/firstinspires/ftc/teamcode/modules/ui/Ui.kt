@@ -9,10 +9,8 @@ down - dpad down;
 select/inc - dpad right;
 dec - dpad left;
 */
-class UI
+class UI(private val telemetry: Telemetry, private val gamepad: Gamepad)
 {
-	private var telemetry: Telemetry? = null
-	private var gamepad: Gamepad? = null
 	private var itemCount = 0
 	private var selectedItem = 1
 	private var prevUp = false
@@ -20,41 +18,28 @@ class UI
 	private var prevRight = false
 	private var prevLeft = false
 	
-	constructor(telem: Telemetry, _gamepad: Gamepad)
-	{
-		init(telem, _gamepad)
-	}
-	
-	constructor();
-	
-	fun init(telem: Telemetry, _gamepad: Gamepad)
-	{
-		gamepad = _gamepad
-		telemetry = telem
-	}
-	
 	fun update()
 	{
-		if(gamepad!!.dpad_up && !prevUp)
+		if(gamepad.dpad_up && !prevUp)
 		{
 			selectedItem--
 			prevUp = true
 		}
-		else if(!gamepad!!.dpad_up)
+		else if(!gamepad.dpad_up)
 		{
 			prevUp = false
 		}
-		if(gamepad!!.dpad_down && !prevDown)
+		if(gamepad.dpad_down && !prevDown)
 		{
 			selectedItem++
 			prevDown = true
 		}
-		else if(!gamepad!!.dpad_down)
+		else if(!gamepad.dpad_down)
 		{
 			prevDown = false
 		}
 		itemCount = 0
-		telemetry?.update()
+		telemetry.update()
 	}
 	
 	fun resetSelected()
@@ -163,33 +148,33 @@ class UI
 	
 	fun label(label: String)
 	{
-		telemetry?.addLine("   $label")
+		telemetry.addLine("   $label")
 	}
 	
 	fun label(label: String, arg: String?)
 	{
-		telemetry?.addLine("   $label: $arg")
+		telemetry.addLine("   $label: $arg")
 	}
 	
 	fun addLine(label: String)
 	{
 		if(selectedItem == itemCount)
 		{
-			telemetry?.addLine(">>$label")
+			telemetry.addLine(">>$label")
 		}
 		else
 		{
-			telemetry?.addLine("--$label")
+			telemetry.addLine("--$label")
 		}
 	}
 	
 	fun right(): Boolean
 	{
-		return gamepad!!.cross
+		return gamepad.cross;
 	}
 	
 	fun left(): Boolean
 	{
-		return gamepad!!.triangle
+		return gamepad.triangle;
 	}
 }

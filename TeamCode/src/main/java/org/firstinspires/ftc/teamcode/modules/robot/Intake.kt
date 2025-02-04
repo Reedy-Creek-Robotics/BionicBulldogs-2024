@@ -1,14 +1,11 @@
 package org.firstinspires.ftc.teamcode.modules.robot
 
 import com.acmerobotics.dashboard.config.Config
-import com.qualcomm.robotcore.hardware.CRServo
-import com.qualcomm.robotcore.hardware.DcMotor
-import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.HardwareMap
 import com.qualcomm.robotcore.util.ElapsedTime
 
 @Config
-class Intake(private val map: HardwareMap)
+class Intake(map: HardwareMap)
 {
 
 	enum class State
@@ -33,10 +30,13 @@ class Intake(private val map: HardwareMap)
 		var spinStop = 0.0;
 
 		@JvmField
-    var rotatorCenter = 0.51;
+    var rotatorCenter = 0.25;
 
 		@JvmField
     var rotatorIncrement = 0.25;
+
+		@JvmField
+		var autoRotatorIncrement = 0.29;
 	}
 
   fun setRotatorPos(pos: Double)
@@ -46,12 +46,12 @@ class Intake(private val map: HardwareMap)
 
   fun rotatorLeft()
   {
-    intakeRotator.position -= rotatorIncrement;
+    intakeRotator.position += rotatorIncrement;
   }
 
   fun rotatorRight()
   {
-    intakeRotator.position += rotatorIncrement;
+    intakeRotator.position -= rotatorIncrement;
   }
 
   fun zeroRotator()

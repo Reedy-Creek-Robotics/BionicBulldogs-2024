@@ -1,26 +1,25 @@
 package org.firstinspires.ftc.teamcode.opmode.telop
 
 import com.acmerobotics.dashboard.config.Config
+import com.acmerobotics.roadrunner.Pose2d
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.util.ElapsedTime
 import org.firstinspires.ftc.teamcode.modules.drive.HDrive
 import org.firstinspires.ftc.teamcode.modules.drive.SparkfunImuLocalizer
+import org.firstinspires.ftc.teamcode.modules.drive.rotPos
 import org.firstinspires.ftc.teamcode.modules.hardware.GamepadEx
-import org.firstinspires.ftc.teamcode.modules.robot.Arm
-import org.firstinspires.ftc.teamcode.modules.robot.HSlide
-import org.firstinspires.ftc.teamcode.modules.robot.Intake
-import org.firstinspires.ftc.teamcode.modules.robot.Outtake
-import org.firstinspires.ftc.teamcode.modules.robot.SampleOuttake
-import org.firstinspires.ftc.teamcode.modules.robot.Slide
-import org.firstinspires.ftc.teamcode.modules.robot.SpecimenOuttake
-import org.firstinspires.ftc.teamcode.modules.robot.SpeciminClaw
+import org.firstinspires.ftc.teamcode.modules.robot.*
 import org.firstinspires.ftc.teamcode.opmode.config.HDriveConfig
 
+@TeleOp(group = "a")
+class MainTelopRed: MainTelop(ColorSensor.BLUE);
+@TeleOp(group = "a")
+class MainTelopBlue: MainTelop(ColorSensor.RED);
+
 @Config
-@TeleOp
-class MainTelop: LinearOpMode()
+open class MainTelop(private val colorSensorBad: Int): LinearOpMode()
 {
 	companion object
 	{
@@ -28,7 +27,7 @@ class MainTelop: LinearOpMode()
 		var hangingHeightDown = 0;
 
 		@JvmField
-		var hangingHeightUp = -600;
+		var hangingHeightUp = -1200;
 	}
 
 	override fun runOpMode()
@@ -36,17 +35,21 @@ class MainTelop: LinearOpMode()
 		val claw = SpeciminClaw(hardwareMap);
 		val slide = Slide(hardwareMap);
 		val specimenOuttake = SpecimenOuttake(claw, slide);
-		val arm = Arm(hardwareMap.servo.get("arm"));
+		val arm = Arm(hardwareMap);
 		val intake = Intake(hardwareMap);
 
 		val outtake = Outtake(hardwareMap);
 
 		val sampleOuttake = SampleOuttake(slide, outtake);
 
-		val hSlide = HSlide(hardwareMap.servo.get("hslide"));
+		val hSlide = HSlide(hardwareMap);
+
+		val colorSensor = ColorSensor(hardwareMap, gamepad1, colorSensorBad);
 
 		val drive = HDrive(HDriveConfig(hardwareMap));
 		drive.setLocalizer(SparkfunImuLocalizer(hardwareMap.get(SparkFunOTOS::class.java, "imu2")));
+
+		drive.setPosEstimate(Pose2d(0.0, 0.0, rotPos));
 
 		var localHeading = 0.0;
 		var imuHeading = 0.0;
@@ -59,7 +62,7 @@ class MainTelop: LinearOpMode()
 		sampleOuttake.init();
 
 		hSlide.zero();
-		arm.down();
+		arm.up();
 
 		intake.zeroRotator();
 
@@ -93,17 +96,17 @@ class MainTelop: LinearOpMode()
 				drive.setLocalizer(localizer);
 				localizer.update();
 				imuHeading = imu.position.h;
-				localHeading = localizer.poseEstimate.heading;
+				localHeading = localizer.poseEstimate.heading.toDouble();
 			}
 
 			//Horizontal Slides
-			if(gamepad1.right_trigger >= 0.5 && hSlide.pos() >= hSlide.min())
-			{
-				hSlide.decrement();
-			}
-			else if(gamepad1.left_trigger >= 0.5 && hSlide.pos() <= hSlide.max())
+			if(gamepad1.right_trigger >= 0.5 && hSlide.pos() <= hSlide.min())
 			{
 				hSlide.increment();
+			}
+			else if(gamepad1.left_trigger >= 0.5 && hSlide.pos() >= hSlide.max())
+			{
+				hSlide.decrement();
 			}
 			else if(gamepad.triangle())
 			{
@@ -113,17 +116,15 @@ class MainTelop: LinearOpMode()
 			}
 
 			// Outtake
-			if(gamepad.dpadLeft())
+			if(gamepad.circle())
 			{
-				outtake.bucketScore();
+				outtake.score2();
 			}
-			if(gamepad.dpadUp())
+
+			if(gamepad.dpadDown())
 			{
-				outtake.bucketDown();
-			}
-			if(gamepad.dpadRight())
-			{
-				outtake.bucketUp();
+				hSlide.gotoPos(0.48);
+				arm.gotoPos(0.0);
 			}
 
 			if(outtake.update() == 1)
@@ -132,7 +133,7 @@ class MainTelop: LinearOpMode()
 			}
 
 			//Specimine Claw
-			if(gamepad.circle())
+			if(gamepad.dpadRight())
 			{
 				if(claw.state == SpeciminClaw.State.Closed)
 				{
@@ -218,6 +219,11 @@ class MainTelop: LinearOpMode()
 				if(arm.state == Arm.State.Up)
 				{
 					arm.down();
+					if(colorSensor.col != ColorSensor.NONE)
+					{
+						intake.reverse();
+						intake.stopIn(0.75);
+					}
 				}
 				else if(arm.state == Arm.State.Down)
 				{
@@ -239,6 +245,7 @@ class MainTelop: LinearOpMode()
 				}
 			}
 
+			colorSensor.update();
 			telemetry.addData("imu heading", imuHeading);
 			telemetry.addData("localizer heading", localHeading);
 			slide.telem(telemetry);

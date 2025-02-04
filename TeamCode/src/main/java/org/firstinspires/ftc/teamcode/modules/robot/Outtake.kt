@@ -11,13 +11,13 @@ class Outtake(val hardwareMap: HardwareMap)
 	companion object
 	{
 		@JvmField
-		var armUp = 0.25;
+		var armUp = 0.0;
 
 		@JvmField
-		var armDown = 1.0;
+		var armDown = 0.95;
 
 		@JvmField
-		var bucketUp = 0.6;
+		var bucketUp = 0.45;
 
 		@JvmField
 		var bucketDown = 0.85;
@@ -27,16 +27,19 @@ class Outtake(val hardwareMap: HardwareMap)
 
 		@JvmField
 		var bucketUpTime = 0.3;
+
+		@JvmField
+		var parkPos = 0.1;
 	}
 
 	enum class State
 	{
-		Up, Score, Idle
+		Up, Score, Idle, Score2
 	}
 
 	var state = State.Idle;
 
-	val arm: Servo = hardwareMap.servo.get("outtakeArm");
+	private val arm: Servo = hardwareMap.servo.get("outtakeArm");
 	private val bucket: Servo = hardwareMap.servo.get("bucket");
 
 	private val elapsedTime = ElapsedTime();
@@ -46,6 +49,13 @@ class Outtake(val hardwareMap: HardwareMap)
 		elapsedTime.reset();
 		arm.position = armUp;
 		state = State.Up;
+	}
+
+	fun score2()
+	{
+		elapsedTime.reset();
+		arm.position = armUp;
+		state = State.Score2;
 	}
 
 	fun score()
@@ -59,12 +69,15 @@ class Outtake(val hardwareMap: HardwareMap)
 	{
 		if(state != State.Idle)
 		{
-			if(state == State.Up)
+			if(state == State.Up || state == State.Score2)
 			{
 				if(elapsedTime.seconds() > bucketUpTime)
 				{
 					bucket.position = bucketUp;
-					state = State.Idle;
+					if(state == State.Score2)
+						score();
+					else
+						state = State.Idle;
 				}
 			}
 			if(state == State.Score)
@@ -104,5 +117,15 @@ class Outtake(val hardwareMap: HardwareMap)
 	fun bucketScore()
 	{
 		bucket.position = bucketScore;
+	}
+
+	fun park()
+	{
+		arm.position = parkPos;
+	}
+
+	fun isArmUp(): Boolean
+	{
+		return arm.position == armUp;
 	}
 }

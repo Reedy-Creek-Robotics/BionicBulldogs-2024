@@ -11,3 +11,5 @@ fun lerp(a: Float, b: Float, t: Float): Float
 {
 		return a + (b - a) * t;
 }
+
+fun Double.format(len: Int) = "%.${len}f".format(this);

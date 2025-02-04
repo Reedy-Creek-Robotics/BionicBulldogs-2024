@@ -17,7 +17,7 @@ class CSampleTest: LinearOpMode()
 	override fun runOpMode()
 	{
 
-		val arm = Arm(hardwareMap.servo.get("arm"));
+		val arm = Arm(hardwareMap);
 		val gripper = Gripper(hardwareMap.servo.get("gripper"));
 		val spin = Intake(hardwareMap);
 		val drive = HDrive(HDriveConfig(hardwareMap));

@@ -16,7 +16,7 @@ class ESampleTest: LinearOpMode()
     override fun runOpMode()
     {
         val rotate = Intake(hardwareMap);
-        val arm = Arm(hardwareMap.servo.get("arm"));
+        val arm = Arm(hardwareMap);
         val drive = HDrive(HDriveConfig(hardwareMap));
         drive.setLocalizer(SparkfunImuLocalizer(hardwareMap.get(SparkFunOTOS::class.java, "imu2")))
         var square = 0;

@@ -1,182 +1,179 @@
 package org.firstinspires.ftc.teamcode.opmode.auto
 
-import com.acmerobotics.dashboard.config.Config
-import com.acmerobotics.roadrunner.geometry.Pose2d
-import com.acmerobotics.roadrunner.geometry.Vector2d
+import com.acmerobotics.dashboard.FtcDashboard
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry
+import com.acmerobotics.roadrunner.ParallelAction
+import com.acmerobotics.roadrunner.Pose2d
+import com.acmerobotics.roadrunner.SequentialAction
+import com.acmerobotics.roadrunner.SleepAction
+import com.acmerobotics.roadrunner.ftc.runBlocking
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
-import com.qualcomm.robotcore.util.ElapsedTime
+import org.firstinspires.ftc.teamcode.modules.actions.*
 import org.firstinspires.ftc.teamcode.modules.drive.rotPos
-import org.firstinspires.ftc.teamcode.modules.robot.Arm
 import org.firstinspires.ftc.teamcode.modules.robot.HSlide
 import org.firstinspires.ftc.teamcode.modules.robot.Intake
-import org.firstinspires.ftc.teamcode.modules.robot.Outtake
-import org.firstinspires.ftc.teamcode.modules.robot.Slide
-import org.firstinspires.ftc.teamcode.modules.robot.SampleOuttake
-import org.firstinspires.ftc.teamcode.modules.robot.SpecimenOuttake
-import org.firstinspires.ftc.teamcode.modules.robot.SpeciminClaw
-import org.firstinspires.ftc.teamcode.roadrunner.drive.SampleMecanumDrive
-import kotlin.math.PI
+import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive
+import java.io.File
+import java.io.FileWriter
 
 @Autonomous
-@Config
 class SampleAuto: LinearOpMode()
 {
-	companion object
-	{
-		@JvmField
-		var transferDelay = 0.5;
-		@JvmField
-		var intakeDelay = 1.0;
-		@JvmField
-		var outtakeDelay = 1.0;
-		@JvmField
-		var slideScore = -900;
-	}
-
 	override fun runOpMode()
 	{
-		val drive = SampleMecanumDrive(hardwareMap);
-		val hslide = HSlide(hardwareMap.servo.get("hslide"));
-		val outtake = Outtake(hardwareMap);
-		val slide = Slide(hardwareMap);
-		val sampleOuttake = SampleOuttake(slide, outtake);
-		val intake = Intake(hardwareMap);
-		val claw = SpeciminClaw(hardwareMap);
-		val arm = Arm(hardwareMap.servo.get("arm"));
-    val specimenClaw = SpecimenOuttake(claw, slide);
+		initComponents(hardwareMap);
+		specimenClaw.open();
+		telemetry = MultipleTelemetry(telemetry, FtcDashboard.getInstance().telemetry);
 
-		val preload = drive.trajectorySequenceBuilder(Pose2d(-30.0, -60.0, Math.toRadians(-90.0)))
-			.lineToConstantHeading(Vector2d(-6.0, -28.0)).build();
-		val samp1 = drive.trajectorySequenceBuilder(preload.end())
-			.lineToLinearHeading(Pose2d(-30.0, -40.0, PI))
-			.lineToLinearHeading(Pose2d(-36.0, -22.0, PI),
-        velOverride(),
-        accelOverride(maxAccel = 30.0)
-      )
-      .build();
-		val toScore = drive.trajectorySequenceBuilder(samp1.end())
-			.lineToLinearHeading(Pose2d(-51.5, -51.5, Math.toRadians(45.0)),
-        velOverride(),
-        accelOverride(maxAccel = 30.0)
-      )
-      .build();
-		val samp2 = drive.trajectorySequenceBuilder(toScore.end())
-			.lineToLinearHeading(Pose2d(-44.0, -22.0, PI),
-        velOverride(),
-        accelOverride(maxAccel = 30.0)
-      )
-      .build();
-		val twoScore = drive.trajectorySequenceBuilder(samp2.end())
-			.lineToLinearHeading(Pose2d(-51.5, -51.5, Math.toRadians(45.0)),
-        velOverride(),
-        accelOverride(maxAccel = 30.0)
-      )
-      .build();
-		val park = drive.trajectorySequenceBuilder(samp2.end())
-			.lineToLinearHeading(Pose2d(-27.0, -10.0, Math.toRadians(90.0)))
-      .build();
+		val beginPose = Pose2d(7.5, 30.5, Math.toRadians(-90.0))
+		val drive = MecanumDrive(hardwareMap, beginPose)
 
-		drive.poseEstimate = preload.start();
+		val action = SequentialAction(
+			listOf(
+				ParallelAction(
+					SampleOuttakeAction_Grab(),
+					drive.actionBuilder(beginPose)
+						.setTangent(0.0)
+						.splineToLinearHeading(Pose2d(15.5, 56.0, Math.toRadians(-45.0)), Math.toRadians(135.0))
+						.build()
+				),
+				SampleOuttakeAction_Score(),
+				ParallelAction(
+					SequentialAction(
+						IntakeAction_Intake(),
+						HSlideAction_GotoPos(HSlide.min),
+						ArmAction_Down(),
+						SleepAction(0.25),
+						IntakeAction_SetRotation(Intake.rotatorCenter + Intake.autoRotatorIncrement),
+					),
+					drive.actionBuilder(Pose2d(15.5, 56.0, Math.toRadians(-45.0)))
+						.setTangent(Math.toRadians(-45.0))
+						.splineToLinearHeading(Pose2d(24.5, 40.0, Math.toRadians(0.0)), Math.toRadians(0.0))
+						.setTangent(Math.toRadians(90.0))
+						.lineToY(46.0, velOverrideRaw(40.0), drive.defaultAccelConstraint)
+						.build(),
+				),
+				SequentialAction(
+					IntakeAction_ZeroRotator(),
+					SleepAction(0.25),
+					ArmAction_Up(),
+					HSlideAction_Score(),
+					SleepAction(0.5),
+					IntakeAction_Outtake(),
+					SleepAction(0.6),
+					IntakeAction_Stop()
+				),
+				ParallelAction(
+					SampleOuttakeAction_Grab(),
+					SequentialAction(
+						SleepAction(0.2),
+						drive.actionBuilder(Pose2d(25.0, 45.0, Math.toRadians(0.0)))
+							.setTangent(Math.toRadians(135.0))
+							.splineToLinearHeading(
+								Pose2d(16.5, 55.0, Math.toRadians(-45.0)),
+								Math.toRadians(135.0)
+							)
+							.build()
+					)
+				),
+				SampleOuttakeAction_Score(),
+				ParallelAction(
+					SequentialAction(
+						IntakeAction_Intake(),
+						HSlideAction_GotoPos(HSlide.min),
+						ArmAction_Down(),
+						SleepAction(0.25),
+						IntakeAction_SetRotation(Intake.rotatorCenter + Intake.autoRotatorIncrement),
+					),
+					drive.actionBuilder(Pose2d(16.5, 55.0, Math.toRadians(-45.0)))
+						.setTangent(Math.toRadians(-45.0))
+						.splineToLinearHeading(Pose2d(24.75, 50.5, Math.toRadians(0.0)), Math.toRadians(0.0))
+						.setTangent(Math.toRadians(90.0))
+						.lineToY(53.0)
+						.build(),
+				),
+				SequentialAction(
+					IntakeAction_ZeroRotator(),
+					SleepAction(0.25),
+					ArmAction_Up(),
+					HSlideAction_Score(),
+					SleepAction(0.5),
+					IntakeAction_Outtake(),
+					SleepAction(0.6),
+					IntakeAction_Stop()
+				),
+				ParallelAction(
+					SampleOuttakeAction_Grab(),
+					SequentialAction(
+						SleepAction(0.6),
+						drive.actionBuilder(Pose2d(25.0, 53.0, Math.toRadians(0.0)))
+							.setTangent(Math.toRadians(135.0))
+							.splineToLinearHeading(
+								Pose2d(16.5, 55.5, Math.toRadians(-45.0)),
+								Math.toRadians(135.0)
+							)
+							.build()
+					)
+				),
+				SampleOuttakeAction_Score(),
+				ParallelAction(
+					SequentialAction(
+						IntakeAction_Intake(),
+						HSlideAction_GotoPos(HSlide.max / 2),
+						ArmAction_Down(),
+					),
+					drive.actionBuilder(Pose2d(16.5, 55.5, Math.toRadians(-45.0)))
+						.setTangent(Math.toRadians(-45.0))
+						.splineToLinearHeading(Pose2d(45.75, 49.0, Math.toRadians(90.0)), Math.toRadians(0.0))
+						.build(),
+				),
+				SequentialAction(
+					HSlideAction_GotoPos(HSlide.min),
+					SleepAction(1.0),
+					IntakeAction_ZeroRotator(),
+					SleepAction(0.25),
+					ArmAction_Up(),
+					HSlideAction_Score(),
+					SleepAction(0.5),
+					IntakeAction_Outtake(),
+					SleepAction(0.6),
+					IntakeAction_Stop()
+				),
+				ParallelAction(
+					SampleOuttakeAction_Grab(),
+					SequentialAction(
+						SleepAction(0.6),
+						drive.actionBuilder(Pose2d(46.0, 49.0, Math.toRadians(90.0)))
+							.setTangent(Math.toRadians(135.0))
+							.splineToLinearHeading(
+								Pose2d(16.5, 55.5, Math.toRadians(-45.0)),
+								Math.toRadians(135.0)
+							)
+							.build()
+					)
+				),
+				SampleOuttakeAction_Score(),
+				drive.actionBuilder(Pose2d(16.5, 55.5, Math.toRadians(-45.0)))
+					.setTangent(Math.toRadians(0.0))
+					.splineToLinearHeading(Pose2d(61.0, 23.0, Math.toRadians(90.0)), Math.toRadians(-90.0))
+					.build(),
+				SampleOuttakeAction_Park(),
+				SleepAction(3.0)
+			)
+		);
 
-    val startHeading = drive.poseEstimate.heading;
+		waitForStart()
 
-    specimenClaw.init();
+		val timerAction = toTimerAction(action);
+		runBlocking(timerAction);
+		val file = File("/sdcard/opmodeTimerSample.txt");
+		if(!file.exists())
+			file.createNewFile();
+		val writer = FileWriter(file);
+		writer.write(timerAction.timerString());
+		writer.close();
 
-		outtake.armDown();
-		outtake.bucketDown();
-		claw.close();
-		arm.down();
-		hslide.zero();
-
-    sampleOuttake.init();
-
-    intake.zeroRotator();
-
-		waitForStart();
-
-    specimenClaw.collect();
-    specimenClaw.waitUntilIdle();
-
-		drive.followTrajectorySequence(preload);
-
-    specimenClaw.score();
-    specimenClaw.waitUntilIdle();
-
-		drive.followTrajectorySequence(samp1);
-
-		intake.forward();
-		hslide.gotoPos(0.65);
-
-		delay(intakeDelay);
-
-		hslide.score();
-		arm.up();
-
-		delay(transferDelay);
-		intake.reverse();
-		delay(transferDelay);
-
-		intake.stop();
-		arm.down();
-		hslide.gotoPos(1.0);
-    sampleOuttake.up();
-
-		drive.followTrajectorySequenceAsync(toScore);
-
-    while(drive.isBusy())
-    {
-      drive.update();
-      sampleOuttake.update();
-    }
-
-    sampleOuttake.score();
-    sampleOuttake.waitUntilIdle();
-
-		drive.followTrajectorySequence(samp2);
-
-		intake.forward();
-		hslide.gotoPos(0.65);
-
-		delay(intakeDelay);
-
-		hslide.score();
-		arm.up();
-
-		delay(transferDelay);
-		intake.reverse();
-		delay(transferDelay);
-
-		intake.stop();
-		arm.down();
-		hslide.zero();
-
-    sampleOuttake.up();
-
-    //Different starting point (samp2 instead of samp1)
-
-		//Arm position to rotate to the opposite side of the bot (sample scoring pos)
-		drive.followTrajectorySequenceAsync(twoScore);
-
-    while(drive.isBusy())
-    {
-      drive.update();
-      sampleOuttake.update();
-    }
-
-		//Arm position to stop the bot from clipping anything
-    sampleOuttake.score();
-    sampleOuttake.waitUntilIdle();
-
-		drive.followTrajectorySequence(park);
-
-		rotPos = drive.localizer.poseEstimate.heading + startHeading;
-	}
-
-	fun delay(time: Double)
-	{
-		val elapsedTime = ElapsedTime();
-		elapsedTime.reset();
-		while(elapsedTime.seconds() < time);
+		rotPos = drive.localizer.pose.heading.toDouble();
 	}
 }

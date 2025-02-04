@@ -10,7 +10,7 @@ class SampleOuttake(private val slide: Slide, private val outtake: Outtake)
 
 	fun up()
 	{
-		slide.gotoPos(-2450);
+		slide.gotoPos(-2000);
 		outtake.up();
 	}
 

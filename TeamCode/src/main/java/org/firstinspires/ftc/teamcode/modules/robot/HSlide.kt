@@ -1,25 +1,27 @@
 package org.firstinspires.ftc.teamcode.modules.robot
 
 import com.acmerobotics.dashboard.config.Config
-import com.qualcomm.robotcore.hardware.Servo
+import com.qualcomm.robotcore.hardware.HardwareMap
 
 @Config
-class HSlide(private val hSlide: Servo)
+class HSlide(hardwareMap: HardwareMap)
 {
 	companion object
 	{
 		@JvmField
-		var increment = 0.04;
+		var increment = 0.05;
 
 		@JvmField
-		var max = 0.95;
+		var max = 0.38;
 
 		@JvmField
-		var min = 0.3;
+		var min = 0.95;
 
 		@JvmField
-		var score = 0.76;
+		var score = 0.38;
 	}
+
+	private val hSlide = hardwareMap.servo.get("hslide");
 
 	fun score()
 	{
@@ -53,7 +55,7 @@ class HSlide(private val hSlide: Servo)
 
 	fun zero()
 	{
-		hSlide.position = 0.95;
+		hSlide.position = max;
 	}
 
 	fun gotoPos(pos: Double)
