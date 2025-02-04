@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap
 @Config
 class Stik (hardwareMap: HardwareMap) {
 
-    private val stik = hardwareMap.servo.get("Stick");
+    private val stik = hardwareMap.servo.get("stick");
 
     enum class State {
         Raised,
