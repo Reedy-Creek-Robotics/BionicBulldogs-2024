@@ -12,6 +12,7 @@ import org.opencv.core.MatOfPoint2f
 import org.opencv.core.Scalar
 import org.opencv.imgproc.Imgproc
 
+//Scrapped
 class SampleRecognition(private val sampleColors: SampleColors): VisionProcessor
 {
 	private var sampleList = ArrayList<Sample>();

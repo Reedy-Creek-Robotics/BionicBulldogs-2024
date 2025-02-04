@@ -1,80 +1,51 @@
 package org.firstinspires.ftc.teamcode.opmode.telop
 
+import android.graphics.Color
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName
-import org.firstinspires.ftc.teamcode.modules.clamp
-import org.firstinspires.ftc.teamcode.modules.robot.SampleRecognition
 import org.firstinspires.ftc.vision.VisionPortal
-import kotlin.math.pow
-import kotlin.math.sqrt
+import org.firstinspires.ftc.vision.opencv.ImageRegion
+import org.firstinspires.ftc.vision.opencv.PredominantColorProcessor
 
 @TeleOp
 class RecognitionTest: LinearOpMode()
 {
 	override fun runOpMode()
 	{
-		val servo = hardwareMap.servo.get("servo");
+		val processor = PredominantColorProcessor.Builder()
+			.setRoi(ImageRegion.entireFrame())
+			.setSwatches(
+				PredominantColorProcessor.Swatch.RED,
+				PredominantColorProcessor.Swatch.BLUE,
+				PredominantColorProcessor.Swatch.YELLOW,
+				PredominantColorProcessor.Swatch.BLACK,
+				PredominantColorProcessor.Swatch.WHITE)
+			.build();
 
-		val processor = SampleRecognition(SampleRecognition.SampleColors.Red);
-
-		val visionPortalBuilder = VisionPortal.Builder();
-		visionPortalBuilder.addProcessor(processor);
-		visionPortalBuilder.setCamera(hardwareMap.get(WebcamName::class.java, "Webcam 1"));
-		val visionPortal = visionPortalBuilder.build();
+		val visionPortal = VisionPortal.Builder()
+			.addProcessor(processor)
+			.setCameraResolution(android.util.Size(640, 480))
+			.setCamera(hardwareMap.get(WebcamName::class.java, "Webcam 1"))
+			.build();
 
 		waitForStart();
 
-		while(opModeIsActive())
-		{
-			val sampleList = processor.getSampleList(null);
+		while(opModeIsActive() || opModeInInit()) {
 
-			var closestDist = -1.0f;
-			var closestInd = -1;
+			val result = processor.analysis;
 
-			for((k, sample) in sampleList.withIndex())
-			{
-				val dist = sqrt(
-					(sample.position.x - (processor.width / 2)).pow(2) + (sample.position.y - processor.height).pow(
-						2
-					)
-				);
-				if(dist < closestDist || closestDist == -1.0f)
-				{
-					closestDist = dist;
-					closestInd = k;
-				}
-			}
 
-			if(closestInd > 0)
-			{
-				val closest = sampleList[closestInd];
-				telemetry.addData("closestSample", closestInd);
-				/*telemetry.addLine(
-					String.format(
-						"closest x %d, y %d, angle %d",
-						closest.position.x,
-						closest.position.y,
-						closest.rotation
-					)
-				);*/
-			}
-			else
-			{
-				telemetry.addLine("no samples found");
-			}
-
-			for((i, sample) in sampleList.withIndex())
-			{
-				telemetry.addData("sample $i position::x", sample.position.x);
-				telemetry.addData("sample $i position::y", sample.position.y);
-				telemetry.addData("sample $i rotation", sample.rotation);
-			}
-			if(sampleList.size > 0)
+			/*if(sampleList.size > 0)
 			{
 				servo.position = (clamp(sampleList[0].rotation + 180, 0.0f, 180.0f)/* / 180*/).toDouble();
-			}
-			telemetry.addData("pos", servo.position)
+			}*/
+			//telemetry.addData("pos", servo.position)
+
+			telemetry.addData("Best Match:", result.closestSwatch);
+			telemetry.addData("R", Color.red(result.rgb));
+			telemetry.addData("G", Color.green(result.rgb));
+			telemetry.addData("B", Color.blue(result.rgb));
 			telemetry.update();
 		}
 	}
