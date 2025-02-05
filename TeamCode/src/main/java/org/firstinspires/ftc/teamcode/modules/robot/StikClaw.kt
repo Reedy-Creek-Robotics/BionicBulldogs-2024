@@ -20,7 +20,7 @@ class StikClaw (hardwareMap: HardwareMap) {
         @JvmField
         var open: Double = 0.25;
         @JvmField
-        var close: Double = 0.0;
+        var close: Double = 0.1;
     }
 
     init {
