@@ -13,8 +13,10 @@ import org.firstinspires.ftc.teamcode.modules.actions.drive
 import org.firstinspires.ftc.teamcode.modules.actions.toTimerAction
 import org.firstinspires.ftc.teamcode.opmode.auto.accelOverrideRaw
 import org.firstinspires.ftc.teamcode.opmode.auto.velOverrideRaw
+import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive
 import java.io.File
 import java.io.FileWriter
+import kotlin.math.PI
 
 class LuaAction
 {
@@ -22,6 +24,11 @@ class LuaAction
 	{
 		fun init(builder: FunctionBuilder)
 		{
+			MecanumDrive.PARAMS.maxWheelVel = 80.0;
+			MecanumDrive.PARAMS.maxProfileAccel = 60.0;
+			MecanumDrive.PARAMS.maxAngVel = PI * 4.0;
+			MecanumDrive.PARAMS.maxAngAccel = PI * 4.0;
+
 			builder.setCurrentObject(LuaAction());
 
 			builder.addObjectFunction("run", LuaType.Void, listOf(LuaType.Object(Action::class.java)));

@@ -13,17 +13,24 @@ function addOpmode(opmode) end
 ---@field setTangent fun(self: table, tangent: number)
 ---@field lineToX fun(self: table, x: number)
 ---@field lineToY fun(self: table, y: number)
+---@field turnTo fun(self: table, h: number)
 ---@field splineToLinearHeading fun(self: table, x: number, y: number, h: number, t: number)
 ---@field splineToConstantHeading fun(self: table, x: number, y: number, t: number)
 ---@field build fun(self: table): Action
+---@field getEndX fun(self: table): number
+---@field getEndY fun(self: table): number
+---@field getEndH fun(self: table): number
+LuaTrajectoryBuilder = {}
 
 ---@class LuaSequentalAction
 ---@field add fun(self: table, action: Action)
 ---@field build fun(self: table): Action
+LuaSequentalAction = {}
 
 ---@class LuaParallelAction 
 ---@field add fun(self: table, action: Action)
 ---@field build fun(self: table): Action
+LuaParallelAction = {}
 
 ---@return LuaTrajectoryBuilder
 ---@param x number

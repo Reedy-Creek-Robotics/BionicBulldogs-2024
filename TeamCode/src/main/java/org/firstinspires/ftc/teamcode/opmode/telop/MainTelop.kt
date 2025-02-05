@@ -40,7 +40,6 @@ open class MainTelop(private val colorSensorBad: Int): LinearOpMode()
 		val specimenOuttake = SpecimenOuttake(claw, slide);
 		val arm = Arm(hardwareMap);
 		val intake = Intake(hardwareMap);
-		val specimenRotator = SpecimenRotator(hardwareMap);
 
 		val outtake = Outtake(hardwareMap);
 
@@ -63,7 +62,6 @@ open class MainTelop(private val colorSensorBad: Int): LinearOpMode()
 		waitForStart();
 
 		specimenOuttake.init();
-		specimenRotator.init();
 		sampleOuttake.init();
 
 		hSlide.zero();
@@ -148,15 +146,6 @@ open class MainTelop(private val colorSensorBad: Int): LinearOpMode()
 				{
 					claw.close();
 				}
-			}
-
-			if(gamepad.ps())
-			{
-				specimenRotator.toggle();
-				if(specimenRotator.state == 0)
-					slide.gotoPos(specimenSlidePosition);
-				else
-					slide.lower();
 			}
 
 			// Intake
