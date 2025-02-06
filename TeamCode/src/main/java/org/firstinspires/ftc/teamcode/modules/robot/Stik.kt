@@ -18,9 +18,9 @@ class Stik (hardwareMap: HardwareMap) {
     companion object
     {
         @JvmField
-        var lower: Double = 0.75;
+        var lower: Double = 0.1;
         @JvmField
-        var raise: Double = 0.0;
+        var raise: Double = 0.73;
     }
 
     init {

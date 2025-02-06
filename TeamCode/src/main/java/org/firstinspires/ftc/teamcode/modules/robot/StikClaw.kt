@@ -18,9 +18,9 @@ class StikClaw (hardwareMap: HardwareMap) {
     companion object
     {
         @JvmField
-        var open: Double = 0.25;
+        var close: Double = 0.5;
         @JvmField
-        var close: Double = 0.1;
+        var open: Double = 0.0;
     }
 
     init {

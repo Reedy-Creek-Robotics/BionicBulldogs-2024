@@ -249,6 +249,24 @@ class MainTelop: LinearOpMode()
 				}
 			}
 
+			/*Stik
+			if (gamepad.square()) {
+				if (stik.state == Stik.State.Raised) {
+					stik.raise();
+					stikRotate.outake();
+				} else if (stik.state == Stik.State.Lowered) {
+					stik.lower();
+					stikRotate.intake();
+				}
+			}
+			if (gamepad.circle()) {
+				if (stikClaw.state == StikClaw.State.Closed) {
+					stikClaw.open();
+				} else if (stikClaw.state == StikClaw.State.Opened) {
+					stikClaw.close();
+				}
+			}*/
+
 			telemetry.addData("imu heading", imuHeading);
 			telemetry.addData("localizer heading", localHeading);
 			slide.telem(telemetry);

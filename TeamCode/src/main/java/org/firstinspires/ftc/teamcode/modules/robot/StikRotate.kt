@@ -18,7 +18,7 @@ class StikRotate(hardwareMap: HardwareMap) {
     companion object
     {
         @JvmField
-        var intake: Double = 0.5;
+        var intake: Double = 0.9;
         @JvmField
         var outake: Double = 0.0;
     }
