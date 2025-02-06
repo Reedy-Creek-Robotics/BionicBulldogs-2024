@@ -10,7 +10,7 @@ class SpecimenOuttake(private val claw: SpeciminClaw, private val slide: Slide)
 	companion object
 	{
 		@JvmField
-		var relesePos = -1130;
+		var relesePos = -1115;
 		@JvmField
 		var pause = 0.26;
 	}
@@ -40,6 +40,13 @@ class SpecimenOuttake(private val claw: SpeciminClaw, private val slide: Slide)
 		elapsedTime.reset();
 		claw.close();
 		state = State.Raising;
+	}
+
+	fun collectInstant()
+	{
+		claw.close();
+		state = State.Raising;
+		update();
 	}
 
 	fun update()

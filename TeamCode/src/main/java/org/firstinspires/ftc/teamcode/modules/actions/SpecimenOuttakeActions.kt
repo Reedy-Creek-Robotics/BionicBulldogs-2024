@@ -18,6 +18,15 @@ class SpecimenOuttakeAction_Grab: Action
 	}
 }
 
+class SpecimenOuttakeAction_GrabInstant: Action
+{
+	override fun run(p: TelemetryPacket): Boolean
+	{
+			specimenOuttake.collectInstant();
+		return false;
+	}
+}
+
 class SpecimenOuttakeAction_Score: Action
 {
 	private var ran = false;

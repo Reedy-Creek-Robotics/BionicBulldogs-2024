@@ -4,18 +4,18 @@
 ---@field start function?
 ---@field update function?
 
----@class opmode Opmode
+---@param opmode Opmode
 function addOpmode(opmode) end
 
 ---@class Action
 
 ---@class LuaTrajectoryBuilder
----@field setTangent fun(self: table, tangent: number)
----@field lineToX fun(self: table, x: number)
----@field lineToY fun(self: table, y: number)
----@field turnTo fun(self: table, h: number)
----@field splineToLinearHeading fun(self: table, x: number, y: number, h: number, t: number)
----@field splineToConstantHeading fun(self: table, x: number, y: number, t: number)
+---@field setTangent fun(self: table, tangent: number): LuaTrajectoryBuilder
+---@field lineToX fun(self: table, x: number): LuaTrajectoryBuilder
+---@field lineToY fun(self: table, y: number): LuaTrajectoryBuilder
+---@field turnTo fun(self: table, h: number): LuaTrajectoryBuilder
+---@field splineToLinearHeading fun(self: table, x: number, y: number, h: number, t: number): LuaTrajectoryBuilder
+---@field splineToConstantHeading fun(self: table, x: number, y: number, t: number): LuaTrajectoryBuilder
 ---@field build fun(self: table): Action
 ---@field getEndX fun(self: table): number
 ---@field getEndY fun(self: table): number
@@ -23,12 +23,12 @@ function addOpmode(opmode) end
 LuaTrajectoryBuilder = {}
 
 ---@class LuaSequentalAction
----@field add fun(self: table, action: Action)
+---@field add fun(self: table, action: Action): LuaSequentalAction
 ---@field build fun(self: table): Action
 LuaSequentalAction = {}
 
 ---@class LuaParallelAction 
----@field add fun(self: table, action: Action)
+---@field add fun(self: table, action: Action): LuaParallelAction
 ---@field build fun(self: table): Action
 LuaParallelAction = {}
 
@@ -59,6 +59,9 @@ function sleepAction(time) end
 
 ---@return Action
 function specimenGrab() end
+
+---@return Action
+function specimenGrabInstant() end
 
 ---@return Action
 function specimenScore() end

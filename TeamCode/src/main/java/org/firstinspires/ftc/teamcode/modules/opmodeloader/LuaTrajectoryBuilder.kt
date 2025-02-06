@@ -6,6 +6,9 @@ import com.acmerobotics.roadrunner.TrajectoryActionBuilder
 import com.acmerobotics.roadrunner.Vector2d
 import com.minerkid08.dynamicopmodeloader.FunctionBuilder
 import com.minerkid08.dynamicopmodeloader.LuaType
+import org.firstinspires.ftc.teamcode.modules.actions.drive
+import org.firstinspires.ftc.teamcode.opmode.auto.accelOverrideRaw
+import org.firstinspires.ftc.teamcode.opmode.auto.velOverrideRaw
 
 class LuaTrajectoryBuilder(private var builder: TrajectoryActionBuilder)
 {
@@ -65,6 +68,28 @@ class LuaTrajectoryBuilder(private var builder: TrajectoryActionBuilder)
 	private var intEndX = 0.0;
 	private var intEndY = 0.0;
 	private var intEndH = 0.0;
+
+	constructor(x: Double, y: Double, h: Double):
+		this(drive.actionBuilder(Pose2d(x, y, Math.toRadians(h))))
+	{
+		intEndX = x;
+		intEndY = y;
+		intEndH = h;
+	}
+
+	constructor(x: Double, y: Double, h: Double, vel: Double, minAccel: Double, maxAccel: Double):
+		this(
+			drive.actionBuilder(
+				Pose2d(x, y, Math.toRadians(h)),
+				velOverrideRaw(vel),
+				accelOverrideRaw(minAccel, maxAccel)
+			)
+		)
+	{
+		intEndX = x;
+		intEndY = y;
+		intEndH = h;
+	}
 
 	fun setTangent(tangent: Double)
 	{

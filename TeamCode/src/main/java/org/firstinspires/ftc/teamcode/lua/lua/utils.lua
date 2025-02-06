@@ -2,16 +2,25 @@ local defaultVel = 80;
 local defaultMinAccel = -30;
 local defaultMaxAccel = 60;
 
----@class Overrides
+---@class Overides
 ---@field vel number?
 ---@field minAccel number?
 ---@field maxAccel number?
 
----@param table Overrides
+---@param overideTable Overides
 ---@return number, number, number
-function overrides(table)
-	local vel = table.vel or defaultVel;
-	local minAccel = table.minAccel or defaultMinAccel;
-	local maxAccel = table.maxAccel or defaultMaxAccel;
+function overides(overideTable)
+	local vel = overideTable.vel or defaultVel;
+	local minAccel = overideTable.minAccel or defaultMinAccel;
+	local maxAccel = overideTable.maxAccel or defaultMaxAccel;
 	return vel, minAccel, maxAccel;
+end
+
+function initExternalFunctions()
+		---@return number
+		---@return number
+		---@return number
+		function LuaTrajectoryBuilder:getEnd()
+			return self:getEndX(), self:getEndY(), self:getEndH();
+		end
 end

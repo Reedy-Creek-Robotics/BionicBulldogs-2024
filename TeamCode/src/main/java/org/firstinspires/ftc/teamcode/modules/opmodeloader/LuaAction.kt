@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.modules.opmodeloader
 
-import android.util.Log
 import com.acmerobotics.roadrunner.Action
 import com.acmerobotics.roadrunner.ParallelAction
 import com.acmerobotics.roadrunner.Pose2d
@@ -11,8 +10,6 @@ import com.minerkid08.dynamicopmodeloader.FunctionBuilder
 import com.minerkid08.dynamicopmodeloader.LuaType
 import org.firstinspires.ftc.teamcode.modules.actions.drive
 import org.firstinspires.ftc.teamcode.modules.actions.toTimerAction
-import org.firstinspires.ftc.teamcode.opmode.auto.accelOverrideRaw
-import org.firstinspires.ftc.teamcode.opmode.auto.velOverrideRaw
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive
 import java.io.File
 import java.io.FileWriter
@@ -37,7 +34,6 @@ class LuaAction
 				LuaType.Void,
 				listOf(LuaType.Object(Action::class.java), LuaType.String)
 			);
-			builder.addObjectFunction("print", LuaType.Void, listOf(LuaType.String));
 			builder.addObjectFunction(
 				"trajectoryAction", LuaType.Object(LuaTrajectoryBuilder::class.java), listOf(
 					LuaType.Double, LuaType.Double, LuaType.Double
@@ -89,20 +85,14 @@ class LuaAction
 
 	fun trajectoryAction(x: Double, y: Double, h: Double): LuaTrajectoryBuilder
 	{
-		return LuaTrajectoryBuilder(drive.actionBuilder(Pose2d(x, y, Math.toRadians(h))));
+		return LuaTrajectoryBuilder(x, y, h);
 	}
 
 	fun trajectoryActionX(
 		x: Double, y: Double, h: Double, vel: Double, minAccel: Double, maxAccel: Double
 	): LuaTrajectoryBuilder
 	{
-		return LuaTrajectoryBuilder(
-			drive.actionBuilder(
-				Pose2d(x, y, Math.toRadians(h)),
-				velOverrideRaw(vel),
-				accelOverrideRaw(minAccel, maxAccel)
-			)
-		);
+		return LuaTrajectoryBuilder(x, y, h, vel, minAccel, maxAccel);
 	}
 
 	fun sequentalAction(): LuaSequentalAction
@@ -135,11 +125,6 @@ class LuaAction
 	fun run(action: Action)
 	{
 		runBlocking(action);
-	}
-
-	fun print(str: String)
-	{
-		Log.d("lua", str);
 	}
 }
 
