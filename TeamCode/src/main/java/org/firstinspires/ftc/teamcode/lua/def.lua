@@ -8,14 +8,21 @@
 function addOpmode(opmode) end
 
 ---@class Action
+Action = {}
 
 ---@class LuaTrajectoryBuilder
 ---@field setTangent fun(self: table, tangent: number): LuaTrajectoryBuilder
 ---@field lineToX fun(self: table, x: number): LuaTrajectoryBuilder
+---@field lineToX2 fun(self: table, x: number, vel: number, minAccel: number, maxAccel: number): LuaTrajectoryBuilder
 ---@field lineToY fun(self: table, y: number): LuaTrajectoryBuilder
+---@field lineToY2 fun(self: table, y: number, vel: number, minAccel: number, maxAccel: number): LuaTrajectoryBuilder
 ---@field turnTo fun(self: table, h: number): LuaTrajectoryBuilder
+---@field splineTo fun(self: table, x: number, y: number, t: number): LuaTrajectoryBuilder
+---@field splineTo2 fun(self: table, x: number, y: number, t: number, vel: number, minAccel: number, maxAccel: number): LuaTrajectoryBuilder
 ---@field splineToLinearHeading fun(self: table, x: number, y: number, h: number, t: number): LuaTrajectoryBuilder
+---@field splineToLinearHeading2 fun(self: table, x: number, y: number, h: number, t: number, vel: number, minAccel: number, maxAccel: number): LuaTrajectoryBuilder
 ---@field splineToConstantHeading fun(self: table, x: number, y: number, t: number): LuaTrajectoryBuilder
+---@field splineToConstantHeading2 fun(self: table, x: number, y: number, t: number, vel: number, minAccel: number, maxAccel: number): LuaTrajectoryBuilder
 ---@field build fun(self: table): Action
 ---@field getEndX fun(self: table): number
 ---@field getEndY fun(self: table): number

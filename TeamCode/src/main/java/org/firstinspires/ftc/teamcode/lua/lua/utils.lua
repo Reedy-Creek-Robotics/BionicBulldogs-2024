@@ -1,5 +1,5 @@
-local defaultVel = 80;
-local defaultMinAccel = -30;
+local defaultVel = 75;
+local defaultMinAccel = -37.5;
 local defaultMaxAccel = 60;
 
 ---@class Overides
@@ -17,10 +17,10 @@ function overides(overideTable)
 end
 
 function initExternalFunctions()
-		---@return number
-		---@return number
-		---@return number
-		function LuaTrajectoryBuilder:getEnd()
-			return self:getEndX(), self:getEndY(), self:getEndH();
-		end
+	---@return number
+	---@return number
+	---@return number
+	function LuaTrajectoryBuilder:getEnd()
+		return self:getEndX(), self:getEndY(), self:getEndH();
+	end
 end

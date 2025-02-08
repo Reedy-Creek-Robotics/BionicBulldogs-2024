@@ -254,6 +254,7 @@ open class MainTelop(private val colorSensorBad: Int): LinearOpMode()
 			slide.telem(telemetry);
 			drive.telem(telemetry);
 			specimenOuttake.telem(telemetry);
+			colorSensor.telem(telemetry);
 			telemetry.addData("hPos", hSlide.pos())
 			telemetry.addData("touchpad", gamepad1.touchpad);
 			telemetry.update();

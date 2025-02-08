@@ -22,30 +22,77 @@ class LuaTrajectoryBuilder(private var builder: TrajectoryActionBuilder)
 				LuaType.Void,
 				listOf(LuaType.Double)
 			);
+
 			builder.addClassFunction(
 				LuaTrajectoryBuilder::class.java,
 				"lineToX",
 				LuaType.Void,
 				listOf(LuaType.Double)
 			);
+
+			builder.addClassFunction(
+				LuaTrajectoryBuilder::class.java,
+				"lineToX2",
+				LuaType.Void,
+				listOf(LuaType.Double, LuaType.Double, LuaType.Double, LuaType.Double)
+			);
+
 			builder.addClassFunction(
 				LuaTrajectoryBuilder::class.java,
 				"lineToY",
 				LuaType.Void,
 				listOf(LuaType.Double)
 			);
+
+			builder.addClassFunction(
+				LuaTrajectoryBuilder::class.java,
+				"lineToY2",
+				LuaType.Void,
+				listOf(LuaType.Double, LuaType.Double, LuaType.Double, LuaType.Double)
+			);
+
 			builder.addClassFunction(
 				LuaTrajectoryBuilder::class.java,
 				"splineToLinearHeading",
 				LuaType.Void,
 				listOf(LuaType.Double, LuaType.Double, LuaType.Double, LuaType.Double)
 			);
+
+			builder.addClassFunction(
+				LuaTrajectoryBuilder::class.java,
+				"splineToLinearHeading2",
+				LuaType.Void,
+				listOf(LuaType.Double, LuaType.Double, LuaType.Double, LuaType.Double, LuaType.Double, LuaType.Double, LuaType.Double)
+			);
+
 			builder.addClassFunction(
 				LuaTrajectoryBuilder::class.java,
 				"splineToConstantHeading",
 				LuaType.Void,
 				listOf(LuaType.Double, LuaType.Double, LuaType.Double)
 			);
+
+			builder.addClassFunction(
+				LuaTrajectoryBuilder::class.java,
+				"splineToConstantHeading2",
+				LuaType.Void,
+				listOf(LuaType.Double, LuaType.Double, LuaType.Double, LuaType.Double, LuaType.Double, LuaType.Double)
+			);
+
+			builder.addClassFunction(
+				LuaTrajectoryBuilder::class.java,
+				"splineTo",
+				LuaType.Void,
+				listOf(LuaType.Double, LuaType.Double, LuaType.Double)
+			);
+
+			builder.addClassFunction(
+				LuaTrajectoryBuilder::class.java,
+				"splineTo2",
+				LuaType.Void,
+				listOf(LuaType.Double, LuaType.Double, LuaType.Double, LuaType.Double, LuaType.Double, LuaType.Double)
+			);
+
 			builder.addClassFunction(
 				LuaTrajectoryBuilder::class.java,
 				"turnTo",
@@ -102,10 +149,22 @@ class LuaTrajectoryBuilder(private var builder: TrajectoryActionBuilder)
 		builder = builder.lineToX(x);
 	}
 
+	fun lineToX2(x: Double, vel: Double, minAccel: Double, maxAccel: Double)
+	{
+		intEndX = x;
+		builder = builder.lineToX(x, velOverrideRaw(vel), accelOverrideRaw(minAccel, maxAccel));
+	}
+
 	fun lineToY(y: Double)
 	{
 		intEndY = y;
 		builder = builder.lineToY(y);
+	}
+
+	fun lineToY2(x: Double, vel: Double, minAccel: Double, maxAccel: Double)
+	{
+		intEndY = x;
+		builder = builder.lineToY(x, velOverrideRaw(vel), accelOverrideRaw(minAccel, maxAccel));
 	}
 
 	fun splineToLinearHeading(x: Double, y: Double, h: Double, t: Double)
@@ -116,11 +175,40 @@ class LuaTrajectoryBuilder(private var builder: TrajectoryActionBuilder)
 		builder = builder.splineToLinearHeading(Pose2d(x, y, Math.toRadians(h)), Math.toRadians(t));
 	}
 
+	fun splineToLinearHeading2(x: Double, y: Double, h: Double, t: Double, vel: Double, minAccel: Double, maxAccel: Double)
+	{
+		intEndX = x;
+		intEndY = y;
+		intEndH = h;
+		builder = builder.splineToLinearHeading(Pose2d(x, y, Math.toRadians(h)), Math.toRadians(t), velOverrideRaw(vel), accelOverrideRaw(minAccel, maxAccel));
+	}
+
 	fun splineToConstantHeading(x: Double, y: Double, t: Double)
 	{
 		intEndX = x;
 		intEndY = y;
 		builder = builder.splineToConstantHeading(Vector2d(x, y), Math.toRadians(t));
+	}
+
+	fun splineToConstantHeading2(x: Double, y: Double, t: Double, vel: Double, minAccel: Double, maxAccel: Double)
+	{
+		intEndX = x;
+		intEndY = y;
+		builder = builder.splineToConstantHeading(Vector2d(x, y), Math.toRadians(t), velOverrideRaw(vel), accelOverrideRaw(minAccel, maxAccel));
+	}
+
+	fun splineTo(x: Double, y: Double, t: Double)
+	{
+		intEndX = x;
+		intEndY = y;
+		builder = builder.splineTo(Vector2d(x, y), Math.toRadians(t));
+	}
+
+	fun splineTo2(x: Double, y: Double, t: Double, vel: Double, minAccel: Double, maxAccel: Double)
+	{
+		intEndX = x;
+		intEndY = y;
+		builder = builder.splineTo(Vector2d(x, y), Math.toRadians(t), velOverrideRaw(vel), accelOverrideRaw(minAccel, maxAccel));
 	}
 
 	fun turnTo(h: Double)
