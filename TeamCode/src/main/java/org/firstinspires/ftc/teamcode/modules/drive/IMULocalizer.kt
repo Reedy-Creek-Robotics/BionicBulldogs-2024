@@ -7,14 +7,15 @@ import org.firstinspires.ftc.teamcode.modules.hardware.ImuEx
 
 class IMULocalizer(): Localizer
 {
-
+	private var offset = 0.0;
 	override var poseEstimate: Pose2d
 		get()
 		{
-			return Pose2d(0.0, 0.0, imu.getHeading(AngleUnit.RADIANS).toDouble())
+			return Pose2d(0.0, 0.0, imu.getHeading(AngleUnit.RADIANS).toDouble() + offset)
 		}
 		set(value)
 		{
+			offset = value.heading.toDouble();
 			imu.imu.resetYaw();
 		}
 

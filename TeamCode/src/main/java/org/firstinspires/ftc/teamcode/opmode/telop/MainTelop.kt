@@ -5,11 +5,14 @@ import com.acmerobotics.roadrunner.Pose2d
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
+import com.qualcomm.robotcore.hardware.IMU
 import com.qualcomm.robotcore.util.ElapsedTime
 import org.firstinspires.ftc.teamcode.modules.drive.HDrive
+import org.firstinspires.ftc.teamcode.modules.drive.IMULocalizer
 import org.firstinspires.ftc.teamcode.modules.drive.SparkfunImuLocalizer
 import org.firstinspires.ftc.teamcode.modules.drive.rotPos
 import org.firstinspires.ftc.teamcode.modules.hardware.GamepadEx
+import org.firstinspires.ftc.teamcode.modules.hardware.ImuEx
 import org.firstinspires.ftc.teamcode.modules.robot.*
 import org.firstinspires.ftc.teamcode.opmode.config.HDriveConfig
 
@@ -50,7 +53,8 @@ open class MainTelop(private val colorSensorBad: Int): LinearOpMode()
 		val colorSensor = ColorSensor(hardwareMap, gamepad1, colorSensorBad);
 
 		val drive = HDrive(HDriveConfig(hardwareMap));
-		drive.setLocalizer(SparkfunImuLocalizer(hardwareMap.get(SparkFunOTOS::class.java, "imu2")));
+		//drive.setLocalizer(SparkfunImuLocalizer(hardwareMap.get(SparkFunOTOS::class.java, "imu2")));
+		drive.setLocalizer(IMULocalizer(ImuEx(hardwareMap.get(IMU::class.java, "imu"))));
 
 		drive.setPosEstimate(Pose2d(0.0, 0.0, rotPos));
 

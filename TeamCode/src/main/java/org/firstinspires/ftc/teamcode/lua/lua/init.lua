@@ -1,5 +1,5 @@
-
 require("specimen");
+require("specimen5");
 
 ---@type Action
 local action = {}

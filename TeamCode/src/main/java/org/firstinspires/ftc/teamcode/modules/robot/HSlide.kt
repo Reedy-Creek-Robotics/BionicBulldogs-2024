@@ -9,7 +9,7 @@ class HSlide(hardwareMap: HardwareMap)
 	companion object
 	{
 		@JvmField
-		var increment = 0.05;
+		var increment = 0.1;
 
 		@JvmField
 		var max = 0.38;

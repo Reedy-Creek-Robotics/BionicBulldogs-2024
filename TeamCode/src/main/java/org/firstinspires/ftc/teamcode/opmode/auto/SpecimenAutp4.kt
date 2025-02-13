@@ -8,14 +8,13 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.teamcode.modules.actions.*
 import org.firstinspires.ftc.teamcode.modules.drive.rotPos
-import org.firstinspires.ftc.teamcode.modules.robot.HSlide
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive
 import java.io.File
 import java.io.FileWriter
 import kotlin.math.PI
 
 @Autonomous
-class SpecimenAutp: LinearOpMode()
+class SpecimenAutp4: LinearOpMode()
 {
 	override fun runOpMode()
 	{

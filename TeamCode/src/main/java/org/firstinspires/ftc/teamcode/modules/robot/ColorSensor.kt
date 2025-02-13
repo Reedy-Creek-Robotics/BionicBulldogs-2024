@@ -29,7 +29,7 @@ class ColorSensor(hardwareMap: HardwareMap, private val gamepad: Gamepad, privat
 	fun update()
 	{
 		prevCol = col;
-		if(sensor.getDistance(DistanceUnit.MM) < 300)
+		if(sensor.getDistance(DistanceUnit.MM) < 20)
 		{
 			val r = sensor.red();
 			val g = sensor.green();
@@ -69,10 +69,11 @@ class ColorSensor(hardwareMap: HardwareMap, private val gamepad: Gamepad, privat
 
 	fun telem(telemetry: Telemetry)
 	{
-		telemetry.addData("r", sensor.red());
-		telemetry.addData("g", sensor.green());
-		telemetry.addData("b", sensor.blue());
-		telemetry.addData("color", col);
+		telemetry.addData("(color sensor) r", sensor.red());
+		telemetry.addData("(color sensor) g", sensor.green());
+		telemetry.addData("(color sensor) b", sensor.blue());
+		telemetry.addData("(color sensor) dist", sensor.getDistance(DistanceUnit.MM));
+		telemetry.addData("(color sensor) color", col);
 	}
 
 	private fun isNone(c: Int): Boolean

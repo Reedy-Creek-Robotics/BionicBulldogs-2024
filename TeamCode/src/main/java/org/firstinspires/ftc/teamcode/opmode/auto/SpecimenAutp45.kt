@@ -6,12 +6,17 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.teamcode.modules.actions.initComponents
 import org.firstinspires.ftc.teamcode.modules.opmodeloader.LuaAction
 import org.firstinspires.ftc.teamcode.modules.opmodeloader.LuaRobotActions
+import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive
+import kotlin.math.PI
 
 @Autonomous
-class SpecimenAutp2 : LinearOpMode()
+class SpecimenAutp45 : LinearOpMode()
 {
 	override fun runOpMode()
 	{
+		MecanumDrive.PARAMS.maxAngVel = PI * 4.0;
+		MecanumDrive.PARAMS.maxAngAccel = PI * 4.0;
+
 		initComponents(hardwareMap);
 		val opmodeLoader = OpmodeLoader();
 
@@ -21,7 +26,7 @@ class SpecimenAutp2 : LinearOpMode()
 		LuaAction.init(builder);
 		LuaRobotActions.init(builder);
 
-		opmodeLoader.loadOpmode("specimenAuto");
+		opmodeLoader.loadOpmode("specimenAuto45");
 
 		telemetry.addLine("initalised");
 		telemetry.update();

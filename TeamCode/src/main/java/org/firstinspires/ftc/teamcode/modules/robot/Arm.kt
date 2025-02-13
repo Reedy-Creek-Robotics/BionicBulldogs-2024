@@ -17,7 +17,7 @@ class Arm(hardwareMap: HardwareMap)
 	companion object
 	{
 		@JvmField
-		var armDown: Double = 0.97;
+		var armDown: Double = 0.99;
 
 		@JvmField
 		var armUp: Double = 0.31;

@@ -1,5 +1,5 @@
 local defaultVel = 75;
-local defaultMinAccel = -37.5;
+local defaultMinAccel = -35;
 local defaultMaxAccel = 60;
 
 ---@class Overides

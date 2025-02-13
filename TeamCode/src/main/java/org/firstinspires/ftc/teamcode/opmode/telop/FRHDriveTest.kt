@@ -3,8 +3,11 @@ package org.firstinspires.ftc.teamcode.opmode.telop
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
+import com.qualcomm.robotcore.hardware.IMU
 import org.firstinspires.ftc.teamcode.modules.drive.HDrive
+import org.firstinspires.ftc.teamcode.modules.drive.IMULocalizer
 import org.firstinspires.ftc.teamcode.modules.drive.SparkfunImuLocalizer
+import org.firstinspires.ftc.teamcode.modules.hardware.ImuEx
 import org.firstinspires.ftc.teamcode.opmode.config.HDriveConfig
 
 @TeleOp(group = "test")
@@ -19,8 +22,9 @@ class FRHDriveTest: LinearOpMode()
 		hDrive = HDrive(HDriveConfig(hardwareMap));
 
 		//Swapped internal localizer to external
-		val imu = hardwareMap.get(SparkFunOTOS::class.java, "imu2");
-		hDrive.setLocalizer(SparkfunImuLocalizer(imu));
+		//val imu = hardwareMap.get(SparkFunOTOS::class.java, "imu2");
+		//hDrive.setLocalizer(SparkfunImuLocalizer(imu));
+		hDrive.setLocalizer(IMULocalizer(ImuEx(hardwareMap.get(IMU::class.java, "imu"))));
 
 		waitForStart();
 
