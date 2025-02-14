@@ -14,7 +14,7 @@ class SpecimenAutp5 : LinearOpMode()
 {
 	override fun runOpMode()
 	{
-		MecanumDrive.PARAMS.maxAngVel = PI * 4.0;
+		MecanumDrive.PARAMS.maxAngVel = PI * 5.0;
 		MecanumDrive.PARAMS.maxAngAccel = PI * 4.0;
 
 		initComponents(hardwareMap);

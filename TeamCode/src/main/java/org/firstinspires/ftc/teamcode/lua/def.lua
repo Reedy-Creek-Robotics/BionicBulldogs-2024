@@ -80,7 +80,15 @@ function run(action) end
 ---@param filename string
 function runTimer(action, filename) end
 
+---@param action Action
+---@return Action
+function initProfileAction(action) end
+
 ---@param x number
 ---@param y number
 ---@param h number
 function setPosEstimate(x, y, h) end
+
+---@param v number
+---@param a number
+function setAngAccel(v, a) end

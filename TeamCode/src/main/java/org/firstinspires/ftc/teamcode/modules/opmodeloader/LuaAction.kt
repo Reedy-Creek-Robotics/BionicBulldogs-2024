@@ -8,6 +8,7 @@ import com.acmerobotics.roadrunner.SleepAction
 import com.acmerobotics.roadrunner.ftc.runBlocking
 import com.minerkid08.dynamicopmodeloader.FunctionBuilder
 import com.minerkid08.dynamicopmodeloader.LuaType
+import org.firstinspires.ftc.teamcode.modules.actions.TimerSequentialAction
 import org.firstinspires.ftc.teamcode.modules.actions.drive
 import org.firstinspires.ftc.teamcode.modules.actions.toTimerAction
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive
@@ -67,8 +68,21 @@ class LuaAction
 				listOf(LuaType.Double)
 			);
 
+			builder.addObjectFunction(
+				"setAngAccel",
+				LuaType.Void,
+				listOf(LuaType.Double, LuaType.Double)
+			);
+
+			builder.addObjectFunction(
+				"initProfileAction",
+				LuaType.Object(Action::class.java),
+				listOf(LuaType.Object(Action::class.java))
+			);
+
 			builder.createClass("Action");
 			builder.createClass("SequentialAction");
+			builder.createClass(TimerSequentialAction::class.simpleName!!);
 			builder.createClass("ParallelAction");
 			builder.createClass("SleepAction");
 
@@ -81,6 +95,12 @@ class LuaAction
 	fun setPosEstimate(x: Double, y: Double, h: Double)
 	{
 		drive.localizer.pose = Pose2d(x, y, Math.toRadians(h));
+	}
+
+	fun setAngAccel(v: Double, a: Double)
+	{
+		MecanumDrive.PARAMS.maxAngVel = v;
+		MecanumDrive.PARAMS.maxAngAccel = a;
 	}
 
 	fun trajectoryAction(x: Double, y: Double, h: Double): LuaTrajectoryBuilder
@@ -112,7 +132,8 @@ class LuaAction
 
 	fun runTimer(action: Action, filename: String)
 	{
-		val a2 = toTimerAction(action as SequentialAction);
+		val a2 =
+			if(action is TimerSequentialAction) action else toTimerAction(action as SequentialAction);
 		runBlocking(a2);
 		val file = File("/sdcard/$filename");
 		if(!file.exists())
@@ -125,6 +146,13 @@ class LuaAction
 	fun run(action: Action)
 	{
 		runBlocking(action);
+	}
+
+	fun initProfileAction(action: Action): Action
+	{
+		if(action !is SequentialAction)
+			error("action must be a sequential action");
+		return toTimerAction(action);
 	}
 }
 

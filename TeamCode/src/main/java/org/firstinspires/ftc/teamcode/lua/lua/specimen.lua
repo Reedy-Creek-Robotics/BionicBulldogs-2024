@@ -14,11 +14,12 @@ addOpmode({
 		local parallel = parallelAction();
 		parallel:add(specimenGrabInstant());
 
-		local trajectory = trajectoryActionX(7.0, -7.5, 180, overides({}));
+		local trajectory = trajectoryActionX(7.0, -7.5, 180, overides({minAccel = -20}));
 		trajectory:lineToX(36.125);
 		parallel:add(trajectory:build());
 
 		builder:add(parallel:build());
+		builder:add(sleepAction(0.05));
 		builder:add(specimenScore());
 
 		-- push samples
@@ -28,15 +29,15 @@ addOpmode({
 		trajectory:splineTo(32.0, -35.0, 0);
 		trajectory:splineToConstantHeading(55.0, -47.0, -90.0);
 		trajectory:setTangent(180.0);
-		trajectory:lineToX(21.5);
+		trajectory:lineToX(20);
 		trajectory:setTangent(0.0);
 		trajectory:splineToConstantHeading(56.0, -55.0, -90.0);
 		trajectory:setTangent(180.0);
-		trajectory:lineToX(21.5);
+		trajectory:lineToX(20.5);
 		trajectory:setTangent(0.0);
 		trajectory:splineToConstantHeading(56.0, -62.5, -90.0);
 		trajectory:setTangent(180.0);
-		trajectory:lineToX(7.75);
+		trajectory:lineToX2(7.75, overides({ vel = 65, minAccel = -60, maxAccel = 65 }));
 		builder:add(trajectory:build());
 
 		-- grab specimen 2
@@ -48,7 +49,7 @@ addOpmode({
 
 		trajectory = trajectoryActionX(8.5, -62, 0, overides({}));
 		trajectory:setTangent(45);
-		trajectory:splineToLinearHeading(36.25, -3.5, 180, 0);
+		trajectory:splineToLinearHeading(36.25, -5.5, 180, 0);
 		builder:add(trajectory:build());
 		builder:add(sleepAction(0.025));
 		builder:add(specimenScore());
@@ -66,10 +67,10 @@ addOpmode({
 
 		trajectory = trajectoryActionX(7.75, -40.5, 0.0, overides({}));
 		trajectory:setTangent(45.0);
-		trajectory:splineToLinearHeading(36, -1.5, 180.0, 0);
+		trajectory:splineToLinearHeading(36.25, -2.5, 180.0, 0);
 		builder:add(trajectory:build());
 		--builder:add(sleepAction(0.025));
-		builder:add(sleepAction(0.025));
+		builder:add(sleepAction(0.125));
 		builder:add(specimenScore());
 
 		-- grab specimen 4
@@ -85,10 +86,10 @@ addOpmode({
 
 		trajectory = trajectoryActionX(8.5, -40.5, 0.0, overides({}));
 		trajectory:setTangent(45.0);
-		trajectory:splineToLinearHeading(36.0, 1.5, 180.0, 0);
+		trajectory:splineToLinearHeading(36.5, 1.5, 180.0, 0);
 		builder:add(trajectory:build());
 		--builder:add(sleepAction(0.05));
-		builder:add(sleepAction(0.025));
+		builder:add(sleepAction(0.125));
 		builder:add(specimenScore());
 
 		-- grab specimen 5

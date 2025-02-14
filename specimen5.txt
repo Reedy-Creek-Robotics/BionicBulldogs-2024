@@ -1,0 +1,60 @@
+TimerSequentialAction - 29.712
+├─TimerParallelAction - 1.891 - %6.4
+│ ├─TimerSequentialAction - 1.748
+│ │ ├─SpecimenOuttakeAction_GrabInstant - 0.051 - %2.9
+│ │ ├─SleepAction - 1.508 - %86.3
+│ │ └─SpecimenOuttakeAction_Score - 0.189 - %10.8
+│ └─TimerSequentialAction - 1.891
+│   └─FollowTrajectoryAction - 1.84 - %100.0
+├─TimerSequentialAction - 10.687 - %36.0
+│ ├─FollowTrajectoryAction - 2.309 - %21.6
+│ ├─FollowTrajectoryAction - 1.474 - %13.8
+│ ├─FollowTrajectoryAction - 1.883 - %17.6
+│ ├─FollowTrajectoryAction - 1.559 - %14.6
+│ ├─FollowTrajectoryAction - 1.679 - %15.7
+│ └─FollowTrajectoryAction - 1.783 - %16.7
+├─SleepAction - 0.025 - %0.1
+├─SpecimenOuttakeAction_Grab - 0.165 - %0.6
+├─TimerParallelAction - 2.771 - %9.3
+│ ├─TimerSequentialAction - 2.771
+│ │ └─FollowTrajectoryAction - 2.771 - %100.0
+│ └─TimerSequentialAction - 2.236
+│   ├─SleepAction - 2.005 - %90.7
+│   └─SpecimenOuttakeAction_Score - 0.206 - %9.3
+├─TimerParallelAction - 2.215 - %7.5
+│ ├─TimerSequentialAction - 2.166
+│ │ └─FollowTrajectoryAction - 2.166 - %100.0
+│ └─TimerSequentialAction - 2.215
+│   ├─SleepAction - 2.025 - %92.6
+│   └─SpecimenOuttakeAction_Grab - 0.163 - %7.4
+├─TimerParallelAction - 2.318 - %7.8
+│ ├─TimerSequentialAction - 2.318
+│ │ └─FollowTrajectoryAction - 2.318 - %100.0
+│ └─TimerSequentialAction - 2.236
+│   ├─SleepAction - 2.024 - %91.7
+│   └─SpecimenOuttakeAction_Score - 0.184 - %8.3
+├─TimerParallelAction - 2.286 - %7.7
+│ ├─TimerSequentialAction - 2.286
+│ │ └─FollowTrajectoryAction - 2.286 - %100.0
+│ └─TimerSequentialAction - 2.234
+│   ├─SleepAction - 2.021 - %91.5
+│   └─SpecimenOuttakeAction_Grab - 0.188 - %8.5
+├─TimerParallelAction - 2.417 - %8.1
+│ ├─TimerSequentialAction - 2.417
+│ │ └─FollowTrajectoryAction - 2.416 - %100.0
+│ └─TimerSequentialAction - 2.233
+│   ├─SleepAction - 2.025 - %91.6
+│   └─SpecimenOuttakeAction_Score - 0.185 - %8.4
+├─TimerParallelAction - 2.285 - %7.7
+│ ├─TimerSequentialAction - 2.285
+│ │ └─FollowTrajectoryAction - 2.285 - %100.0
+│ └─TimerSequentialAction - 2.224
+│   ├─SleepAction - 2.011 - %91.4
+│   └─SpecimenOuttakeAction_Grab - 0.19 - %8.6
+├─TimerParallelAction - 2.452 - %8.3
+│ ├─TimerSequentialAction - 2.452
+│ │ └─FollowTrajectoryAction - 2.452 - %100.0
+│ └─TimerSequentialAction - 2.249
+│   ├─SleepAction - 2.01 - %90.2
+│   └─SpecimenOuttakeAction_Score - 0.218 - %9.8
+└─SleepAction - 0.2 - %0.7
