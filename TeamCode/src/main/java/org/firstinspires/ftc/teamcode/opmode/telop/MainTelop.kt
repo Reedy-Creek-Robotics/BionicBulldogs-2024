@@ -53,8 +53,8 @@ open class MainTelop(private val colorSensorBad: Int): LinearOpMode()
 		val colorSensor = ColorSensor(hardwareMap, gamepad1, colorSensorBad);
 
 		val drive = HDrive(HDriveConfig(hardwareMap));
-		//drive.setLocalizer(SparkfunImuLocalizer(hardwareMap.get(SparkFunOTOS::class.java, "imu2")));
-		drive.setLocalizer(IMULocalizer(ImuEx(hardwareMap.get(IMU::class.java, "imu"))));
+		drive.setLocalizer(SparkfunImuLocalizer(hardwareMap.get(SparkFunOTOS::class.java, "imu2")));
+		//drive.setLocalizer(IMULocalizer(ImuEx(hardwareMap.get(IMU::class.java, "imu"))));
 
 		drive.setPosEstimate(Pose2d(0.0, 0.0, rotPos));
 
@@ -202,6 +202,11 @@ open class MainTelop(private val colorSensorBad: Int): LinearOpMode()
 				}
 			}
 			sampleOuttake.update();
+
+			if(gamepad.ps())
+			{
+				slide.lowerTo(3000);
+			}
 
 			slide.update();
 

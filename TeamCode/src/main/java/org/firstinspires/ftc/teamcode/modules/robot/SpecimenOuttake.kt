@@ -10,7 +10,7 @@ class SpecimenOuttake(private val claw: SpeciminClaw, private val slide: Slide)
 	companion object
 	{
 		@JvmField
-		var relesePos = -1085;
+		var relesePos = -1040;
 		@JvmField
 		var pause = 0.12;
 	}

@@ -88,6 +88,12 @@ class Slide(hardwareMap: HardwareMap)
 		state = State.Lower;
 	}
 
+	fun lowerTo(pos: Int)
+	{
+		runToPosition(pos);
+		state = State.Lower;
+	}
+
 	fun specimenLower()
 	{
 		runToPosition(relesePos);

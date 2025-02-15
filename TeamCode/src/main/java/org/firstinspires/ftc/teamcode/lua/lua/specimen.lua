@@ -14,8 +14,8 @@ addOpmode({
 		local parallel = parallelAction();
 		parallel:add(specimenGrabInstant());
 
-		local trajectory = trajectoryActionX(7.0, -7.5, 180, overides({minAccel = -20}));
-		trajectory:lineToX(36.125);
+		local trajectory = trajectoryActionX(7.0, -7.5, 180, overides({ minAccel = -20 }));
+		trajectory:lineToX(35.5);
 		parallel:add(trajectory:build());
 
 		builder:add(parallel:build());
@@ -49,7 +49,7 @@ addOpmode({
 
 		trajectory = trajectoryActionX(8.5, -62, 0, overides({}));
 		trajectory:setTangent(45);
-		trajectory:splineToLinearHeading(36.25, -5.5, 180, 0);
+		trajectory:splineToLinearHeading(35.75, -5.5, 180, 0);
 		builder:add(trajectory:build());
 		builder:add(sleepAction(0.025));
 		builder:add(specimenScore());
@@ -65,7 +65,7 @@ addOpmode({
 
 		-- score specimen 3
 
-		trajectory = trajectoryActionX(7.75, -40.5, 0.0, overides({}));
+		trajectory = trajectoryActionX(7.75, -40.5, 0.0, overides({ minAccel = (-35 / 2) }));
 		trajectory:setTangent(45.0);
 		trajectory:splineToLinearHeading(36.25, -2.5, 180.0, 0);
 		builder:add(trajectory:build());
@@ -84,9 +84,9 @@ addOpmode({
 
 		-- score specimen 4
 
-		trajectory = trajectoryActionX(8.5, -40.5, 0.0, overides({}));
+		trajectory = trajectoryActionX(8.5, -40.5, 0.0, overides({ minAccel = (-35 / 2) }));
 		trajectory:setTangent(45.0);
-		trajectory:splineToLinearHeading(36.5, 1.5, 180.0, 0);
+		trajectory:splineToLinearHeading(35.85, 1.5, 180.0, 0);
 		builder:add(trajectory:build());
 		--builder:add(sleepAction(0.05));
 		builder:add(sleepAction(0.125));

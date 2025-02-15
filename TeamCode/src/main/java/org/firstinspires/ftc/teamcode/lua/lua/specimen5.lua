@@ -79,7 +79,7 @@ addOpmode({
 
 		trajectory = trajectoryActionX(7.75, -40.5, 0.0, overides({}));
 		trajectory:setTangent(45.0);
-		trajectory:splineToLinearHeading(36.25, -2.5, 180.0, 0);
+		trajectory:splineToLinearHeading(36.5, -2.5, 180.0, 0);
 		parallel = parallelAction();
 		parallel:add(trajectory:build());
 		seq2 = sequentalAction();
@@ -106,7 +106,7 @@ addOpmode({
 
 		trajectory = trajectoryActionX(8.5, -40.5, 0.0, overides({}));
 		trajectory:setTangent(45.0);
-		trajectory:splineToLinearHeading(36.5, 1.5, 180.0, 0);
+		trajectory:splineToLinearHeading(36.75, 1.5, 180.0, 0);
 		parallel = parallelAction();
 		parallel:add(trajectory:build());
 		seq2 = sequentalAction();
@@ -130,7 +130,7 @@ addOpmode({
 
 		trajectory = trajectoryActionX(8.5, -40.5, 0.0, overides({}));
 		trajectory:setTangent(45.0);
-		trajectory:splineToLinearHeading(36.0, 4, 180.0, 0.0);
+		trajectory:splineToLinearHeading(36.25, 4, 180.0, 0.0);
 		parallel = parallelAction();
 		parallel:add(trajectory:build());
 		seq2 = sequentalAction();
