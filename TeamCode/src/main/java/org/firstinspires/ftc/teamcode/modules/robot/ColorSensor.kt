@@ -29,21 +29,51 @@ class ColorSensor(hardwareMap: HardwareMap, private val gamepad: Gamepad, privat
 	fun update()
 	{
 		prevCol = col;
-		if(sensor.getDistance(DistanceUnit.MM) < 20)
+		//for some reason, the sensor thinks that blue samples are farther than red/yellow
+		if(sensor.getDistance(DistanceUnit.MM) < 25)
 		{
 			val r = sensor.red();
 			val g = sensor.green();
 			val b = sensor.blue();
+//225, 430, 576
+//217, 413, 520
+//B: 750, 670, 700, 400, 690, 730
 
-			if(r > 800 && g < 800)
+			//Blue
+			//min (225, 500, 700)
+//260, 550, 750
+//270, 520, 750
+//265, 515, 740
+//250, 495, 745
+//250, 489, 730
+
+			//Red
+			//min (500, 525, 450)
+//540, 520, 480
+//545, 530, 450
+//540, 530, 460
+//300, 385, 375 (x)
+//188, 345, 359 (?)
+//570, 545, 445
+//590, 550, 450
+
+			//Yellow
+			//min (750, 1000, 500)
+//778, 1128, 534
+//785, 1130, 545
+//790, 1126, 550
+//803, 1143, 548
+//806, 1140, 545
+
+			if(r > 500 && r < 600)
 			{
 				col = RED;
 			}
-			else if(b > 800)
+			else if(b > 625)
 			{
 				col = BLUE;
 			}
-			else if(r > 800 && g > 800)
+			else if(g > 1000)
 			{
 				col = YELLOW;
 			}
