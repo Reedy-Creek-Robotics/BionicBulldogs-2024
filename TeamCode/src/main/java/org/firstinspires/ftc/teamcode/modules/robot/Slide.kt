@@ -151,6 +151,12 @@ class Slide(hardwareMap: HardwareMap)
 		slide2.power = 0.0;
 	}
 
+	fun runWithoutEncoder()
+	{
+		slide.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER;
+		slide2.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER;
+	}
+
 	fun runToPosition(pos: Int, power: Double = -1.0)
 	{
 		prevPos = 400000;

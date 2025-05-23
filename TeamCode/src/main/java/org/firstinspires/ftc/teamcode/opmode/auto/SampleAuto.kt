@@ -81,14 +81,12 @@ class SampleAuto: LinearOpMode()
 				ParallelAction(
 					SequentialAction(
 						IntakeAction_Intake(),
-						HSlideAction_GotoPos(HSlide.min),
-						ArmAction_Down(),
 						SleepAction(0.25),
 						IntakeAction_SetRotation(Intake.rotatorCenter + Intake.autoRotatorIncrement),
 					),
 					drive.actionBuilder(Pose2d(16.5, 55.0, Math.toRadians(-45.0)))
 						.setTangent(Math.toRadians(-45.0))
-						.splineToLinearHeading(Pose2d(24.75, 50.5, Math.toRadians(0.0)), Math.toRadians(0.0))
+						.splineToLinearHeading(Pose2d(24.25, 50.5, Math.toRadians(0.0)), Math.toRadians(0.0))
 						.setTangent(Math.toRadians(90.0))
 						.lineToY(53.0)
 						.build(),

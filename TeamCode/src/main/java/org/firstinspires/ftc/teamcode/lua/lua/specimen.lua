@@ -15,7 +15,7 @@ addOpmode({
 		parallel:add(specimenGrabInstant());
 
 		local trajectory = trajectoryActionX(7.0, -7.5, 180, overides({ minAccel = -20 }));
-		trajectory:lineToX(35.5);
+		trajectory:lineToX(36.125);
 		parallel:add(trajectory:build());
 
 		builder:add(parallel:build());
@@ -29,11 +29,11 @@ addOpmode({
 		trajectory:splineTo(32.0, -35.0, 0);
 		trajectory:splineToConstantHeading(55.0, -47.0, -90.0);
 		trajectory:setTangent(180.0);
-		trajectory:lineToX(20);
-		trajectory:setTangent(0.0);
+		trajectory:lineToX(17);
+		trajectory:setTangent(22.5);
 		trajectory:splineToConstantHeading(56.0, -55.0, -90.0);
 		trajectory:setTangent(180.0);
-		trajectory:lineToX(20.5);
+		trajectory:lineToX(17.5);
 		trajectory:setTangent(0.0);
 		trajectory:splineToConstantHeading(56.0, -62.5, -90.0);
 		trajectory:setTangent(180.0);
@@ -49,7 +49,7 @@ addOpmode({
 
 		trajectory = trajectoryActionX(8.5, -62, 0, overides({}));
 		trajectory:setTangent(45);
-		trajectory:splineToLinearHeading(35.75, -5.5, 180, 0);
+		trajectory:splineToLinearHeading(36.25, -5, 180, 0);
 		builder:add(trajectory:build());
 		builder:add(sleepAction(0.025));
 		builder:add(specimenScore());
@@ -86,7 +86,7 @@ addOpmode({
 
 		trajectory = trajectoryActionX(8.5, -40.5, 0.0, overides({ minAccel = (-35 / 2) }));
 		trajectory:setTangent(45.0);
-		trajectory:splineToLinearHeading(35.85, 1.5, 180.0, 0);
+		trajectory:splineToLinearHeading(36, 1.5, 180.0, 0);
 		builder:add(trajectory:build());
 		--builder:add(sleepAction(0.05));
 		builder:add(sleepAction(0.125));
@@ -100,6 +100,7 @@ addOpmode({
 		trajectory:splineToLinearHeading(7.75, -36.5, 0.0, -180.0);
 		builder:add(trajectory:build());
 		action = builder:build();
+		action = initProfileAction(action);
 	end,
 	start = function ()
 		runTimer(action, "specimenAuto2.txt");

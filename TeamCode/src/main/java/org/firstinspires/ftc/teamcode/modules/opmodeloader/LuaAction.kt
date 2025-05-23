@@ -11,6 +11,7 @@ import com.minerkid08.dynamicopmodeloader.LuaType
 import org.firstinspires.ftc.teamcode.modules.actions.TimerSequentialAction
 import org.firstinspires.ftc.teamcode.modules.actions.drive
 import org.firstinspires.ftc.teamcode.modules.actions.toTimerAction
+import org.firstinspires.ftc.teamcode.modules.drive.rotPos
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive
 import java.io.File
 import java.io.FileWriter
@@ -135,6 +136,7 @@ class LuaAction
 		val a2 =
 			if(action is TimerSequentialAction) action else toTimerAction(action as SequentialAction);
 		runBlocking(a2);
+		rotPos = drive.localizer.pose.heading.toDouble();
 		val file = File("/sdcard/$filename");
 		if(!file.exists())
 			file.createNewFile();
@@ -146,6 +148,7 @@ class LuaAction
 	fun run(action: Action)
 	{
 		runBlocking(action);
+		rotPos = drive.localizer.pose.heading.toDouble();
 	}
 
 	fun initProfileAction(action: Action): Action
