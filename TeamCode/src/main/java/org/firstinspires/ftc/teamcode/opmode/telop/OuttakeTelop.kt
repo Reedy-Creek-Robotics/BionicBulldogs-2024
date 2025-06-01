@@ -257,6 +257,14 @@ class OuttakeTelop: LinearOpMode()
 					specimenOuttake.score();
 				}
 			}
+
+			if(gamepad.dpadRight())
+			{
+				if(specimenClaw.state == SpeciminClaw.State.Open)
+					specimenClaw.close();
+				else
+					specimenClaw.open();
+			}
 			specimenOuttake.update();
 
 			colorSensor.update();

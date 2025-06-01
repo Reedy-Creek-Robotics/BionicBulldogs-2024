@@ -7,6 +7,19 @@ import com.acmerobotics.roadrunner.ParallelAction
 import com.acmerobotics.roadrunner.SequentialAction
 import org.firstinspires.ftc.teamcode.modules.format
 
+data class MarkerAction(val name: String): Action
+{
+	fun getName(): String
+	{
+		return "MarkerAction: $name";
+	}
+
+	override fun run(p: TelemetryPacket): Boolean
+	{
+		return false;
+	}
+}
+
 data class TimerSequentialAction(
 	val initialActions: List<Action>
 ): Action
@@ -39,15 +52,20 @@ data class TimerSequentialAction(
 			out += if(i == initialActions.size - 1) "└─";
 			else "├─";
 
+			if(a is MarkerAction)
+				out += a.getName();
+			else
+				out += a.javaClass.simpleName;
+
 			if(times.size != initialActions.size)
 			{
 				if(i >= times.size)
-					out += "${a.javaClass.simpleName} - ? - %?\n";
+					out += " - ? - %?\n";
 				else
-					out += "${a.javaClass.simpleName} - ${times[i].toDouble() / 1000} - %?\n";
+					out += " - ${times[i].toDouble() / 1000} - %?\n";
 			}
 			else
-				out += "${a.javaClass.simpleName} - ${times[i].toDouble() / 1000} - %${
+				out += " - ${times[i].toDouble() / 1000} - %${
 					(times[i].toDouble() / elapsedTime.toDouble() * 100).format(
 						1
 					)

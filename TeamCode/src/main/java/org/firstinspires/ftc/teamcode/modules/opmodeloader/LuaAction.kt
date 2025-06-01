@@ -8,6 +8,7 @@ import com.acmerobotics.roadrunner.SleepAction
 import com.acmerobotics.roadrunner.ftc.runBlocking
 import com.minerkid08.dynamicopmodeloader.FunctionBuilder
 import com.minerkid08.dynamicopmodeloader.LuaType
+import org.firstinspires.ftc.teamcode.modules.actions.MarkerAction
 import org.firstinspires.ftc.teamcode.modules.actions.TimerSequentialAction
 import org.firstinspires.ftc.teamcode.modules.actions.drive
 import org.firstinspires.ftc.teamcode.modules.actions.toTimerAction
@@ -70,6 +71,12 @@ class LuaAction
 			);
 
 			builder.addObjectFunction(
+				"markerAction",
+				LuaType.Object(Action::class.java),
+				listOf(LuaType.String)
+			);
+
+			builder.addObjectFunction(
 				"setAngAccel",
 				LuaType.Void,
 				listOf(LuaType.Double, LuaType.Double)
@@ -86,6 +93,7 @@ class LuaAction
 			builder.createClass(TimerSequentialAction::class.simpleName!!);
 			builder.createClass("ParallelAction");
 			builder.createClass("SleepAction");
+			builder.createClass("MarkerAction");
 
 			LuaTrajectoryBuilder.init(builder);
 			LuaSequentalAction.init(builder);
@@ -129,6 +137,11 @@ class LuaAction
 	fun sleepAction(time: Double): Action
 	{
 		return SleepAction(time);
+	}
+
+	fun markerAction(name: String): Action
+	{
+		return MarkerAction(name);
 	}
 
 	fun runTimer(action: Action, filename: String)

@@ -22,14 +22,14 @@ fun initComponents(hardwareMap: HardwareMap)
 	hSlide = HSlide(hardwareMap);
 	slide = Slide(hardwareMap);
 	specimenClaw = SpeciminClaw(hardwareMap);
-	outtake = Outtake(hardwareMap);
+	//outtake = Outtake(hardwareMap);
 	specimenOuttake = SpecimenOuttake(specimenClaw, slide);
-	sampleOuttake = SampleOuttake(slide, outtake);
+	//sampleOuttake = SampleOuttake(slide, outtake);
 	drive = MecanumDrive(hardwareMap, Pose2d(0.0, 0.0, 0.0));
 
 	intake.zeroRotator();
 	arm.up();
 	hSlide.zero();
 	specimenClaw.close();
-	sampleOuttake.init();
+	//sampleOuttake.init();
 }
