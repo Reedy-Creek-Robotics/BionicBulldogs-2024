@@ -149,13 +149,13 @@ class LuaAction
 		val a2 =
 			if(action is TimerSequentialAction) action else toTimerAction(action as SequentialAction);
 		runBlocking(a2);
-		rotPos = drive.localizer.pose.heading.toDouble();
 		val file = File("/sdcard/$filename");
 		if(!file.exists())
 			file.createNewFile();
 		val writer = FileWriter(file);
 		writer.write(a2.timerString());
 		writer.close();
+		rotPos = drive.localizer.pose.heading.toDouble();
 	}
 
 	fun run(action: Action)
@@ -181,7 +181,7 @@ class LuaSequentalAction
 			builder.addClassFunction(
 				LuaSequentalAction::class.java,
 				"add",
-				LuaType.Void,
+				LuaType.Builder,
 				listOf(LuaType.Object(Action::class.java))
 			);
 			builder.addClassFunction(
@@ -212,7 +212,7 @@ class LuaParallelAction
 			builder.addClassFunction(
 				LuaParallelAction::class.java,
 				"add",
-				LuaType.Void,
+				LuaType.Builder,
 				listOf(LuaType.Object(Action::class.java))
 			);
 			builder.addClassFunction(

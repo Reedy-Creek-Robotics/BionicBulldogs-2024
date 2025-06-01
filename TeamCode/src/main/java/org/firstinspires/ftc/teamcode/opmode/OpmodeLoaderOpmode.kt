@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.teamcode.modules.opmodeloader.LuaAction
 import org.firstinspires.ftc.teamcode.modules.opmodeloader.LuaRobotActions
+import org.firstinspires.ftc.teamcode.modules.opmodeloader.LuaUtils
 import org.firstinspires.ftc.teamcode.modules.ui.UI
 
 @Autonomous
@@ -16,12 +17,14 @@ class OpmodeLoaderOpmode: LinearOpMode()
 
 		val opmodeLoader = OpmodeLoader();
 		var running = true;
-		val opmodes = opmodeLoader.init() ?: return;
+		val opmodes = opmodeLoader.init()?:return;
 
-		LuaAction.init(opmodeLoader.getFunctionBuilder());
-		LuaRobotActions.init(opmodeLoader.getFunctionBuilder());
+		val builder = opmodeLoader.getFunctionBuilder();
+		LuaAction.init(builder);
+		LuaRobotActions.init(builder);
+		LuaUtils.init(builder, this);
 
-		while(running)
+		while(running && opModeInInit())
 		{
 			for(opmode in opmodes)
 			{
@@ -34,7 +37,8 @@ class OpmodeLoaderOpmode: LinearOpMode()
 			}
 			ui.update();
 		}
-
+		if(isStopRequested)
+			return;
 		telemetry.addLine("initalised");
 		telemetry.update();
 
@@ -42,5 +46,7 @@ class OpmodeLoaderOpmode: LinearOpMode()
 
 		telemetry.clearAll();
 		telemetry.update();
+
+		opmodeLoader.start();
 	}
 }

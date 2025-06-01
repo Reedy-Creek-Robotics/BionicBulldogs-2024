@@ -7,11 +7,11 @@ import com.acmerobotics.roadrunner.ParallelAction
 import com.acmerobotics.roadrunner.SequentialAction
 import org.firstinspires.ftc.teamcode.modules.format
 
-data class MarkerAction(val name: String): Action
+data class MarkerAction(private val label: String): Action
 {
-	fun getName(): String
+	fun getLabel(): String
 	{
-		return "MarkerAction: $name";
+		return "MarkerAction: $label";
 	}
 
 	override fun run(p: TelemetryPacket): Boolean
@@ -53,7 +53,7 @@ data class TimerSequentialAction(
 			else "├─";
 
 			if(a is MarkerAction)
-				out += a.getName();
+				out += a.getLabel();
 			else
 				out += a.javaClass.simpleName;
 

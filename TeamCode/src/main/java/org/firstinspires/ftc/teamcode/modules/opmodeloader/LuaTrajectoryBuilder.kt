@@ -19,84 +19,84 @@ class LuaTrajectoryBuilder(private var builder: TrajectoryActionBuilder)
 			builder.addClassFunction(
 				LuaTrajectoryBuilder::class.java,
 				"setTangent",
-				LuaType.Void,
+				LuaType.Builder,
 				listOf(LuaType.Double)
 			);
 
 			builder.addClassFunction(
 				LuaTrajectoryBuilder::class.java,
 				"lineToX",
-				LuaType.Void,
+				LuaType.Builder,
 				listOf(LuaType.Double)
 			);
 
 			builder.addClassFunction(
 				LuaTrajectoryBuilder::class.java,
 				"lineToX2",
-				LuaType.Void,
+				LuaType.Builder,
 				listOf(LuaType.Double, LuaType.Double, LuaType.Double, LuaType.Double)
 			);
 
 			builder.addClassFunction(
 				LuaTrajectoryBuilder::class.java,
 				"lineToY",
-				LuaType.Void,
+				LuaType.Builder,
 				listOf(LuaType.Double)
 			);
 
 			builder.addClassFunction(
 				LuaTrajectoryBuilder::class.java,
 				"lineToY2",
-				LuaType.Void,
+				LuaType.Builder,
 				listOf(LuaType.Double, LuaType.Double, LuaType.Double, LuaType.Double)
 			);
 
 			builder.addClassFunction(
 				LuaTrajectoryBuilder::class.java,
 				"splineToLinearHeading",
-				LuaType.Void,
+				LuaType.Builder,
 				listOf(LuaType.Double, LuaType.Double, LuaType.Double, LuaType.Double)
 			);
 
 			builder.addClassFunction(
 				LuaTrajectoryBuilder::class.java,
 				"splineToLinearHeading2",
-				LuaType.Void,
+				LuaType.Builder,
 				listOf(LuaType.Double, LuaType.Double, LuaType.Double, LuaType.Double, LuaType.Double, LuaType.Double, LuaType.Double)
 			);
 
 			builder.addClassFunction(
 				LuaTrajectoryBuilder::class.java,
 				"splineToConstantHeading",
-				LuaType.Void,
+				LuaType.Builder,
 				listOf(LuaType.Double, LuaType.Double, LuaType.Double)
 			);
 
 			builder.addClassFunction(
 				LuaTrajectoryBuilder::class.java,
 				"splineToConstantHeading2",
-				LuaType.Void,
+				LuaType.Builder,
 				listOf(LuaType.Double, LuaType.Double, LuaType.Double, LuaType.Double, LuaType.Double, LuaType.Double)
 			);
 
 			builder.addClassFunction(
 				LuaTrajectoryBuilder::class.java,
 				"splineTo",
-				LuaType.Void,
+				LuaType.Builder,
 				listOf(LuaType.Double, LuaType.Double, LuaType.Double)
 			);
 
 			builder.addClassFunction(
 				LuaTrajectoryBuilder::class.java,
 				"splineTo2",
-				LuaType.Void,
+				LuaType.Builder,
 				listOf(LuaType.Double, LuaType.Double, LuaType.Double, LuaType.Double, LuaType.Double, LuaType.Double)
 			);
 
 			builder.addClassFunction(
 				LuaTrajectoryBuilder::class.java,
 				"turnTo",
-				LuaType.Void,
+				LuaType.Builder,
 				listOf(LuaType.Double)
 			);
 

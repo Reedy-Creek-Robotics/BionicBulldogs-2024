@@ -6,30 +6,32 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.teamcode.modules.actions.initComponents
 import org.firstinspires.ftc.teamcode.modules.opmodeloader.LuaAction
 import org.firstinspires.ftc.teamcode.modules.opmodeloader.LuaRobotActions
+import org.firstinspires.ftc.teamcode.modules.opmodeloader.LuaUtils
 
 @Autonomous
 class OpmodeLoaderTest: LinearOpMode()
 {
 	override fun runOpMode()
 	{
-		initComponents(hardwareMap);
+		//initComponents(hardwareMap);
 		val opmodeloader = OpmodeLoader();
 		opmodeloader.init();
 
 		val builder = opmodeloader.getFunctionBuilder();
 		LuaAction.init(builder);
 		LuaRobotActions.init(builder);
+		LuaUtils.init(builder, this);
 
 		opmodeloader.loadOpmode("testOpmode");
 
 		telemetry.addLine("initalised");
 		telemetry.update();
-		
+
 		waitForStart();
 
 		telemetry.clearAll();
 		telemetry.update();
-		
+
 		opmodeloader.start();
 	}
 }
