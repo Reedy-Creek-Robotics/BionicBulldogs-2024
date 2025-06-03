@@ -17,12 +17,6 @@ addOpmode({
 
 		local trajectory = trajectoryAction(9.5, 31.5, 0);
 		trajectory:setTangent(0);
-		trajectory:splineToConstantHeading(24, 3.5, -90);
-		builder:add(trajectory:build());
-
-
-		trajectory = trajectoryActionX(24, 3.5, 0, overides({ vel = 40 }));
-		trajectory:setTangent(0);
 		trajectory:splineToConstantHeading(27, 3.5, 0);
 		builder:add(trajectory:build());
 
@@ -53,11 +47,6 @@ addOpmode({
 
 		trajectory = trajectoryAction(20, 3.5, 0);
 		trajectory:setTangent(-90);
-		trajectory:splineToConstantHeading(22, -2.5, 0);
-		builder:add(trajectory:build());
-
-		trajectory = trajectoryActionX(22, -2.5, 0, overides({ vel = 20, maxAccel = 50 }));
-		trajectory:setTangent(0);
 		trajectory:splineToConstantHeading(27, -2.5, 0);
 		builder:add(trajectory:build());
 
@@ -87,11 +76,6 @@ addOpmode({
 
 		builder:add(intakeIntake());
 		trajectory = trajectoryAction(18, -2.5, 0);
-		trajectory:setTangent(0);
-		trajectory:splineToConstantHeading(37, -2.5, 0);
-		builder:add(trajectory:build());
-
-		trajectory = trajectoryActionX(37, -2.5, 0, overides({ vel = 40 }));
 		trajectory:setTangent(0);
 		trajectory:splineToConstantHeading(39, -2.5, 0);
 		builder:add(trajectory:build());
@@ -124,11 +108,6 @@ addOpmode({
 		builder:add(intakeIntake());
 		trajectory = trajectoryAction(20, -2.5, 0);
 		trajectory:setTangent(90);
-		trajectory:splineToConstantHeading(37, 3.5, 0);
-		builder:add(trajectory:build());
-
-		trajectory = trajectoryActionX(37, 3.5, 0, overides({ vel = 40 }));
-		trajectory:setTangent(0);
 		trajectory:splineToConstantHeading(39, 3.5, 0);
 		builder:add(trajectory:build());
 
@@ -151,38 +130,107 @@ addOpmode({
 
 		builder:add(markerAction("score 1"));
 
-		trajectory = trajectoryAction(20, 3.5, 0);
+		trajectory = trajectoryActionX(20, 3.5, 0, overides({ maxAccel = 70 }));
 		trajectory:setTangent(180);
 		trajectory:splineToConstantHeading(11, 0, 180);
 		builder:add(trajectory:build());
 
 		builder:add(specimenGrab());
 
-		trajectory = trajectoryAction(11, 0, 0);
-		trajectory:setTangent(0);
-		trajectory:splineToLinearHeading(60.5, 15.5, -90, 90);
-		builder:add(trajectory:build());
-
-		builder:add(specimenScore());
+		builder:add(
+			parallelAction()
+			:add(
+				trajectoryAction(11, 0, 0)
+				:setTangent(0)
+				:splineToLinearHeading(60.5, 15.5, -90, 90)
+				:build()
+			)
+			:add(
+				sequentalAction()
+				:add(sleepAction(2))
+				:add(specimenScore())
+				:build()
+			)
+			:build()
+		);
 
 		builder:add(markerAction("score 2"));
 
-		trajectory = trajectoryAction(60.5, 15.5, -90);
+		trajectory = trajectoryActionX(60.5, 15.5, -90, overides({ maxAccel = 70 }));
 		trajectory:setTangent(-90);
 		trajectory:splineToLinearHeading(11, 0, 0, 180);
 		builder:add(trajectory:build());
 
 		builder:add(specimenGrab());
 
-		trajectory = trajectoryAction(11, 0, 0);
-		trajectory:setTangent(0);
-		trajectory:splineToLinearHeading(60.5, -15.5, 90, -90);
+		builder:add(
+			parallelAction()
+			:add(
+				trajectoryAction(11, 0, 0)
+				:setTangent(0)
+				:splineToLinearHeading(60.5, -14, 90, -90)
+				:build()
+			)
+			:add(
+				sequentalAction()
+				:add(sleepAction(2))
+				:add(specimenScore())
+				:build()
+			):build()
+		);
+
+		builder:add(markerAction("score 3"));
+
+		trajectory = trajectoryActionX(60.5, -14, 90, overides({ maxAccel = 70 }));
+		trajectory:setTangent(90);
+		trajectory:splineToLinearHeading(11, 0, 0, 180);
 		builder:add(trajectory:build());
 
-		builder:add(specimenScore());
+		builder:add(specimenGrab());
 
+		builder:add(
+			parallelAction()
+			:add(
+				trajectoryAction(11, 0, 0)
+				:setTangent(0)
+				:splineToLinearHeading(61.5, 15.5, -90, 90)
+				:build()
+			)
+			:add(
+				sequentalAction()
+				:add(sleepAction(2))
+				:add(specimenScore())
+				:build()
+			)
+			:build()
+		);
 
-		builder:add(sleepAction(3));
+		builder:add(markerAction("score 4"));
+
+		trajectory = trajectoryActionX(61.5, 15.5, -90, overides({ maxAccel = 70 }));
+		trajectory:setTangent(-90);
+		trajectory:splineToLinearHeading(11, 0, 0, 180);
+		builder:add(trajectory:build());
+
+		builder:add(specimenGrab());
+
+		builder:add(
+			parallelAction()
+			:add(
+				trajectoryAction(11, 0, 0)
+				:setTangent(0)
+				:splineToLinearHeading(61.5, -14, 90, -90)
+				:build()
+			)
+			:add(
+				sequentalAction()
+				:add(sleepAction(2))
+				:add(specimenScore())
+				:build()
+			):build()
+		);
+
+		builder:add(sleepAction(1));
 
 		action = builder:build();
 	end,

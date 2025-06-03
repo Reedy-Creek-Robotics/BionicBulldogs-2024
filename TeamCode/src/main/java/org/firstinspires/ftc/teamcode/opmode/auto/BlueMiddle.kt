@@ -48,6 +48,8 @@ class BlueMiddle : LinearOpMode()
 
 		waitForStart();
 
+		outtakeArm.position = 0.7;
+
 		telemetry.clearAll();
 		telemetry.update();
 
