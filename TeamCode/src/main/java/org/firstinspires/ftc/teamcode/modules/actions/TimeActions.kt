@@ -44,6 +44,18 @@ data class TimerSequentialAction(
 
 		for((i, a) in initialActions.withIndex())
 		{
+			if(a is MarkerAction)
+			{
+				out += '\n';
+				for(i2 in 0 until level)
+				{
+					out += if((lines and (1 shl i2)) > 0) "│ ";
+					else "  ";
+				}
+				out += if(i == initialActions.size - 1) "│ ";
+				else "│ ";
+			}
+
 			for(i2 in 0 until level)
 			{
 				out += if((lines and (1 shl i2)) > 0) "│ ";
@@ -82,6 +94,16 @@ data class TimerSequentialAction(
 				var lines2 = lines;
 				if(i != initialActions.size - 1) lines2 = lines2 or (1 shl level);
 				out += a.profileString(level + 1, lines2);
+			}
+			if(a is MarkerAction)
+			{
+				for(i2 in 0 until level)
+				{
+					out += if((lines and (1 shl i2)) > 0) "│ ";
+					else "  ";
+				}
+				out += if(i == initialActions.size - 1) "└─";
+				else "├─";
 			}
 		}
 		return out;

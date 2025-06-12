@@ -51,7 +51,7 @@ class OuttakeTelop: LinearOpMode()
 		var slidePosition = -1400;
 
 		@JvmField
-		var hslideScore = 0.35;
+		var hslideScore = HSlide.score;
 
 		@JvmField
 		var intakeArmPos = 0.33;
@@ -94,7 +94,7 @@ class OuttakeTelop: LinearOpMode()
 		claw.position = clawOpen;
 		outtakeArm.position = armUp2;
 		clawRotator.position = rotatorDown;
-		intake.setRotatorPos(intakeRotatorPos);
+		intake.zeroRotator();
 
 		//Controls:
 		//Triggers retract/extend HSlides
@@ -130,20 +130,19 @@ class OuttakeTelop: LinearOpMode()
 			}
 
 			//Horizontal Slides
-			if(gamepad1.right_trigger >= 0.5 && hSlide.pos() <= hSlide.min())
+			if(gamepad1.right_trigger >= 0.5)
 			{
 				hSlide.increment();
 			}
-			else if(gamepad1.left_trigger >= 0.5 && hSlide.pos() >= hSlide.max())
+			else if(gamepad1.left_trigger >= 0.5)
 			{
 				hSlide.decrement();
 			}
 			else if(gamepad.triangle())
 			{
 				hSlide.gotoPos(hslideScore);
-				arm.gotoPos(intakeArmPos);
-				arm.state = Arm.State.Up;
-				intake.setRotatorPos(intakeRotatorPos);
+				arm.up();
+				intake.zeroRotator();
 			}
 
 			// Intake

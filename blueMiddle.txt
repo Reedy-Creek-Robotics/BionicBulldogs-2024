@@ -1,114 +1,129 @@
-TimerSequentialAction - 32.287
-├─MarkerAction: sample 1 - 0.0 - %0.0
-├─HSlideAction_GotoPos - 0.006 - %0.0
-├─ArmAction_Down - 0.003 - %0.0
-├─IntakeAction_Intake - 0.004 - %0.0
-├─TimerSequentialAction - 1.905 - %5.9
-│ └─FollowTrajectoryAction - 1.905 - %100.0
-├─TimerSequentialAction - 0.538 - %1.7
-│ └─FollowTrajectoryAction - 0.538 - %100.0
-├─IntakeAction_Stop - 0.002 - %0.0
-├─ArmAction_Up - 0.003 - %0.0
-├─HSlideAction_Zero - 0.005 - %0.0
-├─TimerParallelAction - 0.843 - %2.6
-│ ├─TimerSequentialAction - 0.421
-│ │ ├─SleepAction - 0.42 - %99.8
-│ │ └─IntakeAction_Outtake - 0.001 - %0.2
-│ └─TimerSequentialAction - 0.843
-│   └─FollowTrajectoryAction - 0.843 - %100.0
-├─IntakeAction_Stop - 0.002 - %0.0
-├─MarkerAction: sample 2 - 0.001 - %0.0
-├─HSlideAction_GotoPos - 0.004 - %0.0
-├─ArmAction_Down - 0.003 - %0.0
-├─IntakeAction_Intake - 0.001 - %0.0
-├─TimerSequentialAction - 0.857 - %2.7
-│ └─FollowTrajectoryAction - 0.857 - %100.0
-├─TimerSequentialAction - 0.708 - %2.2
-│ └─FollowTrajectoryAction - 0.708 - %100.0
-├─IntakeAction_Stop - 0.003 - %0.0
-├─ArmAction_Up - 0.003 - %0.0
-├─HSlideAction_Zero - 0.004 - %0.0
-├─TimerParallelAction - 0.964 - %3.0
-│ ├─TimerSequentialAction - 0.964
-│ │ └─FollowTrajectoryAction - 0.964 - %100.0
-│ └─TimerSequentialAction - 0.445
-│   ├─SleepAction - 0.421 - %99.8
-│   └─IntakeAction_Outtake - 0.001 - %0.2
-├─IntakeAction_Stop - 0.003 - %0.0
-├─MarkerAction: sample 3 - 0.0 - %0.0
-├─HSlideAction_GotoPos - 0.004 - %0.0
-├─ArmAction_Down - 0.003 - %0.0
-├─IntakeAction_Intake - 0.001 - %0.0
-├─TimerSequentialAction - 1.396 - %4.3
-│ └─FollowTrajectoryAction - 1.396 - %100.0
-├─TimerSequentialAction - 0.445 - %1.4
-│ └─FollowTrajectoryAction - 0.445 - %100.0
-├─IntakeAction_Stop - 0.002 - %0.0
-├─HSlideAction_Zero - 0.005 - %0.0
-├─ArmAction_Up - 0.003 - %0.0
-├─TimerParallelAction - 1.404 - %4.3
-│ ├─TimerSequentialAction - 1.404
-│ │ └─FollowTrajectoryAction - 1.404 - %100.0
-│ └─TimerSequentialAction - 0.443
-│   ├─SleepAction - 0.415 - %99.8
-│   └─IntakeAction_Outtake - 0.001 - %0.2
-├─IntakeAction_Stop - 0.002 - %0.0
-├─MarkerAction: sample 4 - 0.0 - %0.0
-├─HSlideAction_GotoPos - 0.005 - %0.0
-├─ArmAction_Down - 0.002 - %0.0
-├─IntakeAction_Intake - 0.002 - %0.0
-├─TimerSequentialAction - 1.46 - %4.5
-│ └─FollowTrajectoryAction - 1.46 - %100.0
-├─TimerSequentialAction - 0.451 - %1.4
-│ └─FollowTrajectoryAction - 0.45 - %99.8
-├─IntakeAction_Stop - 0.002 - %0.0
-├─ArmAction_Up - 0.003 - %0.0
-├─HSlideAction_Zero - 0.004 - %0.0
-├─TimerParallelAction - 1.39 - %4.3
-│ ├─TimerSequentialAction - 1.39
-│ │ └─FollowTrajectoryAction - 1.39 - %100.0
-│ └─TimerSequentialAction - 0.445
-│   ├─SleepAction - 0.419 - %99.5
-│   └─IntakeAction_Outtake - 0.002 - %0.5
-├─IntakeAction_Stop - 0.002 - %0.0
-├─MarkerAction: score 1 - 0.0 - %0.0
-├─TimerSequentialAction - 0.942 - %2.9
-│ └─FollowTrajectoryAction - 0.942 - %100.0
-├─SpecimenOuttakeAction_Grab - 0.156 - %0.5
-├─TimerParallelAction - 2.499 - %7.7
-│ ├─TimerSequentialAction - 2.499
-│ │ └─FollowTrajectoryAction - 2.499 - %100.0
-│ └─TimerSequentialAction - 2.297
-│   ├─SleepAction - 2.023 - %89.0
-│   └─SpecimenOuttakeAction_Score - 0.25 - %11.0
-├─MarkerAction: score 2 - 0.0 - %0.0
-├─TimerSequentialAction - 2.417 - %7.5
-│ └─FollowTrajectoryAction - 2.416 - %100.0
-├─SpecimenOuttakeAction_Grab - 0.16 - %0.5
-├─TimerParallelAction - 2.481 - %7.7
-│ ├─TimerSequentialAction - 2.481
-│ │ └─FollowTrajectoryAction - 2.481 - %100.0
-│ └─TimerSequentialAction - 2.239
-│   ├─SleepAction - 2.001 - %90.5
-│   └─SpecimenOuttakeAction_Score - 0.21 - %9.5
-├─MarkerAction: score 3 - 0.0 - %0.0
-├─TimerSequentialAction - 2.394 - %7.4
-│ └─FollowTrajectoryAction - 2.394 - %100.0
-├─SpecimenOuttakeAction_Grab - 0.165 - %0.5
-├─TimerParallelAction - 2.515 - %7.8
-│ ├─TimerSequentialAction - 2.515
-│ │ └─FollowTrajectoryAction - 2.515 - %100.0
-│ └─TimerSequentialAction - 2.289
-│   ├─SleepAction - 2.013 - %89.0
-│   └─SpecimenOuttakeAction_Score - 0.248 - %11.0
-├─MarkerAction: score 4 - 0.0 - %0.0
-├─TimerSequentialAction - 2.438 - %7.6
-│ └─FollowTrajectoryAction - 2.438 - %100.0
-├─SpecimenOuttakeAction_Grab - 0.164 - %0.5
-├─TimerParallelAction - 2.508 - %7.8
-│ ├─TimerSequentialAction - 2.508
-│ │ └─FollowTrajectoryAction - 2.508 - %100.0
-│ └─TimerSequentialAction - 2.296
-│   ├─SleepAction - 2.025 - %89.1
-│   └─SpecimenOuttakeAction_Score - 0.248 - %10.9
-└─SleepAction - 1.0 - %3.1
+Timing is not complete, some information is not available
+TimerSequentialAction - 0.001
+├─
+├─MarkerAction: sample 1 - 0.0 - %?
+├─├─TimerParallelAction - 1.88 - %?
+│ ├─TimerSequentialAction - 0.324
+│ │ ├─SleepAction - 0.314 - %96.9
+│ │ ├─HSlideAction_GotoMin - 0.004 - %1.2
+│ │ ├─ArmAction_Down - 0.003 - %0.9
+│ │ └─IntakeAction_Intake - 0.003 - %0.9
+│ └─TimerSequentialAction - 1.88
+│   └─FollowTrajectoryAction - 1.88 - %100.0
+├─ArmAction_Up - 0.003 - %?
+├─HSlideAction_Zero - 0.004 - %?
+├─TimerParallelAction - 0.426 - %?
+│ ├─TimerSequentialAction - 0.325
+│ │ ├─SleepAction - 0.322 - %99.1
+│ │ └─IntakeAction_Outtake - 0.003 - %0.9
+│ └─TimerSequentialAction - 0.426
+│   └─FollowTrajectoryAction - 0.426 - %100.0
+├─
+├─MarkerAction: sample 2 - 0.0 - %?
+├─├─HSlideAction_GotoMin - 0.003 - %?
+├─ArmAction_Down - 0.001 - %?
+├─IntakeAction_Intake - 0.002 - %?
+├─TimerSequentialAction - 0.855 - %?
+│ └─FollowTrajectoryAction - 0.855 - %100.0
+├─ArmAction_Up - 0.003 - %?
+├─HSlideAction_Zero - 0.004 - %?
+├─TimerParallelAction - 0.561 - %?
+│ ├─TimerSequentialAction - 0.56
+│ │ └─FollowTrajectoryAction - 0.56 - %100.0
+│ └─TimerSequentialAction - 0.33
+│   ├─SleepAction - 0.305 - %99.3
+│   └─IntakeAction_Outtake - 0.002 - %0.7
+├─
+├─MarkerAction: sample 3 - 0.001 - %?
+├─├─TimerParallelAction - 1.157 - %?
+│ ├─HSlideAction_GotoMin - 0.004
+│ ├─ArmAction_Down - 0.007
+│ ├─IntakeAction_Intake - 0.009
+│ └─TimerSequentialAction - 1.157
+│   └─FollowTrajectoryAction - 1.148 - %100.0
+├─HSlideAction_Zero - 0.004 - %?
+├─ArmAction_Up - 0.002 - %?
+├─TimerParallelAction - 1.068 - %?
+│ ├─TimerSequentialAction - 1.068
+│ │ └─FollowTrajectoryAction - 1.068 - %100.0
+│ └─TimerSequentialAction - 0.545
+│   ├─SleepAction - 0.52 - %99.2
+│   └─IntakeAction_Outtake - 0.004 - %0.8
+├─IntakeAction_Stop - 0.003 - %?
+├─
+├─MarkerAction: sample 4 - 0.0 - %?
+├─├─HSlideAction_GotoMin - 0.004 - %?
+├─ArmAction_Down - 0.003 - %?
+├─IntakeAction_Intake - 0.002 - %?
+├─TimerSequentialAction - 1.211 - %?
+│ └─FollowTrajectoryAction - 1.211 - %100.0
+├─ArmAction_Up - 0.003 - %?
+├─HSlideAction_Zero - 0.006 - %?
+├─TimerParallelAction - 1.062 - %?
+│ ├─TimerSequentialAction - 1.062
+│ │ └─FollowTrajectoryAction - 1.062 - %100.0
+│ └─TimerSequentialAction - 0.546
+│   ├─SleepAction - 0.508 - %99.2
+│   └─IntakeAction_Outtake - 0.004 - %0.8
+├─IntakeAction_Stop - 0.004 - %?
+├─
+├─MarkerAction: sample 5 - 0.0 - %?
+├─├─HSlideAction_GotoMin - 0.005 - %?
+├─ArmAction_Down - 0.004 - %?
+├─IntakeAction_Intake - 0.002 - %?
+├─TimerSequentialAction - 1.476 - %?
+│ └─FollowTrajectoryAction - 1.476 - %100.0
+├─ArmAction_Up - 0.004 - %?
+├─HSlideAction_Zero - 0.005 - %?
+├─TimerParallelAction - 1.472 - %?
+│ ├─TimerSequentialAction - 1.472
+│ │ └─FollowTrajectoryAction - 1.472 - %100.0
+│ └─TimerSequentialAction - 0.538
+│   ├─SleepAction - 0.506 - %99.4
+│   └─IntakeAction_Outtake - 0.003 - %0.6
+├─IntakeAction_Stop - 0.003 - %?
+├─
+├─MarkerAction: score 1 - 0.0 - %?
+├─├─TimerSequentialAction - 0.931 - %?
+│ └─FollowTrajectoryAction - 0.931 - %100.0
+├─SpecimenOuttakeAction_Grab - 0.155 - %?
+├─TimerParallelAction - 2.495 - %?
+│ ├─TimerSequentialAction - 2.495
+│ │ └─FollowTrajectoryAction - 2.495 - %100.0
+│ └─TimerSequentialAction - 2.268
+│   ├─SleepAction - 2.008 - %90.0
+│   └─SpecimenOuttakeAction_Score - 0.224 - %10.0
+├─
+├─MarkerAction: score 2 - 0.0 - %?
+├─├─TimerSequentialAction - 2.405 - %?
+│ └─FollowTrajectoryAction - 2.405 - %100.0
+├─SpecimenOuttakeAction_Grab - 0.166 - %?
+├─TimerParallelAction - 2.482 - %?
+│ ├─TimerSequentialAction - 2.482
+│ │ └─FollowTrajectoryAction - 2.482 - %100.0
+│ └─TimerSequentialAction - 2.261
+│   ├─SleepAction - 2.013 - %90.1
+│   └─SpecimenOuttakeAction_Score - 0.221 - %9.9
+├─
+├─MarkerAction: score 3 - 0.0 - %?
+├─├─TimerSequentialAction - 2.404 - %?
+│ └─FollowTrajectoryAction - 2.404 - %100.0
+├─SpecimenOuttakeAction_Grab - 0.162 - %?
+├─TimerParallelAction - 2.528 - %?
+│ ├─TimerSequentialAction - 2.528
+│ │ └─FollowTrajectoryAction - 2.528 - %100.0
+│ └─TimerSequentialAction - 2.291
+│   ├─SleepAction - 2.005 - %88.5
+│   └─SpecimenOuttakeAction_Score - 0.261 - %11.5
+├─
+├─MarkerAction: score 4 - 0.001 - %?
+├─├─TimerSequentialAction - 2.439 - %?
+│ └─FollowTrajectoryAction - 2.439 - %100.0
+├─SpecimenOuttakeAction_Grab - 0.162 - %?
+├─TimerParallelAction - ? - %?
+│ ├─TimerSequentialAction - 0.0
+│ │ └─FollowTrajectoryAction - ? - %?
+│ └─TimerSequentialAction - 2.265
+│   ├─SleepAction - 2.008 - %89.7
+│   └─SpecimenOuttakeAction_Score - 0.23 - %10.3
+└─SleepAction - ? - %?
