@@ -21,7 +21,8 @@ data class MarkerAction(private val label: String): Action
 }
 
 data class TimerSequentialAction(
-	val initialActions: List<Action>
+	val initialActions: List<Action>,
+	val label: String? = null
 ): Action
 {
 	private var actions = initialActions;
@@ -46,14 +47,13 @@ data class TimerSequentialAction(
 		{
 			if(a is MarkerAction)
 			{
-				out += '\n';
 				for(i2 in 0 until level)
 				{
 					out += if((lines and (1 shl i2)) > 0) "│ ";
 					else "  ";
 				}
-				out += if(i == initialActions.size - 1) "│ ";
-				else "│ ";
+				out += if(i == initialActions.size - 1) "│\n";
+				else "│\n";
 			}
 
 			for(i2 in 0 until level)
@@ -72,16 +72,16 @@ data class TimerSequentialAction(
 			if(times.size != initialActions.size)
 			{
 				if(i >= times.size)
-					out += " - ? - %?\n";
+					out += " - ? - ?%\n";
 				else
-					out += " - ${times[i].toDouble() / 1000} - %?\n";
+					out += " - ${times[i].toDouble() / 1000} - ?%\n";
 			}
 			else
-				out += " - ${times[i].toDouble() / 1000} - %${
+				out += " - ${times[i].toDouble() / 1000} - ${
 					(times[i].toDouble() / elapsedTime.toDouble() * 100).format(
 						1
 					)
-				}\n";
+				}%\n";
 
 			if(a is TimerSequentialAction)
 			{
@@ -102,8 +102,8 @@ data class TimerSequentialAction(
 					out += if((lines and (1 shl i2)) > 0) "│ ";
 					else "  ";
 				}
-				out += if(i == initialActions.size - 1) "└─";
-				else "├─";
+				out += if(i == initialActions.size - 1) "│\n";
+				else "\n";
 			}
 		}
 		return out;

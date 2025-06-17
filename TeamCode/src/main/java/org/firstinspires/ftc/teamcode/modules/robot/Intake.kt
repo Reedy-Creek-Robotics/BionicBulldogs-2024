@@ -18,7 +18,8 @@ class Intake(map: HardwareMap)
 	private val elapsedTime = ElapsedTime();
 	private var targetTime = -1.0;
 
-	private var intake = map.crservo.get("rotator0");
+	//private var intake = map.crservo.get("rotator0");
+	private var intake = map.dcMotor.get("intake");
 	private var intakeRotator = map.servo.get("intakeRotator");
 
 	companion object
@@ -27,10 +28,13 @@ class Intake(map: HardwareMap)
 		var spinPower: Double = 1.0;
 
 		@JvmField
+		var revPower: Double = 0.4;
+
+		@JvmField
 		var spinStop = 0.0;
 
 		@JvmField
-    var rotatorCenter = 0.25;
+    var rotatorCenter = 0.26;
 
 		@JvmField
     var rotatorIncrement = 0.25;
@@ -67,7 +71,7 @@ class Intake(map: HardwareMap)
 
 	fun reverse()
 	{
-		intake.power = spinPower;
+		intake.power = revPower;
 		state = State.Reverse;
 	}
 

@@ -195,7 +195,7 @@ class OuttakeTelop: LinearOpMode()
 				if(arm.state == Arm.State.Up)
 				{
 					intake.zeroRotator();
-					delay(0.2);
+					//delay(0.2);
 					arm.down();
 					if(colorSensor.col != ColorSensor.NONE)
 					{

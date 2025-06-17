@@ -73,6 +73,33 @@ function specimenGrabInstant() end
 ---@return Action
 function specimenScore() end
 
+---@return Action
+function intakeUp() end
+
+---@return Action
+function intakeDown() end
+
+---@return Action
+function intakeIntake() end
+
+---@return Action
+function intakeOuttake() end
+
+---@return Action
+function intakeStop() end
+
+---@return Action
+function hslideZero() end
+
+---@return Action
+function hslideGotoMin() end
+
+---@return Action
+function hslideGotoMax() end
+
+---@return Action
+function markerAction(label) end
+
 ---@param action Action
 function run(action) end
 
