@@ -1,0 +1,83 @@
+TimerSequentialAction - 16.996
+│
+├─MarkerAction: score spec - 0.0 - 0.0%
+
+├─SpecimenOuttakeAction_GrabInstant - 0.039 - 0.2%
+├─TimerSequentialAction - 2.397 - 14.1%
+│ └─FollowTrajectoryAction - 2.397 - 100.0%
+├─SpecimenOuttakeAction_Score - 0.246 - 1.4%
+│
+├─MarkerAction: grab 1 - 0.0 - 0.0%
+
+├─TimerSequentialAction - 0.551 - 3.2%
+│ └─TurnAction - 0.551 - 100.0%
+├─ArmAction_Down - 0.003 - 0.0%
+├─IntakeAction_Intake - 0.006 - 0.0%
+├─HSlideAction_GotoPos - 0.005 - 0.0%
+├─SleepAction - 0.55 - 3.2%
+│
+├─MarkerAction: score 1 - 0.0 - 0.0%
+
+├─TimerParallelAction - 2.572 - 15.1%
+│ ├─TimerSequentialAction - 1.625
+│ │ ├─ArmAction_Up - 0.003 - 0.2%
+│ │ ├─HSlideAction_Zero - 0.005 - 0.3%
+│ │ ├─SleepAction - 0.201 - 12.4%
+│ │ ├─SampleClawAction_Transfer - 0.981 - 60.4%
+│ │ └─SampleClawAction_Up - 0.435 - 26.8%
+│ └─TimerSequentialAction - 2.572
+│   └─FollowTrajectoryAction - 2.564 - 100.0%
+├─SampleClawAction_Score - 0.253 - 1.5%
+│
+├─MarkerAction: grab 2 - 0.0 - 0.0%
+
+├─ArmAction_Down - 0.003 - 0.0%
+├─IntakeAction_Intake - 0.007 - 0.0%
+├─TimerParallelAction - 0.737 - 4.3%
+│ ├─TimerSequentialAction - 0.737
+│ │ └─FollowTrajectoryAction - 0.737 - 100.0%
+│ └─TimerSequentialAction - 0.658
+│   ├─SleepAction - 0.619 - 99.2%
+│   └─HSlideAction_GotoMin - 0.005 - 0.8%
+├─SleepAction - 0.65 - 3.8%
+│
+├─MarkerAction: score 2 - 0.0 - 0.0%
+
+├─TimerParallelAction - 3.059 - 18.0%
+│ ├─TimerSequentialAction - 3.059
+│ │ ├─ArmAction_Up - 0.003 - 0.1%
+│ │ ├─HSlideAction_Zero - 0.004 - 0.1%
+│ │ ├─SleepAction - 0.655 - 21.4%
+│ │ ├─SampleClawAction_Transfer - 0.925 - 30.2%
+│ │ ├─SampleClawAction_Up - 0.472 - 15.4%
+│ │ └─SleepAction - 1.0 - 32.7%
+│ └─TimerSequentialAction - 0.858
+│   └─FollowTrajectoryAction - 0.851 - 100.0%
+├─SampleClawAction_Score - 0.253 - 1.5%
+│
+├─MarkerAction: grab 3 - 0.0 - 0.0%
+
+├─ArmAction_Down - 0.003 - 0.0%
+├─IntakeAction_Intake - 0.007 - 0.0%
+├─TimerParallelAction - 0.717 - 4.2%
+│ ├─TimerSequentialAction - 0.717
+│ │ └─FollowTrajectoryAction - 0.717 - 100.0%
+│ └─TimerSequentialAction - 0.652
+│   ├─SleepAction - 0.611 - 99.3%
+│   └─HSlideAction_GotoMin - 0.004 - 0.7%
+├─SleepAction - 0.65 - 3.8%
+│
+├─MarkerAction: score 3 - 0.0 - 0.0%
+
+├─TimerParallelAction - 3.03 - 17.8%
+│ ├─TimerSequentialAction - 3.03
+│ │ ├─ArmAction_Up - 0.002 - 0.1%
+│ │ ├─HSlideAction_Zero - 0.004 - 0.1%
+│ │ ├─SleepAction - 0.665 - 21.9%
+│ │ ├─SampleClawAction_Transfer - 0.926 - 30.6%
+│ │ ├─SampleClawAction_Up - 0.433 - 14.3%
+│ │ └─SleepAction - 1.0 - 33.0%
+│ └─TimerSequentialAction - 0.861
+│   └─FollowTrajectoryAction - 0.855 - 100.0%
+├─SampleClawAction_Score - 0.258 - 1.5%
+└─SleepAction - 1.0 - 5.9%

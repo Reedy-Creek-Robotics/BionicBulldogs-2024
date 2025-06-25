@@ -27,14 +27,25 @@ class LuaRobotActions
 			builder.addObjectFunction("intakeOuttake", LuaType.Object(Action::class.java));
 			builder.addObjectFunction("intakeStop", LuaType.Object(Action::class.java));
 
+			builder.addObjectFunction("sampleClawTransfer", LuaType.Object(Action::class.java));
+			builder.addObjectFunction("sampleClawUp", LuaType.Object(Action::class.java));
+			builder.addObjectFunction("sampleClawScore", LuaType.Object(Action::class.java));
+
 			builder.createClass("SpecimenOuttakeAction_Grab");
 			builder.createClass("SpecimenOuttakeAction_GrabInstant");
 			builder.createClass("SpecimenOuttakeAction_Score");
+
+			builder.createClass("SampleClawAction_Transfer");
+			builder.createClass("SampleClawAction_Up");
+			builder.createClass("SampleClawAction_Score");
+
 			builder.createClass("HSlideAction_GotoPos");
 			builder.createClass("HSlideAction_GotoMin");
 			builder.createClass("HSlideAction_Zero");
+
 			builder.createClass("ArmAction_Up");
 			builder.createClass("ArmAction_Down");
+
 			builder.createClass("IntakeAction_Intake");
 			builder.createClass("IntakeAction_Outtake");
 			builder.createClass("IntakeAction_Stop");
@@ -94,5 +105,20 @@ class LuaRobotActions
 	fun intakeStop(): Action
 	{
 		return IntakeAction_Stop();
+	}
+
+	fun sampleClawTransfer(): Action
+	{
+		return SampleClawAction_Transfer();
+	}
+
+	fun sampleClawUp(): Action
+	{
+		return SampleClawAction_Up();
+	}
+
+	fun sampleClawScore(): Action
+	{
+		return SampleClawAction_Score();
 	}
 }

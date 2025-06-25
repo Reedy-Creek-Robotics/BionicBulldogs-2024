@@ -37,7 +37,7 @@ class SampleOuttakeAction_Park: Action
 {
 	override fun run(p: TelemetryPacket): Boolean
 	{
-		outtake.park();
+		bucketOuttake.park();
 		return false;
 	}
 }

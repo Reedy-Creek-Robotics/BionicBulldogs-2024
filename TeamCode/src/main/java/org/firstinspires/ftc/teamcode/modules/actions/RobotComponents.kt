@@ -10,9 +10,10 @@ lateinit var arm: Arm;
 lateinit var hSlide: HSlide;
 lateinit var slide: Slide;
 lateinit var specimenClaw: SpeciminClaw;
-lateinit var outtake: Outtake;
+lateinit var bucketOuttake: BucketOuttake;
 lateinit var specimenOuttake: SpecimenOuttake;
 lateinit var sampleOuttake: SampleOuttake;
+lateinit var sampleClaw: SampleClaw;
 lateinit var drive: MecanumDrive;
 
 fun initComponents(hardwareMap: HardwareMap)
@@ -25,6 +26,7 @@ fun initComponents(hardwareMap: HardwareMap)
 	//outtake = Outtake(hardwareMap);
 	specimenOuttake = SpecimenOuttake(specimenClaw, slide);
 	//sampleOuttake = SampleOuttake(slide, outtake);
+	sampleClaw = SampleClaw(hardwareMap);
 	drive = MecanumDrive(hardwareMap, Pose2d(0.0, 0.0, 0.0));
 
 	intake.zeroRotator();
@@ -32,4 +34,5 @@ fun initComponents(hardwareMap: HardwareMap)
 	hSlide.zero();
 	specimenClaw.close();
 	//sampleOuttake.init();
+	sampleClaw.init();
 }

@@ -15,7 +15,7 @@ class HSlide(hardwareMap: HardwareMap)
 		var max = 0.05;
 
 		@JvmField
-		var min = 0.75;
+		var min = 0.65;
 
 		@JvmField
 		var score = 0.05;

@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.Servo
 import com.qualcomm.robotcore.util.ElapsedTime
 
 @Config
-class Outtake(val hardwareMap: HardwareMap)
+class BucketOuttake(val hardwareMap: HardwareMap)
 {
 	companion object
 	{

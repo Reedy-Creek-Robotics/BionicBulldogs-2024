@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.modules.robot
 
-class SampleOuttake(private val slide: Slide, private val outtake: Outtake)
+class SampleOuttake(private val slide: Slide, private val outtake: BucketOuttake)
 {
 	fun init()
 	{
@@ -37,6 +37,6 @@ class SampleOuttake(private val slide: Slide, private val outtake: Outtake)
 
 	fun isBusy(): Boolean
 	{
-		return outtake.state != Outtake.State.Idle;
+		return outtake.state != BucketOuttake.State.Idle;
 	}
 }

@@ -5,6 +5,7 @@ import com.acmerobotics.roadrunner.Pose2d
 import com.qualcomm.hardware.sparkfun.SparkFunOTOS
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
+import com.qualcomm.robotcore.hardware.Servo
 import com.qualcomm.robotcore.util.ElapsedTime
 import org.firstinspires.ftc.teamcode.modules.drive.HDrive
 import org.firstinspires.ftc.teamcode.modules.drive.SparkfunImuLocalizer
@@ -26,52 +27,84 @@ class OuttakeTelop: LinearOpMode()
 		var clawClose = 0.97;
 
 		@JvmField
-		var armDown = 0.9;
+		var armDown = 0.87;
 
 		@JvmField
-		var armUp = 0.3;
+		var armUp = 0.2;
 
 		@JvmField
-		var armUp2 = 0.85;
+		var armUp2 = 0.75;
 
 		@JvmField
-		var armUp3 = 0.8;
+		var armUp3 = 0.7;
 
 		@JvmField
-		var rotatorDown = 1.0;
+		var rotatorDown = 0.2;
 
 		@JvmField
-		var rotatorUp = 0.4;
+		var rotatorGrab = 0.2;
+
+		@JvmField
+		var rotatorUp = 0.7;
 
 		@JvmField
 //		var intakeRotatorPos = 0.57;
 		var intakeRotatorPos = 0.0;
 
 		@JvmField
-		var slidePosition = -1400;
+		var intakeArmCollect = 0.75;
+
+		@JvmField
+		var slidePosition = -1600;
 
 		@JvmField
 		var hslideScore = HSlide.score;
 
 		@JvmField
+		var hslideGrab = HSlide.score + 0.01;
+
+		@JvmField
 		var intakeArmPos = 0.33;
+
+		@JvmField
+		var transferDelay1 = 0.3;
+		@JvmField
+		var transferDelay2 = 0.2;
+		@JvmField
+		var transferDelay3 = 0.1;
+		@JvmField
+		var transferDelay4 = 0.2;
+		@JvmField
+		var transferDelay5 = 0.2;
 	}
+
+	private var grabState = 0;
+	private var grabDelay = 0.0;
+	private val grabElapsedTime = ElapsedTime();
 
 	private val colorSensorBad = ColorSensor.RED;
 
+	private lateinit var arm: Arm;
+	private lateinit var intake: Intake;
+	private lateinit var slide: Slide;
+	private lateinit var hslide: HSlide;
+	private lateinit var claw: Servo;
+	private lateinit var outtakeArm: Servo;
+	private lateinit var clawRotator: Servo;
+
 	override fun runOpMode()
 	{
-		val claw = hardwareMap.servo.get("outtakeClaw");
-		val outtakeArm = hardwareMap.servo.get("outtakeArm");
-		val clawRotator = hardwareMap.servo.get("clawRotator");
+		claw = hardwareMap.servo.get("outtakeClaw");
+		outtakeArm = hardwareMap.servo.get("outtakeArm");
+		clawRotator = hardwareMap.servo.get("clawRotator");
 
-		val slide = Slide(hardwareMap);
-		val arm = Arm(hardwareMap);
-		val intake = Intake(hardwareMap);
+		slide = Slide(hardwareMap);
+		arm = Arm(hardwareMap);
+		intake = Intake(hardwareMap);
 		val specimenClaw = SpeciminClaw(hardwareMap);
 		val specimenOuttake = SpecimenOuttake(specimenClaw, slide);
 
-		val hSlide = HSlide(hardwareMap);
+		hslide = HSlide(hardwareMap);
 
 		val colorSensor = ColorSensor(hardwareMap, gamepad1, colorSensorBad);
 
@@ -87,7 +120,7 @@ class OuttakeTelop: LinearOpMode()
 
 		waitForStart();
 
-		hSlide.zero();
+		hslide.zero();
 		arm.up();
 		specimenOuttake.init();
 
@@ -132,15 +165,15 @@ class OuttakeTelop: LinearOpMode()
 			//Horizontal Slides
 			if(gamepad1.right_trigger >= 0.5)
 			{
-				hSlide.increment();
+				hslide.increment();
 			}
 			else if(gamepad1.left_trigger >= 0.5)
 			{
-				hSlide.decrement();
+				hslide.decrement();
 			}
 			else if(gamepad.triangle())
 			{
-				hSlide.gotoPos(hslideScore);
+				hslide.gotoPos(hslideScore);
 				arm.up();
 				intake.zeroRotator();
 			}
@@ -211,14 +244,7 @@ class OuttakeTelop: LinearOpMode()
 
 			if(gamepad.circle())
 			{
-				claw.position = clawOpen;
-				outtakeArm.position = armDown;
-				delay(0.2);
-				claw.position = clawClose;
-				intake.reverse();
-				delay(0.2);
-				outtakeArm.position = armUp3;
-				intake.stop();
+				grabState = 1;
 			}
 
 			if(gamepad.cross())
@@ -227,8 +253,6 @@ class OuttakeTelop: LinearOpMode()
 				{
 					0 ->
 					{
-						clawRotator.position = rotatorUp;
-						outtakeArm.position = armUp;
 						slide.gotoPos(slidePosition);
 						outtakeState = 1;
 					}
@@ -243,6 +267,11 @@ class OuttakeTelop: LinearOpMode()
 						outtakeState = 0;
 					}
 				}
+			}
+			if(slide.getPos() < -500 && outtakeState == 1)
+			{
+				clawRotator.position = rotatorUp;
+				outtakeArm.position = armUp;
 			}
 
 			if(gamepad.touchpad())
@@ -264,6 +293,9 @@ class OuttakeTelop: LinearOpMode()
 				else
 					specimenClaw.open();
 			}
+
+			updateGrab();
+
 			specimenOuttake.update();
 
 			colorSensor.update();
@@ -273,9 +305,74 @@ class OuttakeTelop: LinearOpMode()
 			drive.telem(telemetry);
 			colorSensor.telem(telemetry);
 			specimenOuttake.telem(telemetry);
-			telemetry.addData("hPos", hSlide.pos())
+			telemetry.addData("hPos", hslide.pos())
 			telemetry.addData("touchpad", gamepad1.touchpad);
 			telemetry.update();
+		}
+	}
+
+	private fun updateGrab()
+	{
+		when(grabState)
+		{
+			1 ->
+			{
+				hslide.gotoPos(hslideGrab);
+				arm.gotoPos(intakeArmCollect);
+				grabElapsedTime.reset();
+				grabState = 2;
+			}
+
+			2 ->
+			{
+				if(grabElapsedTime.seconds() >= transferDelay1)
+				{
+					claw.position = clawOpen;
+					outtakeArm.position = armDown;
+					clawRotator.position = rotatorGrab;
+					grabElapsedTime.reset();
+					grabState = 3;
+				}
+			}
+
+			3 ->
+			{
+				if(grabElapsedTime.seconds() >= transferDelay2)
+				{
+					claw.position = clawClose;
+					grabElapsedTime.reset();
+					grabState = 4;
+				}
+			}
+
+			4 ->
+			{
+				if(grabElapsedTime.seconds() >= transferDelay3)
+				{
+					intake.reverse(1.0);
+					grabElapsedTime.reset();
+					grabState = 5;
+				}
+			}
+
+			5 ->
+			{
+				if(grabElapsedTime.seconds() >= transferDelay4)
+				{
+					outtakeArm.position = armUp3;
+					grabElapsedTime.reset();
+					grabState = 6;
+				}
+			}
+
+			6 ->
+			{
+				if(grabElapsedTime.seconds() >= transferDelay5)
+				{
+					intake.stop();
+					grabState = 0;
+				}
+			}
 		}
 	}
 

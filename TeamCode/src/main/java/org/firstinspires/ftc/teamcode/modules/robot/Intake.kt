@@ -69,9 +69,9 @@ class Intake(map: HardwareMap)
 		state = State.Forward;
 	}
 
-	fun reverse()
+	fun reverse(power: Double = 0.0)
 	{
-		intake.power = revPower;
+		intake.power = (if(power == 0.0) revPower else power);
 		state = State.Reverse;
 	}
 
