@@ -7,11 +7,13 @@ import com.acmerobotics.roadrunner.SequentialAction
 import com.acmerobotics.roadrunner.SleepAction
 import com.acmerobotics.roadrunner.ftc.runBlocking
 import com.minerkid08.dynamicopmodeloader.FunctionBuilder
+import com.minerkid08.dynamicopmodeloader.LuaError
 import com.minerkid08.dynamicopmodeloader.LuaType
-import org.firstinspires.ftc.teamcode.modules.actions.MarkerAction
-import org.firstinspires.ftc.teamcode.modules.actions.TimerSequentialAction
 import org.firstinspires.ftc.teamcode.modules.actions.drive
-import org.firstinspires.ftc.teamcode.modules.actions.toTimerAction
+import org.firstinspires.ftc.teamcode.modules.actions.profiler.MarkerAction
+import org.firstinspires.ftc.teamcode.modules.actions.profiler.MarkerSequentialAction
+import org.firstinspires.ftc.teamcode.modules.actions.profiler.ProfileSequentialAction
+import org.firstinspires.ftc.teamcode.modules.actions.profiler.toProfileAction
 import org.firstinspires.ftc.teamcode.modules.drive.rotPos
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive
 import java.io.File
@@ -61,6 +63,12 @@ class LuaAction
 			);
 
 			builder.addObjectFunction(
+				"markerSequentalAction",
+				LuaType.Object(LuaSequentalAction::class.java),
+				listOf(LuaType.String)
+			);
+
+			builder.addObjectFunction(
 				"parallelAction", LuaType.Object(LuaParallelAction::class.java)
 			);
 
@@ -88,12 +96,13 @@ class LuaAction
 				listOf(LuaType.Object(Action::class.java))
 			);
 
-			builder.createClass("Action");
-			builder.createClass("SequentialAction");
-			builder.createClass(TimerSequentialAction::class.simpleName!!);
-			builder.createClass("ParallelAction");
-			builder.createClass("SleepAction");
-			builder.createClass("MarkerAction");
+			builder.createClass(Action::class.java.simpleName);
+			builder.createClass(SequentialAction::class.java.simpleName);
+			builder.createClass(ParallelAction::class.java.simpleName);
+			builder.createClass(MarkerSequentialAction::class.java.simpleName);
+			builder.createClass(ProfileSequentialAction::class.simpleName!!);
+			builder.createClass(SleepAction::class.java.simpleName);
+			builder.createClass(MarkerAction::class.java.simpleName);
 
 			LuaTrajectoryBuilder.init(builder);
 			LuaSequentalAction.init(builder);
@@ -126,12 +135,17 @@ class LuaAction
 
 	fun sequentalAction(): LuaSequentalAction
 	{
-		return LuaSequentalAction();
+		return LuaSequentalAction(null);
 	}
 
 	fun parallelAction(): LuaParallelAction
 	{
 		return LuaParallelAction();
+	}
+
+	fun markerSequentalAction(label: String): LuaSequentalAction
+	{
+		return LuaSequentalAction(label);
 	}
 
 	fun sleepAction(time: Double): Action
@@ -147,7 +161,7 @@ class LuaAction
 	fun runTimer(action: Action, filename: String)
 	{
 		val a2 =
-			if(action is TimerSequentialAction) action else toTimerAction(action as SequentialAction);
+			if(action is ProfileSequentialAction) action else toProfileAction(action as SequentialAction);
 		runBlocking(a2);
 		val file = File("/sdcard/$filename");
 		if(!file.exists())
@@ -167,12 +181,12 @@ class LuaAction
 	fun initProfileAction(action: Action): Action
 	{
 		if(action !is SequentialAction)
-			error("action must be a sequential action");
-		return toTimerAction(action);
+			throw LuaError("action must be a sequential action");
+		return toProfileAction(action);
 	}
 }
 
-class LuaSequentalAction
+class LuaSequentalAction(val label: String?)
 {
 	companion object
 	{
@@ -199,7 +213,10 @@ class LuaSequentalAction
 
 	fun build(): Action
 	{
-		return SequentialAction(actions);
+		return if(label == null)
+			SequentialAction(actions);
+		else
+			MarkerSequentialAction(label, actions);
 	}
 }
 

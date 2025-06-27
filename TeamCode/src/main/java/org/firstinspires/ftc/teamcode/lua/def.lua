@@ -60,9 +60,17 @@ function sequentalAction() end
 ---@return LuaParallelAction
 function parallelAction() end
 
+---@return LuaSequentalAction
+---@param label string
+function markerSequentialAction(label) end
+
 ---@return Action
 ---@param time number
 function sleepAction(time) end
+
+---@return Action
+function markerAction(label) end
+
 
 ---@return Action
 function specimenGrab() end
@@ -72,6 +80,7 @@ function specimenGrabInstant() end
 
 ---@return Action
 function specimenScore() end
+
 
 ---@return Action
 function intakeUp() end
@@ -88,6 +97,7 @@ function intakeOuttake() end
 ---@return Action
 function intakeStop() end
 
+
 ---@return Action
 function hslideZero() end
 
@@ -98,7 +108,19 @@ function hslideGotoMin() end
 function hslideGotoMax() end
 
 ---@return Action
-function markerAction(label) end
+---@param pos number
+function hslideGotoPos(pos) end
+
+
+---@return Action
+function sampleClawTransfer() end
+
+---@return Action
+function sampleClawUp() end
+
+---@return Action
+function sampleClawScore() end
+
 
 ---@param action Action
 function run(action) end

@@ -25,11 +25,11 @@ class RedBasket: LinearOpMode()
 
 		val opmodeLoader = OpmodeLoader();
 
-		opmodeLoader.init();
-
 		val builder = opmodeLoader.getFunctionBuilder();
 		LuaAction.init(builder);
 		LuaRobotActions.init(builder);
+
+		opmodeLoader.init();
 
 		opmodeLoader.loadOpmode("redBasket");
 
