@@ -10,6 +10,7 @@ import com.acmerobotics.roadrunner.ftc.runBlocking
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.teamcode.modules.actions.*
+import org.firstinspires.ftc.teamcode.modules.actions.profiler.toProfileAction
 import org.firstinspires.ftc.teamcode.modules.drive.rotPos
 import org.firstinspires.ftc.teamcode.modules.robot.HSlide
 import org.firstinspires.ftc.teamcode.modules.robot.Intake
@@ -163,7 +164,7 @@ class SampleAuto: LinearOpMode()
 
 		waitForStart()
 
-		val timerAction = toTimerAction(action);
+		val timerAction = toProfileAction(action);
 		runBlocking(timerAction);
 		val file = File("/sdcard/opmodeTimerSample.txt");
 		if(!file.exists())

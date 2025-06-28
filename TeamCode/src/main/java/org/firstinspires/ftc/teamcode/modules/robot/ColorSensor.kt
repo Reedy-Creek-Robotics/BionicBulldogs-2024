@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap
 import org.firstinspires.ftc.robotcore.external.Telemetry
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit
 
-class ColorSensor(hardwareMap: HardwareMap, private val gamepad: Gamepad, private val badColor: Int)
+class ColorSensor(hardwareMap: HardwareMap, private val gamepad: Gamepad? = null, private val badColor: Int = 0)
 {
 	companion object
 	{
@@ -80,21 +80,24 @@ class ColorSensor(hardwareMap: HardwareMap, private val gamepad: Gamepad, privat
 			else
 			{
 				if(col == badColor)
-					gamepad.stopRumble();
+					gamepad?.stopRumble();
 				col = UNKNOWN;
 			}
 		}
 		else
 			col = NONE;
 
-		if(isNone(prevCol) && badColor != BLUE && col == BLUE)
-			gamepad.rumble(0.5, 0.0, 500);
-		if(isNone(prevCol) && badColor != RED && col == RED)
-			gamepad.rumble(0.5, 0.0, 500);
-		if(isNone(prevCol) && badColor != YELLOW && col == YELLOW)
-			gamepad.rumble(0.0, 0.5, 500);
-		if(col == badColor)
-			gamepad.rumble(1.0, 1.0, 50);
+		if(gamepad != null)
+		{
+			if(isNone(prevCol) && badColor != BLUE && col == BLUE)
+				gamepad.rumble(0.5, 0.0, 500);
+			if(isNone(prevCol) && badColor != RED && col == RED)
+				gamepad.rumble(0.5, 0.0, 500);
+			if(isNone(prevCol) && badColor != YELLOW && col == YELLOW)
+				gamepad.rumble(0.0, 0.5, 500);
+			if(col == badColor)
+				gamepad.rumble(1.0, 1.0, 50);
+		}
 	}
 
 	fun telem(telemetry: Telemetry)

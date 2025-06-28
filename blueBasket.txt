@@ -1,0 +1,76 @@
+ProfileSequentialAction - 17.075
+│ 
+├─ProfileSequentialAction: spec - 2.663 - 15.6%
+│ ├─SpecimenOuttakeAction_GrabInstant - 0.054 - 2.0%
+│ ├─ProfileSequentialAction - 2.395 - 89.9%
+│ │ └─FollowTrajectoryAction - 2.395 - 100.0%
+│ └─SpecimenOuttakeAction_Score - 0.214 - 8.0%
+│ 
+├─ProfileSequentialAction: grab 1 - 1.141 - 6.7%
+│ ├─ProfileSequentialAction - 0.577 - 50.6%
+│ │ └─TurnAction - 0.577 - 100.0%
+│ ├─ArmAction_Down - 0.003 - 0.3%
+│ ├─IntakeAction_Intake - 0.006 - 0.5%
+│ ├─HSlideAction_GotoPos - 0.005 - 0.4%
+│ └─SleepAction - 0.55 - 48.2%
+│ 
+├─ProfileSequentialAction: score 1 - 2.845 - 16.7%
+│ ├─ProfileParallelAction - 2.583 - 90.8%
+│ │ ├─ProfileSequentialAction - 1.711
+│ │ │ ├─ArmAction_Up - 0.003 - 0.2%
+│ │ │ ├─HSlideAction_Zero - 0.005 - 0.3%
+│ │ │ ├─SleepAction - 0.209 - 12.2%
+│ │ │ ├─SampleClawAction_Transfer - 0.991 - 57.9%
+│ │ │ └─SampleClawAction_Up - 0.503 - 29.4%
+│ │ ├─ProfileSequentialAction - 2.583
+│ │   └─FollowTrajectoryAction - 2.575 - 100.0%
+│ └─SampleClawAction_Score - 0.262 - 9.2%
+│ 
+├─ProfileSequentialAction: grab 2 - 1.398 - 8.2%
+│ ├─ArmAction_Down - 0.002 - 0.1%
+│ ├─IntakeAction_Intake - 0.007 - 0.5%
+│ ├─ProfileParallelAction - 0.739 - 52.9%
+│ │ ├─ProfileSequentialAction - 0.739
+│ │ │ └─FollowTrajectoryAction - 0.739 - 100.0%
+│ │ ├─ProfileSequentialAction - 0.651
+│ │   ├─SleepAction - 0.614 - 99.4%
+│ │   └─HSlideAction_GotoMin - 0.004 - 0.6%
+│ └─SleepAction - 0.65 - 46.5%
+│ 
+├─ProfileSequentialAction: score 2 - 3.316 - 19.4%
+│ ├─ProfileParallelAction - 3.057 - 92.2%
+│ │ ├─ProfileSequentialAction - 3.057
+│ │ │ ├─ArmAction_Up - 0.002 - 0.1%
+│ │ │ ├─HSlideAction_Zero - 0.005 - 0.2%
+│ │ │ ├─SleepAction - 0.673 - 22.0%
+│ │ │ ├─SampleClawAction_Transfer - 0.928 - 30.4%
+│ │ │ ├─SampleClawAction_Up - 0.449 - 14.7%
+│ │ │ └─SleepAction - 1.0 - 32.7%
+│ │ ├─ProfileSequentialAction - 0.856
+│ │   └─FollowTrajectoryAction - 0.849 - 100.0%
+│ └─SampleClawAction_Score - 0.259 - 7.8%
+│ 
+├─ProfileSequentialAction: grab 3 - 1.393 - 8.2%
+│ ├─ArmAction_Down - 0.003 - 0.2%
+│ ├─IntakeAction_Intake - 0.006 - 0.4%
+│ ├─ProfileParallelAction - 0.734 - 52.7%
+│ │ ├─ProfileSequentialAction - 0.734
+│ │ │ └─FollowTrajectoryAction - 0.734 - 100.0%
+│ │ ├─ProfileSequentialAction - 0.656
+│ │   ├─SleepAction - 0.615 - 99.2%
+│ │   └─HSlideAction_GotoMin - 0.005 - 0.8%
+│ └─SleepAction - 0.65 - 46.7%
+│ 
+├─ProfileSequentialAction: score 3 - 3.319 - 19.4%
+│ ├─ProfileParallelAction - 3.064 - 92.3%
+│ │ ├─ProfileSequentialAction - 3.064
+│ │ │ ├─ArmAction_Up - 0.003 - 0.1%
+│ │ │ ├─HSlideAction_Zero - 0.004 - 0.1%
+│ │ │ ├─SleepAction - 0.661 - 21.6%
+│ │ │ ├─SampleClawAction_Transfer - 0.927 - 30.3%
+│ │ │ ├─SampleClawAction_Up - 0.469 - 15.3%
+│ │ │ └─SleepAction - 1.0 - 32.6%
+│ │ ├─ProfileSequentialAction - 0.873
+│ │   └─FollowTrajectoryAction - 0.866 - 100.0%
+│ └─SampleClawAction_Score - 0.255 - 7.7%
+└─SleepAction - 1.0 - 5.9%

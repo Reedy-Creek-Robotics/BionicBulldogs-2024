@@ -63,7 +63,7 @@ class LuaAction
 			);
 
 			builder.addObjectFunction(
-				"markerSequentalAction",
+				"markerSequentialAction",
 				LuaType.Object(LuaSequentalAction::class.java),
 				listOf(LuaType.String)
 			);
@@ -143,7 +143,7 @@ class LuaAction
 		return LuaParallelAction();
 	}
 
-	fun markerSequentalAction(label: String): LuaSequentalAction
+	fun markerSequentialAction(label: String): LuaSequentalAction
 	{
 		return LuaSequentalAction(label);
 	}

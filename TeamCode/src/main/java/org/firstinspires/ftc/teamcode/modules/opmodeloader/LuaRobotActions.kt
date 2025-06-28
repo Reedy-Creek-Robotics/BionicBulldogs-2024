@@ -26,6 +26,7 @@ class LuaRobotActions
 			builder.addObjectFunction("intakeIntake", LuaType.Object(Action::class.java));
 			builder.addObjectFunction("intakeOuttake", LuaType.Object(Action::class.java));
 			builder.addObjectFunction("intakeStop", LuaType.Object(Action::class.java));
+			builder.addObjectFunction("intakeWaitForColor", LuaType.Object(Action::class.java));
 
 			builder.addObjectFunction("sampleClawTransfer", LuaType.Object(Action::class.java));
 			builder.addObjectFunction("sampleClawUp", LuaType.Object(Action::class.java));
@@ -49,6 +50,7 @@ class LuaRobotActions
 			builder.createClass("IntakeAction_Intake");
 			builder.createClass("IntakeAction_Outtake");
 			builder.createClass("IntakeAction_Stop");
+			builder.createClass("IntakeAction_WaitForColor");
 		}
 	}
 	
@@ -105,6 +107,11 @@ class LuaRobotActions
 	fun intakeStop(): Action
 	{
 		return IntakeAction_Stop();
+	}
+
+	fun intakeWaitForColor(): Action
+	{
+		return IntakeAction_WaitForColor();
 	}
 
 	fun sampleClawTransfer(): Action

@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.modules.actions
 
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket
 import com.acmerobotics.roadrunner.Action
+import org.firstinspires.ftc.teamcode.modules.robot.ColorSensor
 
 class IntakeAction_Intake: Action
 {
@@ -45,5 +46,16 @@ class IntakeAction_SetRotation(private val rot: Double): Action
 	{
 		intake.setRotatorPos(rot);
 		return false;
+	}
+}
+
+class IntakeAction_WaitForColor: Action
+{
+	override fun run(p: TelemetryPacket): Boolean
+	{
+		colorSensor.update();
+		if(colorSensor.col != ColorSensor.NONE)
+			return false;
+		return true;
 	}
 }

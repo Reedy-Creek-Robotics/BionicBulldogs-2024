@@ -7,6 +7,7 @@ import com.acmerobotics.roadrunner.ftc.runBlocking
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.teamcode.modules.actions.*
+import org.firstinspires.ftc.teamcode.modules.actions.profiler.toProfileAction
 import org.firstinspires.ftc.teamcode.modules.drive.rotPos
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive
 import java.io.File
@@ -121,7 +122,7 @@ class SpecimenAutp4: LinearOpMode()
 
 		waitForStart();
 
-		val timerAction = toTimerAction(action);
+		val timerAction = toProfileAction(action);
 		runBlocking(timerAction);
 		rotPos = drive.localizer.pose.heading.toDouble();
 
