@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.modules.actions
 
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket
 import com.acmerobotics.roadrunner.Action
+import com.qualcomm.robotcore.util.ElapsedTime
 import org.firstinspires.ftc.teamcode.modules.robot.ColorSensor
 
 class IntakeAction_Intake: Action
@@ -49,12 +50,21 @@ class IntakeAction_SetRotation(private val rot: Double): Action
 	}
 }
 
-class IntakeAction_WaitForColor: Action
+class IntakeAction_WaitForColor(private val color: Int): Action
 {
+	val elapsedTime = ElapsedTime();
+	var ran = false;
 	override fun run(p: TelemetryPacket): Boolean
 	{
+		if(!ran)
+		{
+			ran = true;
+			elapsedTime.reset();
+		}
+		if(elapsedTime.seconds() > 2)
+			return false;
 		colorSensor.update();
-		if(colorSensor.col != ColorSensor.NONE)
+		if(colorSensor.col == color)
 			return false;
 		return true;
 	}

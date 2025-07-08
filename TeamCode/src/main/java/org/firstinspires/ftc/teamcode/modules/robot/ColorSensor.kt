@@ -65,15 +65,28 @@ class ColorSensor(hardwareMap: HardwareMap, private val gamepad: Gamepad? = null
 //803, 1143, 548
 //806, 1140, 545
 
-			if(r > 500 && r < 600)
+
+
+			//red
+			// 1150 640 350
+			// 5400 3700 2400
+
+			//blue
+			// 860 1700 3450
+
+			//yellow
+			// 3100 4280 1170
+			// 5200 7100 1750
+
+			if(r > 4000 && g < 4000 && b < 4000)
 			{
 				col = RED;
 			}
-			else if(b > 625)
+			else if(b > 3000 && r < 2000)
 			{
 				col = BLUE;
 			}
-			else if(g > 1000)
+			else if(g > 4000 && r > 4000)
 			{
 				col = YELLOW;
 			}

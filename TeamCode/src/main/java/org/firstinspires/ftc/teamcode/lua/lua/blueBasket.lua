@@ -32,7 +32,7 @@ addOpmode({
 			:add(intakeDown())
 			:add(intakeIntake())
 			:add(hslideGotoPos(0.6))
-			:add(sleepAction(0.55))
+			:add(intakeWaitForColor(Colors.YELLOW))
 			:build()
 		);
 
@@ -77,11 +77,11 @@ addOpmode({
 					sequentalAction()
 					:add(sleepAction(0.6))
 					:add(hslideGotoMin())
+					:add(intakeWaitForColor(Colors.YELLOW))
 					:build()
 				)
 				:build()
 			)
-			:add(sleepAction(0.65))
 			:build()
 		);
 
@@ -127,11 +127,11 @@ addOpmode({
 					sequentalAction()
 					:add(sleepAction(0.6))
 					:add(hslideGotoMin())
+					:add(intakeWaitForColor(Colors.YELLOW))
 					:build()
 				)
 				:build()
 			)
-			:add(sleepAction(0.65))
 			:build()
 		);
 

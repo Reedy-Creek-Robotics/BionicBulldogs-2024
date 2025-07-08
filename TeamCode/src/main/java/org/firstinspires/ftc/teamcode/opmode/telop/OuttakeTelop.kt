@@ -124,7 +124,7 @@ class OuttakeTelop: LinearOpMode()
 		arm.up();
 		specimenOuttake.init();
 
-		claw.position = clawOpen;
+		claw.position = clawClose;
 		outtakeArm.position = armUp2;
 		clawRotator.position = rotatorDown;
 		intake.zeroRotator();
