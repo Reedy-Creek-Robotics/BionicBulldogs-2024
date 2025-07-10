@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.modules
 
+import org.firstinspires.ftc.robotcore.external.Telemetry
+
 fun clamp(v: Float, min: Float, max: Float): Float
 {
 		if(v > max) return max;
@@ -13,3 +15,8 @@ fun lerp(a: Float, b: Float, t: Float): Float
 }
 
 fun Double.format(len: Int) = "%.${len}f".format(this);
+
+fun Telemetry.fmt(fmt: String, vararg args: Any)
+{
+	addLine(fmt.format(args));
+}

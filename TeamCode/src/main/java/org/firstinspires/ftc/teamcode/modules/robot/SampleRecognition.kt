@@ -1,111 +1,183 @@
 package org.firstinspires.ftc.teamcode.modules.robot
 
-import android.graphics.Canvas
-import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration
+import com.qualcomm.hardware.limelightvision.LLResultTypes
+import com.qualcomm.hardware.limelightvision.Limelight3A
+import com.qualcomm.robotcore.hardware.HardwareMap
+import org.firstinspires.ftc.robotcore.external.Telemetry
 import org.firstinspires.ftc.teamcode.modules.Vec2
-import org.firstinspires.ftc.vision.VisionProcessor
-import org.opencv.core.Core
-import org.opencv.core.CvType
-import org.opencv.core.Mat
-import org.opencv.core.MatOfPoint
-import org.opencv.core.MatOfPoint2f
-import org.opencv.core.Scalar
-import org.opencv.imgproc.Imgproc
+import org.firstinspires.ftc.teamcode.modules.fmt
+import org.firstinspires.ftc.teamcode.modules.ui.FloatPtr
+import org.firstinspires.ftc.teamcode.opmode.telop.Sample
+import kotlin.math.PI
+import kotlin.math.pow
+import kotlin.math.sqrt
+import kotlin.math.tan
 
-class SampleRecognition(private val sampleColors: SampleColors): VisionProcessor
+private var telemetry: Telemetry? = null;
+
+class Sample
 {
-	private var sampleList = ArrayList<Sample>();
+	lateinit var res: LLResultTypes.ColorResult;
+	lateinit var pos: Vec2;
+	var dist = 0.0f;
+	var width = 0.0f;
+	var height = 0.0f;
+}
 
-	var width = 0;
-	var height = 0;
+fun getSamplePosition(sample: LLResultTypes.ColorResult): Vec2
+{
+	return getSamplePosition(sample.targetXDegrees.toFloat(), sample.targetYDegrees.toFloat());
+}
 
-	class SampleColors(val low: Scalar, val high: Scalar, val low2: Scalar?, val high2: Scalar?)
+fun getSamplePosition(tx: Float, ty: Float): Vec2
+{
+	val a1 = -25 * PI / 180;
+	val a2 = ty * PI / 180;
+	val dy = -13.75 / tan(a1 + a2);
+
+	val a3 = 0 * PI / 180;
+	val a4 = tx * PI / 180;
+	val dx = dy * tan(a3 + a4);
+	return Vec2(dx.toFloat(), dy.toFloat());
+}
+
+private fun processSampleList(
+	list: List<LLResultTypes.ColorResult>,
+	sample: Sample,
+	closestDist: FloatPtr
+)
+{
+	for(sample2 in list)
 	{
-		companion object
+		val pos = org.firstinspires.ftc.teamcode.opmode.telop.getSamplePosition(sample2);
+		val dist = sqrt((pos.x - sample.pos.x).pow(2) + (pos.y - sample.pos.y).pow(2));
+		telemetry?.addLine("sample2 x: ${pos.x}, y: ${pos.y}, d: $dist");
+		if(sample.res == sample2)
 		{
-			val Red = SampleColors(
-				Scalar(160.0, 150.0, 20.0),
-				Scalar(180.0, 255.0, 255.0),
-				Scalar(0.0, 150.0, 20.0),
-				Scalar(20.0, 255.0, 255.0)
-			);
-			val Blue = SampleColors(Scalar(90.0, 150.0, 20.0), Scalar(125.0, 255.0, 255.0), null, null);
-			val Red2 = SampleColors(Scalar(0.0, 0.0, 180.0), Scalar(160.0, 120.0, 255.0), null, null);
-			val Blue2 = SampleColors(Scalar(130.0, 0.0, 0.0), Scalar(255.0, 120.0, 110.0), null, null);
-			val Yellow = SampleColors(Scalar(0.0, 120.0, 180.0), Scalar(160.0, 255.0, 255.0), null, null);
+			telemetry?.addLine("sample same as target, skipping");
+			continue;
+		}
+		if(pos.y > sample.pos.y)
+		{
+			telemetry?.addLine("sample behind target, skipping");
+			continue;
+		}
+		if(pos.x > sample.pos.x + 3)
+		{
+			telemetry?.addLine("sample too far right, skipping");
+			continue;
+		}
+		if(pos.x < sample.pos.x - 3)
+		{
+			telemetry?.addLine("sample too far left, skipping");
+			continue;
+		}
+		if(closestDist.value > dist)
+		{
+			telemetry?.addLine("dist updated to $dist");
+			closestDist.value = dist;
 		}
 	}
+}
 
-	@Synchronized
-	fun getSampleList(newList: ArrayList<Sample>?): ArrayList<Sample>
+class SampleRecognition(hardwareMap: HardwareMap, private val telem: Telemetry? = null)
+{
+	companion object
 	{
-		val list2 = sampleList;
-		if(newList != null)
-		{
-			sampleList = newList;
-		}
-		return list2;
+		val RED = 2;
+		val BLUE = 1;
+		val YELLOW = 0;
 	}
 
-	override fun init(width2: Int, height2: Int, calibration: CameraCalibration?)
+	val limelight = hardwareMap.get(Limelight3A::class.java, "limelight");
+	fun findBestSample(targetColor: Int): Sample
 	{
-		width = width2;
-		height = height2;
-	}
+		val targetResult = getSamples(targetColor);
+		telemetry?.clearAll();
+		telemetry?.fmt("--- Found Col %d ---", targetColor);
+		telemetry?.update();
 
-	override fun processFrame(frame: Mat, captureTimeNanos: Long): Mat
-	{
-		Imgproc.cvtColor(frame, frame, Imgproc.COLOR_RGB2HSV);
+		var otherColorId = targetColor + 1;
+		if(otherColorId > 2)
+			otherColorId = 0;
+		val otherColor = getSamples(targetColor);
+		telemetry?.clearAll();
+		telemetry?.fmt("--- Found Col %d ---", targetColor);
+		telemetry?.fmt("--- Found Col %d ---", otherColorId);
+		telemetry?.update();
 
-		val inRange1 = Mat();
-		Core.inRange(frame, sampleColors.low, sampleColors.high, inRange1);
+		var otherColorId2 = otherColorId + 1;
+		if(otherColorId2 > 2)
+			otherColorId2 = 0;
+		val otherColor2 = getSamples(otherColorId2);
+		telemetry?.clearAll();
+		telemetry?.fmt("--- Found Col %d ---", targetColor);
+		telemetry?.fmt("--- Found Col %d ---", otherColorId);
+		telemetry?.fmt("--- Found Col %d ---", otherColorId2);
+		telemetry?.update();
 
-		if(sampleColors.low2 != null)
+		telemetry?.clearAll();
+		telemetry?.fmt("Red %d", otherColor.size);
+		telemetry?.fmt("Blue %d", otherColor2.size);
+		telemetry?.fmt("Yellow %d", targetResult.size);
+
+		val samples = ArrayList<Sample>();
+		for(res: LLResultTypes.ColorResult in targetResult)
 		{
-			val inRange2 = Mat();
-			Core.inRange(frame, sampleColors.low2, sampleColors.high2, inRange2);
-
-			Core.add(inRange1, inRange2, frame);
-		}
-		else
-		{
-			frame.copyTo(inRange1);
-		}
-
-
-		val countors = ArrayList<MatOfPoint>();
-		Imgproc.findContours(
-			frame, countors, MatOfPoint2f(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_NONE
-		);
-
-		val sampleList2 = ArrayList<Sample>();
-
-		for(countor in countors)
-		{
-			val countor2f = MatOfPoint2f();
-			countor.convertTo(countor2f, CvType.CV_32F);
-			val rectangle = Imgproc.minAreaRect(countor2f);
-			if(rectangle.size.width > 50 && rectangle.size.height > 50)
+			val pos = getSamplePosition(res);
+			telemetry?.fmt("--- sample x: %f, y: %f ---", pos.x, pos.y);
+			val sample = Sample();
+			sample.res = res;
+			sample.pos = pos;
+			if(res.targetYDegrees < -14)
 			{
-				val pos = Vec2(rectangle.center.x.toFloat(), rectangle.center.y.toFloat());
-				if(rectangle.size.width > rectangle.size.height) rectangle.angle += 90;
-				sampleList2.add(Sample(pos, rectangle.angle.toFloat()));
+				telemetry?.addLine("sample too low, skipping");
+				continue;
 			}
+			val dist = FloatPtr(9999.0f);
+
+			telemetry?.addLine("--- Red List ---");
+			processSampleList(otherColor, sample, dist);
+			telemetry?.addLine("--- Blue List ---");
+			processSampleList(otherColor2, sample, dist);
+			telemetry?.addLine("--- Yellow List ---");
+			processSampleList(targetResult, sample, dist);
+
+			sample.dist = dist.value;
+			samples.add(sample);
 		}
 
-		getSampleList(sampleList2);
+		samples.sortWith({a, b -> (a.dist - b.dist).toInt()});
 
-		return frame;
+		val maxSample = samples[0];
+
+		if(telemetry != null)
+		{
+			val dist = FloatPtr(999999.0f);
+			telemetry?.addLine("--- Closest Sample ---");
+			telemetry?.addLine("--- Red List ---");
+			processSampleList(otherColor, maxSample, dist);
+			telemetry?.addLine("--- Blue List ---");
+			processSampleList(otherColor2, maxSample, dist);
+			telemetry?.addLine("--- Yellow List ---");
+			processSampleList(targetResult, maxSample, dist);
+			telemetry?.addLine("--- Closest Sample ---");
+			telemetry?.fmt("dist: %f", maxSample.dist);
+			telemetry?.fmt("x: %f", maxSample.pos.x);
+			telemetry?.fmt("y: %f", maxSample.pos.y);
+			telemetry?.fmt("tx: %f", maxSample.res.targetXDegrees);
+			telemetry?.fmt("ty: %f", maxSample.res.targetYDegrees);
+			telemetry?.update();
+		}
+		return maxSample;
 	}
 
-	override fun onDrawFrame(
-		canvas: Canvas?,
-		onscreenWidth: Int,
-		onscreenHeight: Int,
-		scaleBmpPxToCanvasPx: Float,
-		scaleCanvasDensity: Float,
-		userContext: Any?
-	)
+	private fun getSamples(color: Int): List<LLResultTypes.ColorResult>
 	{
+		limelight.pipelineSwitch(color);
+		var result = limelight.latestResult;
+		while(result == null || !result.isValid || result.pipelineIndex != color)
+			result = limelight.latestResult;
+		return result.colorResults;
 	}
 }

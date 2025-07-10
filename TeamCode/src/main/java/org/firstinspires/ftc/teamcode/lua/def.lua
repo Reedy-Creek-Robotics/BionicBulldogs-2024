@@ -60,6 +60,11 @@ function sequentalAction() end
 ---@return LuaParallelAction
 function parallelAction() end
 
+---@return Action
+---@param a Action
+---@param b Action
+function waitForOtherAction(a, b) end
+
 ---@return LuaSequentalAction
 ---@param label string
 function markerSequentialAction(label) end
@@ -120,6 +125,19 @@ function sampleClawUp() end
 
 ---@return Action
 function sampleClawScore() end
+
+
+---@return Action
+function recognizeSample() end
+
+---@return Action
+---@param xoff number
+---@param yoff number
+function moveToSample(xoff, yoff) end
+
+---@return Action
+---@param offset number
+function recognizeSample(offset) end
 
 
 ---@param action Action

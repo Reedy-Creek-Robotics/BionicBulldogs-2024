@@ -9,6 +9,7 @@ import com.acmerobotics.roadrunner.ftc.runBlocking
 import com.minerkid08.dynamicopmodeloader.FunctionBuilder
 import com.minerkid08.dynamicopmodeloader.LuaError
 import com.minerkid08.dynamicopmodeloader.LuaType
+import org.firstinspires.ftc.teamcode.modules.actions.WaitForOtherAction
 import org.firstinspires.ftc.teamcode.modules.actions.drive
 import org.firstinspires.ftc.teamcode.modules.actions.profiler.MarkerAction
 import org.firstinspires.ftc.teamcode.modules.actions.profiler.MarkerSequentialAction
@@ -70,6 +71,12 @@ class LuaAction
 
 			builder.addObjectFunction(
 				"parallelAction", LuaType.Object(LuaParallelAction::class.java)
+			);
+
+			builder.addObjectFunction(
+				"waitForOtherAction",
+				LuaType.Object(Action::class.java),
+				listOf(LuaType.Object(Action::class.java), LuaType.Object(Action::class.java))
 			);
 
 			builder.addObjectFunction(
@@ -141,6 +148,11 @@ class LuaAction
 	fun parallelAction(): LuaParallelAction
 	{
 		return LuaParallelAction();
+	}
+
+	fun waitForOtherAction(a: Action, b: Action): Action
+	{
+		return WaitForOtherAction(a, b);
 	}
 
 	fun markerSequentialAction(label: String): LuaSequentalAction

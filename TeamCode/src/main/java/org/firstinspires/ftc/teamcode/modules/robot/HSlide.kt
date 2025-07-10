@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.modules.robot
 
 import com.acmerobotics.dashboard.config.Config
+import com.acmerobotics.roadrunner.clamp
 import com.qualcomm.robotcore.hardware.HardwareMap
+import org.firstinspires.ftc.teamcode.modules.clamp
 
 @Config
 class HSlide(hardwareMap: HardwareMap)
@@ -66,6 +68,7 @@ class HSlide(hardwareMap: HardwareMap)
 
 	fun gotoPos(pos: Double)
 	{
-		hSlide.position = pos;
+		val pos2 = clamp(pos, max, min);
+		hSlide.position = pos2;
 	}
 }

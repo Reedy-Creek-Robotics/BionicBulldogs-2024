@@ -37,36 +37,41 @@ addOpmode({
 			:build()
 		);
 
+		builder:add(
+			markerSequentialAction("sample 2")
+			:add(intakeDown())
+			:add(hslideGotoMin())
+			:add(intakeIntake())
+			:add(sleepAction(0.1))
+			:add(
+				trajectoryAction(19.5, 3.5, 0)
+				:setTangent(-90)
+				:splineToConstantHeading(19.5, -3.5, -90)
+				:build()
+			)
+			:add(intakeUp())
+			:add(hslideZero())
+			:add(
+				parallelAction()
+				:add(
+					sequentalAction()
+					:add(sleepAction(0.25))
+					:add(intakeOuttake())
+					:build()
+				)
+				:add(
+					trajectoryAction(19.5, -3.5, 0)
+					:setTangent(180)
+					:splineToLinearHeading(18, -2, 0, 180)
+					:build()
+				)
+				:build()
+			)
+			:add(sleepAction(0.1))
+			:build()
+		);
+
 		local trajectory = nil;
-		builder:add(markerAction("sample 2"));
-
-		builder:add(intakeDown());
-		builder:add(hslideGotoMin());
-		builder:add(intakeIntake());
-		builder:add(sleepAction(0.1));
-
-		trajectory = trajectoryAction(19.5, 3.5, 0);
-		trajectory:setTangent(-90);
-		trajectory:splineToConstantHeading(19.5, -3.5, -90);
-		builder:add(trajectory:build());
-
-		builder:add(intakeUp());
-		builder:add(hslideZero());
-
-		seq = sequentalAction();
-		seq:add(sleepAction(0.25));
-		seq:add(intakeOuttake());
-
-		trajectory = trajectoryAction(19.5, -3.5, 0);
-		trajectory:setTangent(180);
-		trajectory:splineToLinearHeading(18, -2, 0, 180);
-
-		local parallel = parallelAction();
-		parallel:add(trajectory:build());
-		parallel:add(seq:build());
-		builder:add(parallel:build());
-		builder:add(sleepAction(0.1));
-
 		builder:add(markerAction("sample 3"));
 
 		builder:add(

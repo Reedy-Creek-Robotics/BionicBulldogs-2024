@@ -16,6 +16,7 @@ lateinit var sampleOuttake: SampleOuttake;
 lateinit var sampleClaw: SampleClaw;
 lateinit var drive: MecanumDrive;
 lateinit var colorSensor: ColorSensor;
+lateinit var sampleRecognition: SampleRecognition;
 
 fun initComponents(hardwareMap: HardwareMap)
 {
@@ -30,6 +31,8 @@ fun initComponents(hardwareMap: HardwareMap)
 	sampleClaw = SampleClaw(hardwareMap);
 	colorSensor = ColorSensor(hardwareMap);
 	drive = MecanumDrive(hardwareMap, Pose2d(0.0, 0.0, 0.0));
+
+	sampleRecognition = SampleRecognition(hardwareMap);
 
 	intake.zeroRotator();
 	arm.up();

@@ -32,6 +32,10 @@ class LuaRobotActions
 			builder.addObjectFunction("sampleClawUp", LuaType.Object(Action::class.java));
 			builder.addObjectFunction("sampleClawScore", LuaType.Object(Action::class.java));
 
+			builder.addObjectFunction("recognizeSample", LuaType.Object(Action::class.java));
+			builder.addObjectFunction("moveToSample", LuaType.Object(Action::class.java));
+			builder.addObjectFunction("extendHslideToSample", LuaType.Object(Action::class.java));
+
 			builder.createClass("SpecimenOuttakeAction_Grab");
 			builder.createClass("SpecimenOuttakeAction_GrabInstant");
 			builder.createClass("SpecimenOuttakeAction_Score");
@@ -51,6 +55,10 @@ class LuaRobotActions
 			builder.createClass("IntakeAction_Outtake");
 			builder.createClass("IntakeAction_Stop");
 			builder.createClass("IntakeAction_WaitForColor");
+
+			builder.createClass("VisionAction_RecognizeSample");
+			builder.createClass("VisionAction_MoveToSample");
+			builder.createClass("VisionAction_ExtendHslidesToSample");
 		}
 	}
 	
@@ -127,5 +135,20 @@ class LuaRobotActions
 	fun sampleClawScore(): Action
 	{
 		return SampleClawAction_Score();
+	}
+
+	fun recognizeSample(): Action
+	{
+		return VisionAction_RecognizeSample();
+	}
+
+	fun moveToSample(xOff: Double, yOff: Double): Action
+	{
+		return VisionAction_MoveToSample(xOff.toFloat(), yOff.toFloat());
+	}
+
+	fun extendHslideToSample(offset: Double): Action
+	{
+		return VisionAction_ExtendHslideToSample(offset.toFloat());
 	}
 }

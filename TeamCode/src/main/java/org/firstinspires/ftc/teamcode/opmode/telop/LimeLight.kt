@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.opmode.telop
 
 import com.acmerobotics.roadrunner.Pose2d
+import com.acmerobotics.roadrunner.SequentialAction
+import com.acmerobotics.roadrunner.SleepAction
 import com.acmerobotics.roadrunner.Vector2d
 import com.acmerobotics.roadrunner.ftc.runBlocking
 import com.qualcomm.hardware.limelightvision.LLResultTypes
@@ -9,22 +11,25 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.util.ElapsedTime
 import org.firstinspires.ftc.teamcode.modules.Vec2
+import org.firstinspires.ftc.teamcode.modules.actions.FunctionAction
+import org.firstinspires.ftc.teamcode.modules.actions.WaitForOtherAction
 import org.firstinspires.ftc.teamcode.modules.hardware.GamepadEx
+import org.firstinspires.ftc.teamcode.modules.lerp
 import org.firstinspires.ftc.teamcode.modules.robot.Arm
+import org.firstinspires.ftc.teamcode.modules.robot.ColorSensor
 import org.firstinspires.ftc.teamcode.modules.robot.HSlide
 import org.firstinspires.ftc.teamcode.modules.robot.Intake
 import org.firstinspires.ftc.teamcode.modules.ui.FloatPtr
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive
-import kotlin.math.PI
-import kotlin.math.pow
-import kotlin.math.sqrt
-import kotlin.math.tan
+import kotlin.math.*
 
 fun getSamplePosition(sample: LLResultTypes.ColorResult): Vec2
 {
-	val tx = sample.targetXDegrees;
-	val ty = sample.targetYDegrees;
+	return getSamplePosition(sample.targetXDegrees.toFloat(), sample.targetYDegrees.toFloat());
+}
 
+fun getSamplePosition(tx: Float, ty: Float): Vec2
+{
 	val a1 = -25 * PI / 180;
 	val a2 = ty * PI / 180;
 	val dy = -13.75 / tan(a1 + a2);
@@ -35,39 +40,114 @@ fun getSamplePosition(sample: LLResultTypes.ColorResult): Vec2
 	return Vec2(dx.toFloat(), dy.toFloat());
 }
 
+class Sample
+{
+	lateinit var res: LLResultTypes.ColorResult;
+	lateinit var pos: Vec2;
+	var dist = 0.0f;
+	var width = 0.0f;
+	var height = 0.0f;
+}
+
 @TeleOp
 class LimeLight: LinearOpMode()
 {
-	private fun processSampleList(list: List<LLResultTypes.ColorResult>, sample: LLResultTypes.ColorResult, closestDist: FloatPtr)
+	private fun getSampleSize(sample: LLResultTypes.ColorResult): Vec2
 	{
-		val pos = getSamplePosition(sample);
+		val corners = sample.targetCorners;
+		val aabb1 = Vec2();
+		val aabb2 = Vec2();
+
+		aabb1.x = corners[0][0].toFloat();
+		aabb1.y = corners[0][1].toFloat();
+		aabb2.x = corners[0][0].toFloat();
+		aabb2.y = corners[0][1].toFloat();
+
+		for(corner in corners)
+		{
+			aabb1.x = min(aabb1.x, corner[0].toFloat());
+			aabb1.y = min(aabb1.y, corner[1].toFloat());
+			aabb2.x = max(aabb2.x, corner[0].toFloat());
+			aabb2.y = max(aabb2.y, corner[1].toFloat());
+		}
+		telemetry.addLine("aabb1x: ${aabb1.x}");
+		telemetry.addLine("aabb1y: ${aabb1.y}");
+		telemetry.addLine("aabb2x: ${aabb2.x}");
+		telemetry.addLine("aabb2y: ${aabb2.y}");
+
+		//size: 960x720
+
+		var x1Raw = aabb1.x / 960.0f;
+		var y1Raw = aabb1.y / 720.0f;
+		var x2Raw = aabb2.x / 960.0f;
+		var y2Raw = aabb2.y / 720.0f;
+
+		telemetry.addLine("x1Raw: $x1Raw");
+		telemetry.addLine("y1Raw: $y1Raw");
+		telemetry.addLine("x2Raw: $x2Raw");
+		telemetry.addLine("y2Raw: $y2Raw");
+
+		//fov 54.5x42
+		x1Raw = lerp(-54.5f / 2.0f, 54.5f / 2.0f, x1Raw);
+		x2Raw = lerp(-54.5f / 2.0f, 54.5f / 2.0f, x2Raw);
+		y1Raw = lerp(-42.0f / 2.0f, 42.0f / 2.0f, y1Raw);
+		y2Raw = lerp(-42.0f / 2.0f, 42.0f / 2.0f, y2Raw);
+
+		telemetry.addLine("x1Raw: $x1Raw");
+		telemetry.addLine("y1Raw: $y1Raw");
+		telemetry.addLine("x2Raw: $x2Raw");
+		telemetry.addLine("y2Raw: $y2Raw");
+
+		val topLeft = getSamplePosition(x1Raw, y1Raw);
+		val bottomRight = getSamplePosition(x2Raw, y2Raw);
+
+		telemetry.addLine("c1: ${topLeft.x}");
+		telemetry.addLine("c1: ${topLeft.y}");
+		telemetry.addLine("c2: ${bottomRight.x}");
+		telemetry.addLine("c2: ${bottomRight.y}");
+
+		val width = bottomRight.x - topLeft.x;
+		val height = bottomRight.y - topLeft.y;
+
+		return Vec2(width, height);
+	}
+
+	private fun processSampleList(
+		list: List<LLResultTypes.ColorResult>,
+		sample: Sample,
+		closestDist: FloatPtr
+	)
+	{
 		for(sample2 in list)
 		{
-			val pos2 = getSamplePosition(sample2);
-			val dist2 = sqrt((pos2.x - pos.x).pow(2) + (pos2.y - pos.y).pow(2));
-			telemetry.addLine("sample2 x: ${pos2.x}, y: ${pos2.y}, d: $dist2");
-			if(sample == sample2)
+			val pos = getSamplePosition(sample2);
+			val dist = sqrt((pos.x - sample.pos.x).pow(2) + (pos.y - sample.pos.y).pow(2));
+			telemetry.addLine("sample2 x: ${pos.x}, y: ${pos.y}, d: $dist");
+			if(sample.res == sample2)
 			{
 				telemetry.addLine("sample same as target, skipping");
 				continue;
 			}
-			if(pos2.y > pos.y)
+			if(pos.y > sample.pos.y)
 			{
 				telemetry.addLine("sample behind target, skipping");
 				continue;
 			}
-			if(pos2.x > pos.x + 5)
+			if(pos.x > sample.pos.x + 3)
 			{
 				telemetry.addLine("sample too far right, skipping");
 				continue;
 			}
-			if(pos2.x < pos.x - 5)
+			if(pos.x < sample.pos.x - 3)
 			{
 				telemetry.addLine("sample too far left, skipping");
 				continue;
 			}
-			if(closestDist.value > dist2)
-				closestDist.value = dist2;
+			if(closestDist.value > dist)
+			{
+				telemetry.addLine("dist updated to $dist");
+				closestDist.value = dist;
+			}
 		}
 	}
 
@@ -79,6 +159,8 @@ class LimeLight: LinearOpMode()
 		val hslide = HSlide(hardwareMap);
 		val arm = Arm(hardwareMap);
 		val intake = Intake(hardwareMap);
+
+		val colorSensor = ColorSensor(hardwareMap);
 
 		arm.up();
 		hslide.zero();
@@ -137,13 +219,15 @@ class LimeLight: LinearOpMode()
 				telemetry.addLine("Blue ${otherColor2.size}");
 				telemetry.addLine("Yellow ${targetResult.size}");
 
-				var closestDist = 0.0f;
-				var closestSample: LLResultTypes.ColorResult? = null;
-				for(sample: LLResultTypes.ColorResult in targetResult)
+				val samples = ArrayList<Sample>();
+				for(res: LLResultTypes.ColorResult in targetResult)
 				{
-					val pos = getSamplePosition(sample);
+					val pos = getSamplePosition(res);
 					telemetry.addLine("--- sample x: ${pos.x}, y: ${pos.y} ---");
-					if(sample.targetYDegrees < -20)
+					val sample = Sample();
+					sample.res = res;
+					sample.pos = pos;
+					if(res.targetYDegrees < -14)
 					{
 						telemetry.addLine("sample too low, skipping");
 						continue;
@@ -157,29 +241,52 @@ class LimeLight: LinearOpMode()
 					telemetry.addLine("--- Yellow List ---");
 					processSampleList(targetResult, sample, dist);
 
-					if(dist.value > closestDist)
-					{
-						closestSample = sample;
-						closestDist = dist.value;
-					}
+					sample.dist = dist.value;
+					samples.add(sample);
 				}
-				if(closestSample == null)
+
+				samples.sortWith({a, b -> (a.dist - b.dist).toInt()});
+
+				//val len = min(samples.size, 5);
+
+				//var maxY = 999999.0f;
+				//var maxSample: Sample? = null;
+
+				//for(i in 0 until len)
+				//{
+				//	val sample = samples[i];
+				//	if(sample.pos.y < maxY)
+				//	{
+				//		maxY = sample.pos.y;
+				//		maxSample = sample;
+				//	}
+				//}
+				val maxSample = samples[0];
+
+				if(maxSample == null)
 				{
 					telemetry.addLine("--- No Closest Sample Found ---");
 					telemetry.update();
 				}
 				else
 				{
-					val pos = getSamplePosition(closestSample);
+					val dist = FloatPtr(999999.0f);
 					telemetry.addLine("--- Closest Sample ---");
-					telemetry.addLine("dist: $closestDist");
-					telemetry.addLine("x: ${pos.x}");
-					telemetry.addLine("y: ${pos.y}");
-					telemetry.addLine("tx: ${closestSample.targetXDegrees}");
-					telemetry.addLine("ty: ${closestSample.targetYDegrees}");
+					telemetry.addLine("--- Red List ---");
+					processSampleList(otherColor, maxSample, dist);
+					telemetry.addLine("--- Blue List ---");
+					processSampleList(otherColor2, maxSample, dist);
+					telemetry.addLine("--- Yellow List ---");
+					processSampleList(targetResult, maxSample, dist);
+					telemetry.addLine("--- Closest Sample ---");
+					telemetry.addLine("dist: ${maxSample.dist}");
+					telemetry.addLine("x: ${maxSample.pos.x}");
+					telemetry.addLine("y: ${maxSample.pos.y}");
+					telemetry.addLine("tx: ${maxSample.res.targetXDegrees}");
+					telemetry.addLine("ty: ${maxSample.res.targetYDegrees}");
+					dx = maxSample.pos.x.toDouble();
+					dy = maxSample.pos.y.toDouble();
 					telemetry.update();
-					dx = pos.x.toDouble();
-					dy = pos.y.toDouble();
 				}
 			}
 
@@ -202,24 +309,93 @@ class LimeLight: LinearOpMode()
 
 				runBlocking(trajectory);
 
-				val hslidePos = (HSlide.min - HSlide.max) * ((dy - 5 - 9.5) / 21.0) + HSlide.max;
-				arm.down();
-				hslide.gotoPos(hslidePos);
-
 				telemetry.clearAll();
 				telemetry.addLine("--- Intaking ---");
 				telemetry.addLine("dx: $dx");
 				telemetry.addLine("dy: $dy");
 				telemetry.addLine("tx: $tx");
 				telemetry.addLine("ty: ${0}");
-				telemetry.addLine("hslidePos: $hslidePos");
 				telemetry.update();
 
-				intake.forward();
+				val hslidePos = (HSlide.min - HSlide.max) * ((dy - 5 - 9.5) / 21.0) + HSlide.max;
+				val hslidePos2 = (HSlide.min - HSlide.max) * ((dy - 8 - 9.5) / 21.0) + HSlide.max;
+				hslide.gotoPos(hslidePos2);
+
 				val e = ElapsedTime();
 				e.reset();
-				while(e.seconds() < 2);
-				intake.stop();
+				while(e.seconds() < 1);
+
+				arm.down();
+				e.reset();
+				while(e.seconds() < 1);
+
+				intake.forward();
+				hslide.gotoPos(hslidePos);
+
+				var outtakeTime = 0.0f;
+
+				val action = WaitForOtherAction(
+					FunctionAction(
+						fun(elapsedTime: Float): Boolean
+						{
+							colorSensor.update();
+							when(intake.state)
+							{
+								Intake.State.Reverse ->
+								{
+									if(outtakeTime == 0.0f && colorSensor.col == ColorSensor.NONE)
+										outtakeTime = elapsedTime;
+									else if(outtakeTime < elapsedTime + 0.5)
+									{
+										intake.forward();
+										outtakeTime = 0.0f;
+									}
+								}
+
+								Intake.State.Forward ->
+								{
+									if(colorSensor.col == ColorSensor.RED || colorSensor.col == ColorSensor.BLUE)
+									{
+										intake.reverse();
+										outtakeTime = elapsedTime;
+									}
+								}
+
+								Intake.State.Stop    ->
+								{
+								}
+							}
+							if(colorSensor.col == ColorSensor.YELLOW)
+								return false;
+							return true;
+						}
+					),
+					SequentialAction(
+						SleepAction(2.0),
+						drive.actionBuilder(Pose2d(9.5, tx, 0.0))
+							.setTangent(Math.toRadians(90.0))
+							.splineToConstantHeading(Vector2d(9.5, tx + 3), Math.toRadians(90.0))
+							.build(),
+						drive.actionBuilder(Pose2d(9.5, tx + 3, 0.0))
+							.setTangent(Math.toRadians(-90.0))
+							.splineToConstantHeading(Vector2d(9.5, tx - 3), Math.toRadians(-90.0))
+							.build(),
+						FunctionAction(
+							fun(elapsedTime: Float): Boolean
+							{
+								val hslidePos3 = (HSlide.min - HSlide.max) * ((dy - 2 - 9.5) / 21.0) + HSlide.max;
+								hslide.gotoPos(hslidePos3);
+								return false;
+							}
+						),
+						drive.actionBuilder(Pose2d(9.5, tx - 3, 0.0))
+							.setTangent(Math.toRadians(90.0))
+							.splineToConstantHeading(Vector2d(9.5, tx), Math.toRadians(90.0))
+							.build()
+					)
+				);
+
+				runBlocking(action);
 
 				telemetry.clearAll();
 				telemetry.addLine("--- Done ---");
