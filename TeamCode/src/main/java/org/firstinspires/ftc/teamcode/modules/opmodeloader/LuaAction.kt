@@ -108,6 +108,7 @@ class LuaAction
 			builder.createClass(ParallelAction::class.java.simpleName);
 			builder.createClass(MarkerSequentialAction::class.java.simpleName);
 			builder.createClass(ProfileSequentialAction::class.simpleName!!);
+			builder.createClass(WaitForOtherAction::class.simpleName!!);
 			builder.createClass(SleepAction::class.java.simpleName);
 			builder.createClass(MarkerAction::class.java.simpleName);
 

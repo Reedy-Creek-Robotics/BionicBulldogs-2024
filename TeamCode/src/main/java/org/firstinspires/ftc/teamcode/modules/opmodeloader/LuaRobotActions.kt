@@ -26,15 +26,15 @@ class LuaRobotActions
 			builder.addObjectFunction("intakeIntake", LuaType.Object(Action::class.java));
 			builder.addObjectFunction("intakeOuttake", LuaType.Object(Action::class.java));
 			builder.addObjectFunction("intakeStop", LuaType.Object(Action::class.java));
-			builder.addObjectFunction("intakeWaitForColor", LuaType.Object(Action::class.java), listOf(LuaType.Double));
+			builder.addObjectFunction("intakeWaitForColor", LuaType.Object(Action::class.java), listOf(LuaType.Double, LuaType.Double));
 
 			builder.addObjectFunction("sampleClawTransfer", LuaType.Object(Action::class.java));
 			builder.addObjectFunction("sampleClawUp", LuaType.Object(Action::class.java));
 			builder.addObjectFunction("sampleClawScore", LuaType.Object(Action::class.java));
 
 			builder.addObjectFunction("recognizeSample", LuaType.Object(Action::class.java));
-			builder.addObjectFunction("moveToSample", LuaType.Object(Action::class.java));
-			builder.addObjectFunction("extendHslideToSample", LuaType.Object(Action::class.java));
+			builder.addObjectFunction("moveToSample", LuaType.Object(Action::class.java), listOf(LuaType.Double, LuaType.Double, LuaType.Double));
+			builder.addObjectFunction("extendHSlideToSample", LuaType.Object(Action::class.java), listOf(LuaType.Double));
 
 			builder.createClass("SpecimenOuttakeAction_Grab");
 			builder.createClass("SpecimenOuttakeAction_GrabInstant");
@@ -58,7 +58,7 @@ class LuaRobotActions
 
 			builder.createClass("VisionAction_RecognizeSample");
 			builder.createClass("VisionAction_MoveToSample");
-			builder.createClass("VisionAction_ExtendHslidesToSample");
+			builder.createClass("VisionAction_ExtendHslideToSample");
 		}
 	}
 	
@@ -117,9 +117,9 @@ class LuaRobotActions
 		return IntakeAction_Stop();
 	}
 
-	fun intakeWaitForColor(color: Double): Action
+	fun intakeWaitForColor(color: Double, maxTime: Double): Action
 	{
-		return IntakeAction_WaitForColor(color.toInt());
+		return IntakeAction_WaitForColor(color.toInt(), maxTime);
 	}
 
 	fun sampleClawTransfer(): Action
@@ -142,12 +142,12 @@ class LuaRobotActions
 		return VisionAction_RecognizeSample();
 	}
 
-	fun moveToSample(xOff: Double, yOff: Double): Action
+	fun moveToSample(xOff: Double, yOff: Double, tangent: Double): Action
 	{
-		return VisionAction_MoveToSample(xOff.toFloat(), yOff.toFloat());
+		return VisionAction_MoveToSample(xOff.toFloat(), yOff.toFloat(), tangent.toFloat());
 	}
 
-	fun extendHslideToSample(offset: Double): Action
+	fun extendHSlideToSample(offset: Double): Action
 	{
 		return VisionAction_ExtendHslideToSample(offset.toFloat());
 	}

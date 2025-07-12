@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.modules.robot
 
+import android.util.Log
 import com.qualcomm.hardware.limelightvision.LLResultTypes
 import com.qualcomm.hardware.limelightvision.Limelight3A
 import com.qualcomm.robotcore.hardware.HardwareMap
@@ -51,36 +52,20 @@ private fun processSampleList(
 	{
 		val pos = org.firstinspires.ftc.teamcode.opmode.telop.getSamplePosition(sample2);
 		val dist = sqrt((pos.x - sample.pos.x).pow(2) + (pos.y - sample.pos.y).pow(2));
-		telemetry?.addLine("sample2 x: ${pos.x}, y: ${pos.y}, d: $dist");
 		if(sample.res == sample2)
-		{
-			telemetry?.addLine("sample same as target, skipping");
 			continue;
-		}
 		if(pos.y > sample.pos.y)
-		{
-			telemetry?.addLine("sample behind target, skipping");
 			continue;
-		}
 		if(pos.x > sample.pos.x + 3)
-		{
-			telemetry?.addLine("sample too far right, skipping");
 			continue;
-		}
 		if(pos.x < sample.pos.x - 3)
-		{
-			telemetry?.addLine("sample too far left, skipping");
 			continue;
-		}
 		if(closestDist.value > dist)
-		{
-			telemetry?.addLine("dist updated to $dist");
 			closestDist.value = dist;
-		}
 	}
 }
 
-class SampleRecognition(hardwareMap: HardwareMap, private val telem: Telemetry? = null)
+class SampleRecognition(private val telem: Telemetry?)
 {
 	companion object
 	{
@@ -89,14 +74,24 @@ class SampleRecognition(hardwareMap: HardwareMap, private val telem: Telemetry? 
 		val YELLOW = 0;
 	}
 
-	val limelight = hardwareMap.get(Limelight3A::class.java, "limelight");
+	lateinit var limelight: Limelight3A;
+
+	constructor(hardwareMap: HardwareMap, telem: Telemetry? = null): this(telem)
+	{
+		limelight = hardwareMap.get(Limelight3A::class.java, "limelight");
+		limelight.setPollRateHz(100);
+		limelight.start();
+	}
+
 	fun findBestSample(targetColor: Int): Sample
 	{
+		Log.d("sampleRecognition", "recognizing target");
 		val targetResult = getSamples(targetColor);
 		telemetry?.clearAll();
 		telemetry?.fmt("--- Found Col %d ---", targetColor);
 		telemetry?.update();
 
+		Log.d("sampleRecognition", "recognizing other");
 		var otherColorId = targetColor + 1;
 		if(otherColorId > 2)
 			otherColorId = 0;
@@ -106,6 +101,7 @@ class SampleRecognition(hardwareMap: HardwareMap, private val telem: Telemetry? 
 		telemetry?.fmt("--- Found Col %d ---", otherColorId);
 		telemetry?.update();
 
+		Log.d("sampleRecognition", "recognizing other2");
 		var otherColorId2 = otherColorId + 1;
 		if(otherColorId2 > 2)
 			otherColorId2 = 0;
@@ -115,6 +111,11 @@ class SampleRecognition(hardwareMap: HardwareMap, private val telem: Telemetry? 
 		telemetry?.fmt("--- Found Col %d ---", otherColorId);
 		telemetry?.fmt("--- Found Col %d ---", otherColorId2);
 		telemetry?.update();
+		Log.d("sampleRecognition", "recognition done");
+
+		Log.d("sampleRecognition", "target %d".format(targetResult.size));
+		Log.d("sampleRecognition", "target %d".format(otherColor.size));
+		Log.d("sampleRecognition", "target %d".format(otherColor2.size));
 
 		telemetry?.clearAll();
 		telemetry?.fmt("Red %d", otherColor.size);
@@ -129,19 +130,23 @@ class SampleRecognition(hardwareMap: HardwareMap, private val telem: Telemetry? 
 			val sample = Sample();
 			sample.res = res;
 			sample.pos = pos;
-			if(res.targetYDegrees < -14)
-			{
-				telemetry?.addLine("sample too low, skipping");
-				continue;
-			}
 			val dist = FloatPtr(9999.0f);
 
-			telemetry?.addLine("--- Red List ---");
 			processSampleList(otherColor, sample, dist);
-			telemetry?.addLine("--- Blue List ---");
 			processSampleList(otherColor2, sample, dist);
-			telemetry?.addLine("--- Yellow List ---");
 			processSampleList(targetResult, sample, dist);
+
+			if(sample.pos.y > 32)
+			{
+				telemetry?.addLine("sample too far forward, skipping");
+				continue;
+			}
+
+			if(dist.value < 3)
+			{
+				telemetry?.addLine("sample too close to other samples, skipping");
+				continue;
+			}
 
 			sample.dist = dist.value;
 			samples.add(sample);
@@ -153,14 +158,6 @@ class SampleRecognition(hardwareMap: HardwareMap, private val telem: Telemetry? 
 
 		if(telemetry != null)
 		{
-			val dist = FloatPtr(999999.0f);
-			telemetry?.addLine("--- Closest Sample ---");
-			telemetry?.addLine("--- Red List ---");
-			processSampleList(otherColor, maxSample, dist);
-			telemetry?.addLine("--- Blue List ---");
-			processSampleList(otherColor2, maxSample, dist);
-			telemetry?.addLine("--- Yellow List ---");
-			processSampleList(targetResult, maxSample, dist);
 			telemetry?.addLine("--- Closest Sample ---");
 			telemetry?.fmt("dist: %f", maxSample.dist);
 			telemetry?.fmt("x: %f", maxSample.pos.x);

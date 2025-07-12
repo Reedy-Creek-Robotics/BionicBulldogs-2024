@@ -1,9 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmode.telop
 
-import com.acmerobotics.roadrunner.Pose2d
-import com.acmerobotics.roadrunner.SequentialAction
-import com.acmerobotics.roadrunner.SleepAction
-import com.acmerobotics.roadrunner.Vector2d
+import com.acmerobotics.roadrunner.*
 import com.acmerobotics.roadrunner.ftc.runBlocking
 import com.qualcomm.hardware.limelightvision.LLResultTypes
 import com.qualcomm.hardware.limelightvision.Limelight3A
@@ -13,12 +10,11 @@ import com.qualcomm.robotcore.util.ElapsedTime
 import org.firstinspires.ftc.teamcode.modules.Vec2
 import org.firstinspires.ftc.teamcode.modules.actions.FunctionAction
 import org.firstinspires.ftc.teamcode.modules.actions.WaitForOtherAction
+import org.firstinspires.ftc.teamcode.modules.fmt
+import org.firstinspires.ftc.teamcode.modules.format
 import org.firstinspires.ftc.teamcode.modules.hardware.GamepadEx
 import org.firstinspires.ftc.teamcode.modules.lerp
-import org.firstinspires.ftc.teamcode.modules.robot.Arm
-import org.firstinspires.ftc.teamcode.modules.robot.ColorSensor
-import org.firstinspires.ftc.teamcode.modules.robot.HSlide
-import org.firstinspires.ftc.teamcode.modules.robot.Intake
+import org.firstinspires.ftc.teamcode.modules.robot.*
 import org.firstinspires.ftc.teamcode.modules.ui.FloatPtr
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive
 import kotlin.math.*
@@ -122,32 +118,16 @@ class LimeLight: LinearOpMode()
 		{
 			val pos = getSamplePosition(sample2);
 			val dist = sqrt((pos.x - sample.pos.x).pow(2) + (pos.y - sample.pos.y).pow(2));
-			telemetry.addLine("sample2 x: ${pos.x}, y: ${pos.y}, d: $dist");
 			if(sample.res == sample2)
-			{
-				telemetry.addLine("sample same as target, skipping");
 				continue;
-			}
 			if(pos.y > sample.pos.y)
-			{
-				telemetry.addLine("sample behind target, skipping");
 				continue;
-			}
 			if(pos.x > sample.pos.x + 3)
-			{
-				telemetry.addLine("sample too far right, skipping");
 				continue;
-			}
 			if(pos.x < sample.pos.x - 3)
-			{
-				telemetry.addLine("sample too far left, skipping");
 				continue;
-			}
 			if(closestDist.value > dist)
-			{
-				telemetry.addLine("dist updated to $dist");
 				closestDist.value = dist;
-			}
 		}
 	}
 
@@ -227,25 +207,36 @@ class LimeLight: LinearOpMode()
 					val sample = Sample();
 					sample.res = res;
 					sample.pos = pos;
-					if(res.targetYDegrees < -14)
-					{
-						telemetry.addLine("sample too low, skipping");
-						continue;
-					}
 					val dist = FloatPtr(9999.0f);
 
-					telemetry.addLine("--- Red List ---");
 					processSampleList(otherColor, sample, dist);
-					telemetry.addLine("--- Blue List ---");
 					processSampleList(otherColor2, sample, dist);
-					telemetry.addLine("--- Yellow List ---");
 					processSampleList(targetResult, sample, dist);
+
+					if(sample.pos.y > 32)
+					{
+						telemetry.addLine("sample too far forward, skipping");
+						continue;
+					}
+
+					if(dist.value < 3)
+					{
+						telemetry.addLine("sample too close to other samples, skipping");
+						continue;
+					}
 
 					sample.dist = dist.value;
 					samples.add(sample);
 				}
 
-				samples.sortWith({a, b -> (a.dist - b.dist).toInt()});
+				samples.sortWith({a, b -> if(a.pos.y > b.pos.y) -1 else 1});
+
+				for(i in 0 until samples.size)
+				{
+					val sample = samples[i];
+					//telemetry.fmt("sample %d : x: %.2f, y: %.2f, dist: %.2f", i, sample.pos.x, sample.pos.y, sample.dist);
+					telemetry.fmt("sample $i : x: ${sample.pos.x.format(2)}, y: ${sample.pos.y.format(2)}, dist: ${sample.dist.format(2)}");
+				}
 
 				//val len = min(samples.size, 5);
 
@@ -270,14 +261,6 @@ class LimeLight: LinearOpMode()
 				}
 				else
 				{
-					val dist = FloatPtr(999999.0f);
-					telemetry.addLine("--- Closest Sample ---");
-					telemetry.addLine("--- Red List ---");
-					processSampleList(otherColor, maxSample, dist);
-					telemetry.addLine("--- Blue List ---");
-					processSampleList(otherColor2, maxSample, dist);
-					telemetry.addLine("--- Yellow List ---");
-					processSampleList(targetResult, maxSample, dist);
 					telemetry.addLine("--- Closest Sample ---");
 					telemetry.addLine("dist: ${maxSample.dist}");
 					telemetry.addLine("x: ${maxSample.pos.x}");
@@ -396,6 +379,8 @@ class LimeLight: LinearOpMode()
 				);
 
 				runBlocking(action);
+				drive.setDrivePowers(PoseVelocity2d(Vector2d(0.0, 0.0), 0.0));
+				intake.stop();
 
 				telemetry.clearAll();
 				telemetry.addLine("--- Done ---");

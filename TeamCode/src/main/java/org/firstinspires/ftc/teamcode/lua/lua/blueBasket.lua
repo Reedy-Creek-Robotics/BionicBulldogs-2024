@@ -1,4 +1,5 @@
 require("utils");
+require("vision");
 
 ---@type Action
 local action = {}
@@ -15,7 +16,7 @@ addOpmode({
 			:add(
 				trajectoryAction(7.5, -30.5, -90)
 				:setTangent(0)
-				:splineToConstantHeading(63, -33.5, 25)
+				:splineToConstantHeading(63, -33.5, 27)
 				:build()
 			)
 			:add(specimenScore())
@@ -32,7 +33,7 @@ addOpmode({
 			:add(intakeDown())
 			:add(intakeIntake())
 			:add(hslideGotoPos(0.6))
-			:add(intakeWaitForColor(Colors.YELLOW))
+			:add(intakeWaitForColor(Colors.YELLOW, 2))
 			:build()
 		);
 
@@ -44,7 +45,7 @@ addOpmode({
 					sequentalAction()
 					:add(intakeUp())
 					:add(hslideZero())
-					:add(sleepAction(0.2))
+					:add(sleepAction(0.3))
 					:add(sampleClawTransfer())
 					:add(sampleClawUp())
 					:build()
@@ -77,7 +78,7 @@ addOpmode({
 					sequentalAction()
 					:add(sleepAction(0.6))
 					:add(hslideGotoMin())
-					:add(intakeWaitForColor(Colors.YELLOW))
+					:add(intakeWaitForColor(Colors.YELLOW, 2))
 					:build()
 				)
 				:build()
@@ -120,14 +121,14 @@ addOpmode({
 				:add(
 					trajectoryAction(16, -53, 45)
 					:setTangent(0)
-					:splineToLinearHeading(21, -53, -35, 0)
+					:splineToLinearHeading(21, -53, -36, 0)
 					:build()
 				)
 				:add(
 					sequentalAction()
 					:add(sleepAction(0.6))
 					:add(hslideGotoMin())
-					:add(intakeWaitForColor(Colors.YELLOW))
+					:add(intakeWaitForColor(Colors.YELLOW, 2))
 					:build()
 				)
 				:build()
@@ -158,6 +159,18 @@ addOpmode({
 				:build()
 			)
 			:add(sampleClawScore())
+			:build()
+		);
+
+		builder:add(
+			markerSequentialAction("grab 4")
+			:add(
+				trajectoryAction(15, -54, 45)
+				:setTangent(45)
+				:splineToLinearHeading(39, 0, 0, 0)
+				:build()
+			)
+			:add(grabSample(48.5, 0))
 			:build()
 		);
 

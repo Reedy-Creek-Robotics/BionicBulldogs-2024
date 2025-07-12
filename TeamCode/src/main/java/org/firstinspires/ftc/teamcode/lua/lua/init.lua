@@ -15,3 +15,4 @@ require("redRight");
 require("blueLeft");
 
 require("testOpmode");
+require("visionTest");

@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.telemetry.TelemetryPacket
 import com.acmerobotics.roadrunner.Action
 import com.qualcomm.robotcore.util.ElapsedTime
 import org.firstinspires.ftc.teamcode.modules.robot.ColorSensor
+import org.firstinspires.ftc.teamcode.modules.robot.Intake
 
 class IntakeAction_Intake: Action
 {
@@ -50,20 +51,52 @@ class IntakeAction_SetRotation(private val rot: Double): Action
 	}
 }
 
-class IntakeAction_WaitForColor(private val color: Int): Action
+class IntakeAction_WaitForColor(private val color: Int, private val maxDelay: Double): Action
 {
-	val elapsedTime = ElapsedTime();
-	var ran = false;
+	private val elapsedTime = ElapsedTime();
+	private var ran = false;
+	private var outtakeTime = 0.0;
+
 	override fun run(p: TelemetryPacket): Boolean
 	{
 		if(!ran)
 		{
 			ran = true;
 			elapsedTime.reset();
+			intake.forward();
 		}
-		if(elapsedTime.seconds() > 2)
-			return false;
 		colorSensor.update();
+
+		when(intake.state)
+		{
+			Intake.State.Reverse ->
+			{
+				if(outtakeTime == 0.0 && colorSensor.col == ColorSensor.NONE)
+					outtakeTime = elapsedTime.seconds();
+				else if(outtakeTime < elapsedTime.seconds() + 0.5)
+				{
+					intake.forward();
+					outtakeTime = 0.0;
+				}
+			}
+
+			Intake.State.Forward ->
+			{
+				if(colorSensor.col != color && colorSensor.col != ColorSensor.NONE)
+				{
+					intake.reverse();
+					outtakeTime = elapsedTime.seconds();
+				}
+			}
+
+			Intake.State.Stop    ->
+			{
+			}
+		}
+
+		if(elapsedTime.seconds() > maxDelay)
+			return false;
+
 		if(colorSensor.col == color)
 			return false;
 		return true;

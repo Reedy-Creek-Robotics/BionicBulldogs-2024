@@ -102,6 +102,10 @@ function intakeOuttake() end
 ---@return Action
 function intakeStop() end
 
+---@return Action
+---@param color number
+function waitForColor(color) end
+
 
 ---@return Action
 function hslideZero() end
@@ -133,11 +137,12 @@ function recognizeSample() end
 ---@return Action
 ---@param xoff number
 ---@param yoff number
-function moveToSample(xoff, yoff) end
+---@param tangent number
+function moveToSample(xoff, yoff, tangent) end
 
 ---@return Action
 ---@param offset number
-function recognizeSample(offset) end
+function extendHSlideToSample(offset) end
 
 
 ---@param action Action

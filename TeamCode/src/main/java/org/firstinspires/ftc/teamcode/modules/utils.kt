@@ -15,6 +15,7 @@ fun lerp(a: Float, b: Float, t: Float): Float
 }
 
 fun Double.format(len: Int) = "%.${len}f".format(this);
+fun Float.format(len: Int) = "%.${len}f".format(this);
 
 fun Telemetry.fmt(fmt: String, vararg args: Any)
 {
