@@ -26,7 +26,7 @@ class SampleClaw(hardwareMap: HardwareMap)
 		var rotatorDown = 0.2;
 
 		@JvmField
-		var rotatorUp = 0.7;
+		var rotatorUp = 0.69;
 	}
 
 	private val claw: Servo = hardwareMap.servo.get("outtakeClaw");

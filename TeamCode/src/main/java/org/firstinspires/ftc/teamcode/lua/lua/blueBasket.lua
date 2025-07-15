@@ -27,7 +27,7 @@ addOpmode({
 			markerSequentialAction("grab 1")
 			:add(
 				trajectoryAction(63, -33.5, -90)
-				:turnTo(-143)
+				:turnTo(-138)
 				:build()
 			)
 			:add(intakeDown())
@@ -71,7 +71,7 @@ addOpmode({
 				:add(
 					trajectoryAction(16, -53, 45)
 					:setTangent(0)
-					:splineToLinearHeading(21, -53, -18, 0)
+					:splineToLinearHeading(21, -53, -16, 0)
 					:build()
 				)
 				:add(
@@ -121,7 +121,7 @@ addOpmode({
 				:add(
 					trajectoryAction(16, -53, 45)
 					:setTangent(0)
-					:splineToLinearHeading(21, -53, -36, 0)
+					:splineToLinearHeading(21, -53, -34, 0)
 					:build()
 				)
 				:add(
@@ -170,7 +170,28 @@ addOpmode({
 				:splineToLinearHeading(39, 0, 0, 0)
 				:build()
 			)
-			:add(grabSample(48.5, 0))
+			:add(grabSample(48, 0))
+			:add(
+				parallelAction()
+				:add(
+					sequentalAction()
+					:add(intakeUp())
+					:add(hslideZero())
+					:add(sleepAction(0.65))
+					:add(sampleClawTransfer())
+					:add(sampleClawUp())
+					:add(sleepAction(1))
+					:build()
+				)
+				:add(
+					trajectoryAction(48, 0, 0)
+					:setTangent(-180)
+					:splineToLinearHeading(15, -54, 45, -135)
+					:build()
+				)
+				:build()
+			)
+			:add(sampleClawScore())
 			:build()
 		);
 

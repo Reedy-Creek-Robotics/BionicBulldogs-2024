@@ -67,6 +67,9 @@ class IntakeAction_WaitForColor(private val color: Int, private val maxDelay: Do
 		}
 		colorSensor.update();
 
+		if(colorSensor.col == color)
+			return false;
+
 		when(intake.state)
 		{
 			Intake.State.Reverse ->
@@ -82,10 +85,15 @@ class IntakeAction_WaitForColor(private val color: Int, private val maxDelay: Do
 
 			Intake.State.Forward ->
 			{
-				if(colorSensor.col != color && colorSensor.col != ColorSensor.NONE)
+				if(colorSensor.col != ColorSensor.YELLOW && colorSensor.col != ColorSensor.NONE && outtakeTime == 0.0)
+				{
+					outtakeTime = elapsedTime.seconds();
+				}
+
+				if(outtakeTime > 0 && elapsedTime.seconds() - outtakeTime > 0.5)
 				{
 					intake.reverse();
-					outtakeTime = elapsedTime.seconds();
+					outtakeTime = 0.0;
 				}
 			}
 
@@ -95,9 +103,6 @@ class IntakeAction_WaitForColor(private val color: Int, private val maxDelay: Do
 		}
 
 		if(elapsedTime.seconds() > maxDelay)
-			return false;
-
-		if(colorSensor.col == color)
 			return false;
 		return true;
 	}

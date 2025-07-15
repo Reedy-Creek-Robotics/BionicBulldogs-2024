@@ -27,19 +27,30 @@ abstract class OpmodeLoaderOpmodeBase(private val name: String): LinearOpMode()
 		LuaAction.init(builder);
 		LuaRobotActions.init(builder);
 
-		opmodeLoader.init();
+		try
+		{
 
-		opmodeLoader.loadOpmode(name);
+			opmodeLoader.init();
 
-		telemetry.addLine("initalised");
-		telemetry.update();
+			opmodeLoader.loadOpmode(name);
 
-		waitForStart();
-		sampleClaw.armStart();
+			telemetry.addLine("initalised");
+			telemetry.update();
 
-		telemetry.clearAll();
-		telemetry.update();
+			waitForStart();
+			sampleClaw.armStart();
 
-		opmodeLoader.start();
+			telemetry.clearAll();
+			telemetry.update();
+
+			opmodeLoader.start();
+
+			opmodeLoader.close();
+		}
+		catch(e: RuntimeException)
+		{
+			opmodeLoader.close();
+			throw e
+		}
 	}
 }

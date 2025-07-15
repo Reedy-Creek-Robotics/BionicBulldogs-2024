@@ -123,6 +123,7 @@ class SampleRecognition(private val telem: Telemetry?)
 		telemetry?.fmt("Yellow %d", targetResult.size);
 
 		val samples = ArrayList<Sample>();
+		val allSamples = ArrayList<Sample>();
 		for(res: LLResultTypes.ColorResult in targetResult)
 		{
 			val pos = getSamplePosition(res);
@@ -136,6 +137,9 @@ class SampleRecognition(private val telem: Telemetry?)
 			processSampleList(otherColor2, sample, dist);
 			processSampleList(targetResult, sample, dist);
 
+			sample.dist = dist.value;
+			allSamples.add(sample);
+
 			if(sample.pos.y > 32)
 			{
 				telemetry?.addLine("sample too far forward, skipping");
@@ -148,13 +152,16 @@ class SampleRecognition(private val telem: Telemetry?)
 				continue;
 			}
 
-			sample.dist = dist.value;
 			samples.add(sample);
 		}
 
 		samples.sortWith({a, b -> (a.dist - b.dist).toInt()});
 
-		val maxSample = samples[0];
+		val maxSample = if(samples.size > 0)
+			samples[0];
+		else
+			allSamples[0];
+
 
 		if(telemetry != null)
 		{
