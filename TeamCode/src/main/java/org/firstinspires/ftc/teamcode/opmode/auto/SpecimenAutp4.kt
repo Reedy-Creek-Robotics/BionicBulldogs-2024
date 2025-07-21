@@ -24,7 +24,7 @@ class SpecimenAutp4: LinearOpMode()
 		MecanumDrive.PARAMS.maxAngVel = PI * 4.0;
 		MecanumDrive.PARAMS.maxAngAccel = PI * 4.0;
 
-		initComponents(hardwareMap);
+		initComponents(hardwareMap, telemetry);
 		telemetry = MultipleTelemetry(telemetry, FtcDashboard.getInstance().telemetry);
 
 		val beginPose = Pose2d(7.0, -7.5, Math.toRadians(180.0))

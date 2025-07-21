@@ -10,7 +10,7 @@ class SpecimenOuttakeAction_Grab: Action
 	{
 		if(!ran)
 		{
-			specimenOuttake.collect();
+			specimenOuttake.collectHigh();
 			ran = true;
 		}
 		specimenOuttake.update();

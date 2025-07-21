@@ -10,14 +10,25 @@ class SpecimenOuttake(private val claw: SpeciminClaw, private val slide: Slide)
 	companion object
 	{
 		@JvmField
-		var relesePos = -1040;
+		var relesePosHigh = -1040;
+
+		@JvmField
+		var relesePosLow = -1;
+
 		@JvmField
 		var pause = 0.12;
 	}
 
 	private val elapsedTime = ElapsedTime();
+	private var targetPos = Target.High;
 
 	var state = State.Down;
+
+
+	enum class Target
+	{
+		Low, High
+	}
 
 	enum class State
 	{
@@ -35,17 +46,27 @@ class SpecimenOuttake(private val claw: SpeciminClaw, private val slide: Slide)
 		state = State.Lowering;
 	}
 
-	fun collect()
+	fun collectLow()
 	{
 		elapsedTime.reset();
 		claw.close();
 		state = State.Raising;
+		targetPos = Target.Low;
+	}
+
+	fun collectHigh()
+	{
+		elapsedTime.reset();
+		claw.close();
+		state = State.Raising;
+		targetPos = Target.High;
 	}
 
 	fun collectInstant()
 	{
 		claw.close();
 		state = State.Raising;
+		targetPos = Target.High;
 		update();
 	}
 
@@ -55,16 +76,21 @@ class SpecimenOuttake(private val claw: SpeciminClaw, private val slide: Slide)
 		{
 			if(elapsedTime.seconds() > pause)
 			{
-				slide.raise();
+				if(targetPos == Target.Low)
+					slide.gotoLow();
+				else
+					slide.gotoHigh();
 				state = State.Up;
 			}
 		}
 		if(state == State.Lowering)
 		{
-			if(slide.getPos() > relesePos)
+			val target = if(targetPos == Target.Low) relesePosLow else relesePosHigh;
+			if(slide.getPos() > target || slide.state == Slide.State.Stalled)
 			{
 				claw.open();
 				state = State.Down;
+				slide.state = Slide.State.Down;
 			}
 		}
 	}

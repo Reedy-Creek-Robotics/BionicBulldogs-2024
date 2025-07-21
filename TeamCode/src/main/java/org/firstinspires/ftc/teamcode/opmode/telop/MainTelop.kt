@@ -189,11 +189,11 @@ open class MainTelop(private val colorSensorBad: Int): LinearOpMode()
 			// Outtake Slides
 			if(gamepad.cross())
 			{
-				if(slide.state == Slide.State.Lower)
+				if(slide.state == Slide.State.Down)
 				{
 					sampleOuttake.up();
 				}
-				else if(slide.state == Slide.State.Raise)
+				else if(slide.state == Slide.State.High)
 				{
 					sampleOuttake.score();
 				}
@@ -212,13 +212,9 @@ open class MainTelop(private val colorSensorBad: Int): LinearOpMode()
 			if(gamepad.touchpad())
 			{
 				if(specimenOuttake.state == SpecimenOuttake.State.Down)
-				{
-					specimenOuttake.collect();
-				}
+					specimenOuttake.collectHigh();
 				else if(specimenOuttake.state == SpecimenOuttake.State.Up)
-				{
 					specimenOuttake.score();
-				}
 			}
 			specimenOuttake.update();
 

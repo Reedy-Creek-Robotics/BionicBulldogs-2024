@@ -17,7 +17,7 @@ class SpecimenAutp45 : LinearOpMode()
 		MecanumDrive.PARAMS.maxAngVel = PI * 4.0;
 		MecanumDrive.PARAMS.maxAngAccel = PI * 4.0;
 
-		initComponents(hardwareMap);
+		initComponents(hardwareMap, telemetry);
 		val opmodeLoader = OpmodeLoader();
 
 		opmodeLoader.init();

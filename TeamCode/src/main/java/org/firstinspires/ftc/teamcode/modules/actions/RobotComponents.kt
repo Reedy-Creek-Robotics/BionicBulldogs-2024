@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.modules.actions
 
 import com.acmerobotics.roadrunner.Pose2d
 import com.qualcomm.robotcore.hardware.HardwareMap
+import org.firstinspires.ftc.robotcore.external.Telemetry
 import org.firstinspires.ftc.teamcode.modules.robot.*
 import org.firstinspires.ftc.teamcode.roadrunner.MecanumDrive
 
@@ -17,9 +18,11 @@ lateinit var sampleClaw: SampleClaw;
 lateinit var drive: MecanumDrive;
 lateinit var colorSensor: ColorSensor;
 lateinit var sampleRecognition: SampleRecognition;
+lateinit var telemetry: Telemetry;
 
-fun initComponents(hardwareMap: HardwareMap)
+fun initComponents(hardwareMap: HardwareMap, telem: Telemetry)
 {
+	telemetry = telem;
 	intake = Intake(hardwareMap);
 	arm = Arm(hardwareMap);
 	hSlide = HSlide(hardwareMap);

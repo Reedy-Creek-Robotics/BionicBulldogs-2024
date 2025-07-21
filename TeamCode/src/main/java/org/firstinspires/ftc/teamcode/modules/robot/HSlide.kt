@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.modules.robot
 import com.acmerobotics.dashboard.config.Config
 import com.acmerobotics.roadrunner.clamp
 import com.qualcomm.robotcore.hardware.HardwareMap
-import org.firstinspires.ftc.teamcode.modules.clamp
 
 @Config
 class HSlide(hardwareMap: HardwareMap)
@@ -20,7 +19,7 @@ class HSlide(hardwareMap: HardwareMap)
 		var min = 0.65;
 
 		@JvmField
-		var score = 0.05;
+		var score = 0.13;
 	}
 
 	private val hSlide = hardwareMap.servo.get("hslide");

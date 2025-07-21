@@ -27,11 +27,6 @@ class LuaAction
 	{
 		fun init(builder: FunctionBuilder)
 		{
-			MecanumDrive.PARAMS.maxWheelVel = 80.0;
-			MecanumDrive.PARAMS.maxProfileAccel = 60.0;
-			MecanumDrive.PARAMS.maxAngVel = PI * 4.0;
-			MecanumDrive.PARAMS.maxAngAccel = PI * 4.0;
-
 			builder.setCurrentObject(LuaAction());
 
 			builder.addObjectFunction("run", LuaType.Void, listOf(LuaType.Object(Action::class.java)));

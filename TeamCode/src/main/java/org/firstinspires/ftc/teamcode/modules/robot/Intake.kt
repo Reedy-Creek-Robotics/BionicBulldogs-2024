@@ -28,7 +28,7 @@ class Intake(map: HardwareMap)
 		var spinPower: Double = 1.0;
 
 		@JvmField
-		var revPower: Double = 0.4;
+		var revPower: Double = 0.5;
 
 		@JvmField
 		var spinStop = 0.0;

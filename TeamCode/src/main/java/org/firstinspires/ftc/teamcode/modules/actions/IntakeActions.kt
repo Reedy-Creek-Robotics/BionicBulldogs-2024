@@ -66,6 +66,7 @@ class IntakeAction_WaitForColor(private val color: Int, private val maxDelay: Do
 			intake.forward();
 		}
 		colorSensor.update();
+		colorSensor.telem(telemetry);
 
 		if(colorSensor.col == color)
 			return false;

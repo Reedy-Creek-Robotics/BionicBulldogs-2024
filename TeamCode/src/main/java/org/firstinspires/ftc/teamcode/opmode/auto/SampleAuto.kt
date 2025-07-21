@@ -23,7 +23,7 @@ class SampleAuto: LinearOpMode()
 {
 	override fun runOpMode()
 	{
-		initComponents(hardwareMap);
+		initComponents(hardwareMap, telemetry);
 		specimenClaw.open();
 		telemetry = MultipleTelemetry(telemetry, FtcDashboard.getInstance().telemetry);
 

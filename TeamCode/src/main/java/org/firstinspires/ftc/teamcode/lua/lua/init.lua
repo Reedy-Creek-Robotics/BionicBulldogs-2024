@@ -7,8 +7,10 @@ Colors = {
 };
 
 require("blueMiddle");
+require("blueMiddle2");
 
 require("redBasket");
+require("redBasket2");
 require("blueBasket");
 
 require("redRight");

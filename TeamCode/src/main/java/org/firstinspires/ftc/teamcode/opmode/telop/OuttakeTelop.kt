@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.Servo
 import com.qualcomm.robotcore.util.ElapsedTime
+import org.firstinspires.ftc.robotcore.external.Telemetry
+import org.firstinspires.ftc.teamcode.modules.actions.sampleOuttake
 import org.firstinspires.ftc.teamcode.modules.drive.HDrive
 import org.firstinspires.ftc.teamcode.modules.drive.SparkfunImuLocalizer
 import org.firstinspires.ftc.teamcode.modules.drive.rotPos
@@ -58,12 +60,6 @@ class OuttakeTelop: LinearOpMode()
 		var slidePosition = -1600;
 
 		@JvmField
-		var hslideScore = HSlide.score;
-
-		@JvmField
-		var hslideGrab = HSlide.score + 0.01;
-
-		@JvmField
 		var intakeArmPos = 0.33;
 
 		@JvmField
@@ -92,8 +88,11 @@ class OuttakeTelop: LinearOpMode()
 	private lateinit var outtakeArm: Servo;
 	private lateinit var clawRotator: Servo;
 
+	private var outtakeState = 0;
+
 	override fun runOpMode()
 	{
+		telemetry.setDisplayFormat(Telemetry.DisplayFormat.MONOSPACE);
 		claw = hardwareMap.servo.get("outtakeClaw");
 		outtakeArm = hardwareMap.servo.get("outtakeArm");
 		clawRotator = hardwareMap.servo.get("clawRotator");
@@ -143,7 +142,6 @@ class OuttakeTelop: LinearOpMode()
 		//Dpad left rotates bucket to position 1.0 (for some reason)
 		//Dpad right rotates bucket to dump (position 0.9)
 
-		var outtakeState = 0;
 
 		while(opModeIsActive())
 		{
@@ -173,7 +171,7 @@ class OuttakeTelop: LinearOpMode()
 			}
 			else if(gamepad.triangle())
 			{
-				hslide.gotoPos(hslideScore);
+				hslide.score();
 				arm.up();
 				intake.zeroRotator();
 			}
@@ -253,8 +251,7 @@ class OuttakeTelop: LinearOpMode()
 				{
 					0 ->
 					{
-						slide.gotoPos(slidePosition);
-						outtakeState = 1;
+						grabState = 1;
 					}
 
 					1 ->
@@ -277,13 +274,17 @@ class OuttakeTelop: LinearOpMode()
 			if(gamepad.touchpad())
 			{
 				if(specimenOuttake.state == SpecimenOuttake.State.Down)
-				{
-					specimenOuttake.collect();
-				}
-				else if(specimenOuttake.state == SpecimenOuttake.State.Up)
-				{
+					specimenOuttake.collectHigh();
+				else
 					specimenOuttake.score();
-				}
+			}
+
+			if(gamepad.dpadLeft())
+			{
+				if(specimenOuttake.state == SpecimenOuttake.State.Down)
+					specimenOuttake.collectLow();
+				else
+					specimenOuttake.score();
 			}
 
 			if(gamepad.dpadRight())
@@ -306,7 +307,6 @@ class OuttakeTelop: LinearOpMode()
 			colorSensor.telem(telemetry);
 			specimenOuttake.telem(telemetry);
 			telemetry.addData("hPos", hslide.pos())
-			telemetry.addData("touchpad", gamepad1.touchpad);
 			telemetry.update();
 		}
 	}
@@ -317,7 +317,7 @@ class OuttakeTelop: LinearOpMode()
 		{
 			1 ->
 			{
-				hslide.gotoPos(hslideGrab);
+				hslide.score();
 				arm.gotoPos(intakeArmCollect);
 				grabElapsedTime.reset();
 				grabState = 2;
@@ -371,6 +371,8 @@ class OuttakeTelop: LinearOpMode()
 				{
 					intake.stop();
 					grabState = 0;
+					slide.gotoPos(slidePosition);
+					outtakeState = 1;
 				}
 			}
 		}

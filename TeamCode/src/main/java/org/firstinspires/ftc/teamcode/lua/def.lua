@@ -104,11 +104,15 @@ function intakeStop() end
 
 ---@return Action
 ---@param color number
-function waitForColor(color) end
+---@param delay number
+function intakeWaitForColor(color, delay) end
 
 
 ---@return Action
 function hslideZero() end
+
+---@return Action
+function hslideScore() end
 
 ---@return Action
 function hslideGotoMin() end

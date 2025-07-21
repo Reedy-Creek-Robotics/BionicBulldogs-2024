@@ -17,8 +17,9 @@ class LuaRobotActions
 			builder.addObjectFunction("specimenScore", LuaType.Object(Action::class.java));
 
 			builder.addObjectFunction("hslideGotoPos", LuaType.Object(Action::class.java), listOf(LuaType.Double));
-			builder.addObjectFunction("hslideZero", LuaType.Object(Action::class.java));
 			builder.addObjectFunction("hslideGotoMin", LuaType.Object(Action::class.java));
+			builder.addObjectFunction("hslideZero", LuaType.Object(Action::class.java));
+			builder.addObjectFunction("hslideScore", LuaType.Object(Action::class.java));
 
 			builder.addObjectFunction("intakeUp", LuaType.Object(Action::class.java));
 			builder.addObjectFunction("intakeDown", LuaType.Object(Action::class.java));
@@ -47,6 +48,7 @@ class LuaRobotActions
 			builder.createClass("HSlideAction_GotoPos");
 			builder.createClass("HSlideAction_GotoMin");
 			builder.createClass("HSlideAction_Zero");
+			builder.createClass("HSlideAction_Score");
 
 			builder.createClass("ArmAction_Up");
 			builder.createClass("ArmAction_Down");
@@ -90,6 +92,11 @@ class LuaRobotActions
 	fun hslideZero(): Action
 	{
 		return HSlideAction_Zero();
+	}
+
+	fun hslideScore(): Action
+	{
+		return HSlideAction_Score();
 	}
 
 	fun intakeUp(): Action

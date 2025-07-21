@@ -31,7 +31,7 @@ addOpmode({
 			)
 			:add(intakeUp())
 			:add(hslideZero())
-			:add(sleepAction(0.32))
+			:add(sleepAction(0.42))
 			:add(intakeOuttake())
 			:add(sleepAction(0.3))
 			:build()
@@ -55,7 +55,7 @@ addOpmode({
 				parallelAction()
 				:add(
 					sequentalAction()
-					:add(sleepAction(0.25))
+					:add(sleepAction(0.35))
 					:add(intakeOuttake())
 					:build()
 				)
@@ -82,7 +82,7 @@ addOpmode({
 			:add(
 				trajectoryAction(18, -2.5, 0)
 				:setTangent(0)
-				:splineToConstantHeading(29, -3.5, 0)
+				:splineToConstantHeading(30, -3.5, 0)
 				:build()
 			)
 			:build()
@@ -92,10 +92,10 @@ addOpmode({
 		builder:add(intakeUp());
 
 		seq = sequentalAction();
-		seq:add(sleepAction(0.5));
+		seq:add(sleepAction(0.6));
 		seq:add(intakeOuttake());
 
-		trajectory = trajectoryAction(29, -3.5, 0);
+		trajectory = trajectoryAction(30, -3.5, 0);
 		trajectory:setTangent(180);
 		trajectory:splineToConstantHeading(20, -2, 180);
 
@@ -115,17 +115,17 @@ addOpmode({
 
 		trajectory = trajectoryAction(20, -2, 0);
 		trajectory:setTangent(90);
-		trajectory:splineToConstantHeading(29, 4, 0);
+		trajectory:splineToConstantHeading(30, 4, 0);
 		builder:add(trajectory:build());
 
 		builder:add(intakeUp());
 		builder:add(hslideZero());
 
 		seq = sequentalAction();
-		seq:add(sleepAction(0.5));
+		seq:add(sleepAction(0.6));
 		seq:add(intakeOuttake());
 
-		trajectory = trajectoryAction(29, 4, 0);
+		trajectory = trajectoryAction(30, 4, 0);
 		trajectory:setTangent(180);
 		trajectory:splineToConstantHeading(20, 3.2, 180);
 		parallel = parallelAction();

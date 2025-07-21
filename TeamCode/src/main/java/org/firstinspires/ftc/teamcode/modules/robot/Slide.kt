@@ -18,10 +18,10 @@ class Slide(hardwareMap: HardwareMap)
 
 	enum class State
 	{
-		Lower, Raise
+		Down, Low, High, Stalled
 	}
 
-	var state = State.Lower;
+	var state = State.Down;
 
 	companion object
 	{
@@ -38,7 +38,10 @@ class Slide(hardwareMap: HardwareMap)
 		var relesePos = -800;
 
 		@JvmField
-		var specimenPos = 1250;
+		var specimenPosLow = 350;
+
+		@JvmField
+		var specimenPosHigh = 1250;
 
 		@JvmField
 		var stallDifference = 1;
@@ -70,28 +73,34 @@ class Slide(hardwareMap: HardwareMap)
 		return slide.currentPosition;
 	}
 
-	fun raise()
+	fun gotoLow()
 	{
-		runToPosition(-specimenPos);
-		state = State.Raise;
+		runToPosition(-specimenPosLow);
+		state = State.Low;
+	}
+
+	fun gotoHigh()
+	{
+		runToPosition(-specimenPosHigh);
+		state = State.Low;
 	}
 
 	fun gotoPos(pos: Int)
 	{
 		runToPosition(pos);
-		state = State.Raise;
+		state = State.High;
 	}
 
 	fun lower()
 	{
 		runToPosition(0);
-		state = State.Lower;
+		state = State.Down;
 	}
 
 	fun lowerTo(pos: Int)
 	{
 		runToPosition(pos);
-		state = State.Lower;
+		state = State.Down;
 	}
 
 	fun specimenLower()
@@ -105,7 +114,7 @@ class Slide(hardwareMap: HardwareMap)
 		{
 			slides.power = 0.0;
 		}*/
-		if(state == State.Lower && slide.mode == DcMotor.RunMode.RUN_TO_POSITION)
+		if(state == State.Down && slide.mode == DcMotor.RunMode.RUN_TO_POSITION)
 		{
 			if(abs(prevPos - slide.currentPosition) < stallDifference && slide.power > 0.0)
 			{
@@ -123,6 +132,7 @@ class Slide(hardwareMap: HardwareMap)
 					slide.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER;
 					slide2.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER;
 					stalled = false;
+					state = State.Stalled;
 				}
 			}
 			else

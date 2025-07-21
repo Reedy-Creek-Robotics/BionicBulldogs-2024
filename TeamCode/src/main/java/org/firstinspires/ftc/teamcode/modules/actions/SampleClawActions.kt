@@ -4,8 +4,6 @@ import com.acmerobotics.dashboard.config.Config
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket
 import com.acmerobotics.roadrunner.Action
 import com.qualcomm.robotcore.util.ElapsedTime
-import org.firstinspires.ftc.teamcode.opmode.telop.OuttakeTelop.Companion.armUp
-import org.firstinspires.ftc.teamcode.opmode.telop.OuttakeTelop.Companion.rotatorUp
 import org.firstinspires.ftc.teamcode.opmode.telop.OuttakeTelop.Companion.slidePosition
 
 @Config
